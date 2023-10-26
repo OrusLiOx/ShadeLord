@@ -1,0 +1,780 @@
+fileFormatVersion: 2
+guid: 13a8e4a247234ed449a8903725be0374
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1621497582158744726
+    second: SpriteSheet_VoidTendril_0
+  - first:
+      213: -4153011098832475335
+    second: SpriteSheet_VoidTendril_1
+  - first:
+      213: -8812469434944044956
+    second: SpriteSheet_VoidTendril_2
+  - first:
+      213: 7437881297918358491
+    second: SpriteSheet_VoidTendril_3
+  - first:
+      213: 4639849219024760724
+    second: SpriteSheet_VoidTendril_4
+  - first:
+      213: 4956518945195471596
+    second: SpriteSheet_VoidTendril_5
+  - first:
+      213: 8980214688784650917
+    second: SpriteSheet_VoidTendril_6
+  - first:
+      213: -1250988457222384803
+    second: SpriteSheet_VoidTendril_7
+  - first:
+      213: -156010853977809674
+    second: SpriteSheet_VoidTendril_7
+  - first:
+      213: 4878843094779841056
+    second: SpriteSheet_VoidTendril_8
+  - first:
+      213: -5563845537731857293
+    second: SpriteSheet_VoidTendril_9
+  - first:
+      213: -8772227358433557626
+    second: SpriteSheet_VoidTendril_11
+  - first:
+      213: -8469340375363225136
+    second: SpriteSheet_VoidTendril1_0
+  - first:
+      213: 3159928439109055482
+    second: SpriteSheet_VoidTendril1_1
+  - first:
+      213: -253902259352677198
+    second: SpriteSheet_VoidTendril1_2
+  - first:
+      213: -6968185385255728819
+    second: SpriteSheet_VoidTendril1_3
+  - first:
+      213: -1166553294402164164
+    second: SpriteSheet_VoidTendril1_4
+  - first:
+      213: -6955618534722967968
+    second: SpriteSheet_VoidTendril1_5
+  - first:
+      213: -2017036866607713541
+    second: SpriteSheet_VoidTendril1_6
+  - first:
+      213: -5346197988792922233
+    second: SpriteSheet_VoidTendril1_7
+  - first:
+      213: 4889465168720768781
+    second: SpriteSheet_VoidTendril1_8
+  - first:
+      213: 9125805052907760799
+    second: SpriteSheet_VoidTendril1_9
+  - first:
+      213: 810265784852923153
+    second: SpriteSheet_VoidTendril1_10
+  - first:
+      213: 3496703778305074763
+    second: SpriteSheet_VoidTendril1_11
+  - first:
+      213: 3294947650138537666
+    second: SpriteSheet_VoidTendril2_0
+  - first:
+      213: -3742015757021697015
+    second: SpriteSheet_VoidTendril2_1
+  - first:
+      213: -4074175460481653644
+    second: SpriteSheet_VoidTendril2_2
+  - first:
+      213: 7403563147823384518
+    second: SpriteSheet_VoidTendril2_3
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_0
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 1224
+        width: 403
+        height: 102
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69c0abcb577b08610800000000000000
+      internalID: 1621497582158744726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_1
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 1223
+        width: 367
+        height: 109
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93be5d1c86a8d56c0800000000000000
+      internalID: -4153011098832475335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_2
+      rect:
+        serializedVersion: 2
+        x: 1060
+        y: 1220
+        width: 361
+        height: 125
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4604c284db1d3b580800000000000000
+      internalID: -8812469434944044956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_3
+      rect:
+        serializedVersion: 2
+        x: 1545
+        y: 1215
+        width: 384
+        height: 109
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd3f1f302a9a83760800000000000000
+      internalID: 7437881297918358491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_4
+      rect:
+        serializedVersion: 2
+        x: 2017
+        y: 1212
+        width: 383
+        height: 103
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49f285f184e046040800000000000000
+      internalID: 4639849219024760724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_5
+      rect:
+        serializedVersion: 2
+        x: 2517
+        y: 1213
+        width: 386
+        height: 93
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce2beda48b719c440800000000000000
+      internalID: 4956518945195471596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_6
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 927
+        width: 449
+        height: 86
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a211c32ea120ac70800000000000000
+      internalID: 8980214688784650917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_7
+      rect:
+        serializedVersion: 2
+        x: 525
+        y: 930
+        width: 388
+        height: 74
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d53552d40a893aee0800000000000000
+      internalID: -1250988457222384803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_8
+      rect:
+        serializedVersion: 2
+        x: 1004
+        y: 932
+        width: 325
+        height: 75
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fc1c8374fcb5ddf0800000000000000
+      internalID: -156010853977809674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_9
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 932
+        width: 379
+        height: 76
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02a483b02f125b340800000000000000
+      internalID: 4878843094779841056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_10
+      rect:
+        serializedVersion: 2
+        x: 1909
+        y: 928
+        width: 379
+        height: 82
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 374b95246ff39c2b0800000000000000
+      internalID: -5563845537731857293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril_11
+      rect:
+        serializedVersion: 2
+        x: 2342
+        y: 928
+        width: 400
+        height: 81
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 683ca9bd1b9c24680800000000000000
+      internalID: -8772227358433557626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 630
+        width: 433
+        height: 144
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d9f9941dcbd67a80800000000000000
+      internalID: -8469340375363225136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_1
+      rect:
+        serializedVersion: 2
+        x: 492
+        y: 629
+        width: 437
+        height: 264
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af3ffb06c225adb20800000000000000
+      internalID: 3159928439109055482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_2
+      rect:
+        serializedVersion: 2
+        x: 991
+        y: 626
+        width: 433
+        height: 231
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b45d978d35f97cf0800000000000000
+      internalID: -253902259352677198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_3
+      rect:
+        serializedVersion: 2
+        x: 1468
+        y: 620
+        width: 494
+        height: 216
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4983c6af480c4f90800000000000000
+      internalID: -6968185385255728819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_4
+      rect:
+        serializedVersion: 2
+        x: 1992
+        y: 618
+        width: 446
+        height: 178
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3ae89b95f19fcfe0800000000000000
+      internalID: -1166553294402164164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_5
+      rect:
+        serializedVersion: 2
+        x: 2501
+        y: 619
+        width: 434
+        height: 252
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 066e6bc8bcda87f90800000000000000
+      internalID: -6955618534722967968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_6
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 333
+        width: 428
+        height: 222
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf2faf218ab0204e0800000000000000
+      internalID: -2017036866607713541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_7
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 336
+        width: 393
+        height: 191
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78f071b214d7ec5b0800000000000000
+      internalID: -5346197988792922233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_8
+      rect:
+        serializedVersion: 2
+        x: 989
+        y: 338
+        width: 348
+        height: 178
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0f2f3b5aaedad340800000000000000
+      internalID: 4889465168720768781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_9
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 338
+        width: 417
+        height: 237
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9c2804585f55ae70800000000000000
+      internalID: 9125805052907760799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_10
+      rect:
+        serializedVersion: 2
+        x: 1909
+        y: 334
+        width: 379
+        height: 177
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 113cfc73074ae3b00800000000000000
+      internalID: 810265784852923153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril1_11
+      rect:
+        serializedVersion: 2
+        x: 2342
+        y: 335
+        width: 400
+        height: 172
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b46e3ae5f89c68030800000000000000
+      internalID: 3496703778305074763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril2_0
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 7
+        width: 380
+        height: 171
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cef3003e610abd20800000000000000
+      internalID: 3294947650138537666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril2_1
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 4
+        width: 445
+        height: 259
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90caecabe70b11cc0800000000000000
+      internalID: -3742015757021697015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril2_2
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 6
+        width: 485
+        height: 260
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 474a06d210f9577c0800000000000000
+      internalID: -4074175460481653644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpriteSheet_VoidTendril2_3
+      rect:
+        serializedVersion: 2
+        x: 1402
+        y: 6
+        width: 379
+        height: 245
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c78f2a057dbeb660800000000000000
+      internalID: 7403563147823384518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

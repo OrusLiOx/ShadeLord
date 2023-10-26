@@ -1,0 +1,588 @@
+fileFormatVersion: 2
+guid: 96fab098f2988664e93070537c17e362
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2820185192121451387
+    second: Side_Arrive_0
+  - first:
+      213: 5206858390908983582
+    second: Side_Arrive_1
+  - first:
+      213: -7105784610609884357
+    second: Side_Arrive_2
+  - first:
+      213: 4312072581644832271
+    second: Side_Neutral
+  - first:
+      213: -3081640487744057615
+    second: Side_Leave_0
+  - first:
+      213: 7882305542108656207
+    second: Side_Leave_1
+  - first:
+      213: 7926652627013684674
+    second: Side_Leave_2
+  - first:
+      213: -7545996341986282500
+    second: Forward_Blink_0
+  - first:
+      213: -5907893496105696428
+    second: Forward_Blink_1
+  - first:
+      213: -6304984746540720673
+    second: Forward_Blink_2
+  - first:
+      213: 585107358299423680
+    second: Forward_Arrive_0
+  - first:
+      213: 5563248093304155716
+    second: Forward_Arrive_1
+  - first:
+      213: -2822204577450479778
+    second: Forward_Arrive_2
+  - first:
+      213: 7136343864655141330
+    second: Forward_Neutral
+  - first:
+      213: 8031487572939172443
+    second: Forward_Leave_0
+  - first:
+      213: 5206359082756712854
+    second: Forward_Leave_1
+  - first:
+      213: 6379577926654547998
+    second: Forward_Leave_2
+  - first:
+      213: -8569759865767214276
+    second: Side_Blink_0
+  - first:
+      213: -2017533663079822152
+    second: Side_Blink_1
+  - first:
+      213: -1022753529723327324
+    second: Side_Blink_2
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Side_Arrive_0
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 2939
+        width: 1121
+        height: 2556
+      alignment: 9
+      pivot: {x: 0.5945436, y: 0.89220846}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58cb8ce7280bcd8d0800000000000000
+      internalID: -2820185192121451387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Arrive_1
+      rect:
+        serializedVersion: 2
+        x: 1391
+        y: 2921
+        width: 1043
+        height: 2573
+      alignment: 9
+      pivot: {x: 0.60260576, y: 0.8661069}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1954e19e1a724840800000000000000
+      internalID: 5206858390908983582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Arrive_2
+      rect:
+        serializedVersion: 2
+        x: 2459
+        y: 2900
+        width: 1046
+        height: 2592
+      alignment: 9
+      pivot: {x: 0.59038246, y: 0.8235021}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3319227b8e236d90800000000000000
+      internalID: -7105784610609884357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Neutral
+      rect:
+        serializedVersion: 2
+        x: 3545
+        y: 2892
+        width: 1237
+        height: 2600
+      alignment: 9
+      pivot: {x: 0.5937685, y: 0.800952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0e44aaaa2f87db30800000000000000
+      internalID: 4312072581644832271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Leave_0
+      rect:
+        serializedVersion: 2
+        x: 4909
+        y: 2845
+        width: 1045
+        height: 2592
+      alignment: 9
+      pivot: {x: 0.5899718, y: 0.82427055}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fecd8abd40db35d0800000000000000
+      internalID: -3081640487744057615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Leave_1
+      rect:
+        serializedVersion: 2
+        x: 6077
+        y: 2811
+        width: 956
+        height: 2574
+      alignment: 9
+      pivot: {x: 0.6427921, y: 0.86656266}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f42ba78d023936d60800000000000000
+      internalID: 7882305542108656207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Leave_2
+      rect:
+        serializedVersion: 2
+        x: 7181
+        y: 2841
+        width: 968
+        height: 2562
+      alignment: 9
+      pivot: {x: 0.68339247, y: 0.89325374}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cd411b2190210e60800000000000000
+      internalID: 7926652627013684674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Forward_Blink_0
+      rect:
+        serializedVersion: 2
+        x: 8358
+        y: 2872
+        width: 1427
+        height: 2628
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8026837}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf3b28fae4c374790800000000000000
+      internalID: -7545996341986282500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Forward_Blink_1
+      rect:
+        serializedVersion: 2
+        x: 9877
+        y: 2872
+        width: 1426
+        height: 2628
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8026837}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45387c9aa22f20ea0800000000000000
+      internalID: -5907893496105696428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Forward_Blink_2
+      rect:
+        serializedVersion: 2
+        x: 11382
+        y: 2872
+        width: 1427
+        height: 2628
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8026837}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdd1f2c37c13088a0800000000000000
+      internalID: -6304984746540720673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Forward_Arrive_0
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 31
+        width: 1371
+        height: 2527
+      alignment: 9
+      pivot: {x: 0.5, y: 0.95943177}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c387e6da08be1800800000000000000
+      internalID: 585107358299423680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Forward_Arrive_1
+      rect:
+        serializedVersion: 2
+        x: 1524
+        y: 75
+        width: 1374
+        height: 2617
+      alignment: 9
+      pivot: {x: 0.5003495, y: 0.896627}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44e63ce5aa0a43d40800000000000000
+      internalID: 5563248093304155716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Forward_Arrive_2
+      rect:
+        serializedVersion: 2
+        x: 2962
+        y: 77
+        width: 1298
+        height: 2660
+      alignment: 9
+      pivot: {x: 0.5003856, y: 0.85657185}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5f2595b3e385d8d0800000000000000
+      internalID: -2822204577450479778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Forward_Neutral
+      rect:
+        serializedVersion: 2
+        x: 4348
+        y: 135
+        width: 1427
+        height: 2628
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8026837}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d9dec75fe2690360800000000000000
+      internalID: 7136343864655141330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Forward_Leave_0
+      rect:
+        serializedVersion: 2
+        x: 5856
+        y: 99
+        width: 1162
+        height: 2660
+      alignment: 9
+      pivot: {x: 0.49872634, y: 0.8565779}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5ae00b1563957f60800000000000000
+      internalID: 8031487572939172443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Forward_Leave_1
+      rect:
+        serializedVersion: 2
+        x: 7183
+        y: 105
+        width: 1119
+        height: 2617
+      alignment: 9
+      pivot: {x: 0.49645722, y: 0.89663553}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 699a7d45004b04840800000000000000
+      internalID: 5206359082756712854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Forward_Leave_2
+      rect:
+        serializedVersion: 2
+        x: 8483
+        y: 98
+        width: 1039
+        height: 2549
+      alignment: 9
+      pivot: {x: 0.49809292, y: 0.95116365}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e18da27e250d88850800000000000000
+      internalID: 6379577926654547998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Blink_0
+      rect:
+        serializedVersion: 2
+        x: 9612
+        y: 130
+        width: 1237
+        height: 2600
+      alignment: 9
+      pivot: {x: 0.5937685, y: 0.800952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c33cb8e7ec8121980800000000000000
+      internalID: -8569759865767214276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Blink_1
+      rect:
+        serializedVersion: 2
+        x: 10901
+        y: 130
+        width: 1237
+        height: 2600
+      alignment: 9
+      pivot: {x: 0.5937685, y: 0.800952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bc0cb1a2d74004e0800000000000000
+      internalID: -2017533663079822152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Blink_2
+      rect:
+        serializedVersion: 2
+        x: 12209
+        y: 130
+        width: 1237
+        height: 2600
+      alignment: 9
+      pivot: {x: 0.5937685, y: 0.800952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ac601065137ec1f0800000000000000
+      internalID: -1022753529723327324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
