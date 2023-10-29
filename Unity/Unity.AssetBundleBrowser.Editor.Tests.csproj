@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{C6B2D6FE-5B8D-4D7F-A804-55BAD4FB6F36}</ProjectGuid>
+    <ProjectGuid>{EA28F1A5-D6DF-DF2B-A343-42448806D904}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.AssetBundleBrowser.Editor.Tests</AssemblyName>
@@ -651,7 +651,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.AssetBundleBrowser.Editor.csproj">
-      <Project>{A1CA90AD-4607-4217-01BF-852E89DB48E3}</Project>
+      <Project>{3B78670F-2C83-69EC-6984-D98002FC0C87}</Project>
       <Name>Unity.AssetBundleBrowser.Editor</Name>
     </ProjectReference>
   </ItemGroup>

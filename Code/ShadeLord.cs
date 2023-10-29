@@ -31,7 +31,7 @@ namespace ShadeLord
         private Material _blurMat;
 
 		// info
-        public ShadeLord() : base("Mod") { }
+        public ShadeLord() : base("ShadeLord") { }
 		public override string GetVersion()
 		{
 			return Assembly.GetExecutingAssembly().GetName().Version.ToString();

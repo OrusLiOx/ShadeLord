@@ -1,12 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
-    - Attacks
-    - BeamAnimation
-    - FaceSpike
     - RandomizeAnimationStart
-    - Spike
-    - TestAnimations
     - fade
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
@@ -78,17 +73,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 2200}
     - Class: 114
-      Script: {instanceID: 2736}
-    - Class: 114
       Script: {instanceID: 3464}
-    - Class: 114
-      Script: {instanceID: 3790}
-    - Class: 114
-      Script: {instanceID: 4026}
-    - Class: 114
-      Script: {instanceID: 4320}
-    - Class: 114
-      Script: {instanceID: 4330}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -110,41 +95,11 @@ ScriptsOnlyBuild:
     className: fade
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: BeamAnimation
-  - hash:
-      serializedVersion: 2
       Hash: 43eb20e36c2f595d3cd2a7d35226df31
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: RandomizeAnimationStart
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: Spike
-  - hash:
-      serializedVersion: 2
-      Hash: a9a11639985ce000e11b5109d5a9e01f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: Attacks
-  - hash:
-      serializedVersion: 2
-      Hash: 3a92dc88e1a0478d5f9cc70940c9c030
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: FaceSpike
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: TestAnimations
   platform: 5
   scenePathNames:
   - Assets/Scenes/GG_Shade_Lord.unity
-  playerPath: C:/Users/ylily/Desktop/Things/_HollowKnightMod/UnderstandingShit/1.5/Mod/Assets/gg_shade_lord
+  playerPath: C:/Users/ylily/Desktop/Things/_HollowKnightMod/UnderstandingShit/ShadeLord/Code/Assets/gg_shade_lord

@@ -16,7 +16,7 @@ namespace ShadeLord
         {
             On.GameManager.EnterHero += OnEnterHero;
             USceneManager.activeSceneChanged += OnSceneChange;
-        }
+		}
 
 		private void OnEnterHero(On.GameManager.orig_EnterHero orig, GameManager gm, bool additiveGateSearch)
 		{
@@ -31,8 +31,10 @@ namespace ShadeLord
 		private void OnSceneChange(Scene prevScene, Scene nextScene)
         {
             if (nextScene.name == "GG_Shade_Lord")
-            {
-				GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+            {	
+				// add properties to certain elements
+				// respawns, camera locks, hazards, etc
+				GameObject[] allObjects = FindObjectsOfType<GameObject>();
 				foreach (GameObject obj in allObjects)
 				{
 					if (obj.name.Contains("Respawn"))
@@ -41,10 +43,9 @@ namespace ShadeLord
 						SetCameraLock(obj);
 					else if (obj.name.Contains("VoidHazard"))
 						obj.AddComponent<DamageHero>().hazardType = 5;//*/
-					if (obj.GetComponent<CameraLockArea>() != null)
-					{
-						Modding.Logger.Log(obj.name+": " +obj.GetComponent<CameraLockArea>().cameraXMax + "," + obj.GetComponent<CameraLockArea>().cameraYMax);
-					}
+					else if (obj.name.Contains("ShortTendril"))
+						obj.AddComponent<RandomizeAnimationStart>();
+
 					if (obj.GetComponent<SpriteRenderer>() != null)
 					{
 						obj.GetComponent<SpriteRenderer>().material.shader = Shader.Find("Sprites/Default");
@@ -53,51 +54,19 @@ namespace ShadeLord
 
 				PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
 
+				// scene stuf
 				var bsc = Instantiate(ShadeLord.GameObjects["Boss Scene Controller"]);
                 bsc.SetActive(true);
                 SceneController = bsc.GetComponent<BossSceneController>();
                 StatueCreator.BossLevel = SceneController.BossLevel;
 
-                var godseeker = Instantiate(ShadeLord.GameObjects["Godseeker"], new Vector3(x, 70f, 28.39f), Quaternion.identity);
+                var godseeker = Instantiate(ShadeLord.GameObjects["Godseeker"], new Vector3(x, 75f, 18.39f), Quaternion.identity);
                 godseeker.SetActive(true);
-                godseeker.transform.localScale = Vector3.one * 1.5f;
+                godseeker.transform.localScale = Vector3.one * 1f;
 				
 				// boss stuff
 				GameObject.Find("ShadeLord").AddComponent<ShadeCtrl>();
-
-				//SetCameraLock("Terrain/Area1");
-				//SetCameraLock("Terrain/Area3");
-				//GameObject.Find("Terrain/Area1/Floor").SetActive(true);
-
-				// hazard respawns
-				/*
-				CreateSpawn("a1",		x, 68f, 53f, 1f, true);
-				/*CreateSpawn("a2middle",	x, 55.6f, 5f, 1f, true);
-				CreateSpawn("a2left",	x-12, 55.6f, 5f, 1f, true);
-				CreateSpawn("a2right",	x+12, 55.6f, 5f, 1f, false);*/
-				/*
-				CreateSpawn("dcheck1",	x-24.5f, 37f, 3f, 3f, true);
-				CreateSpawn("dplat1",	x-15.76f, 34f, 4f, 1f, true);
-				CreateSpawn("dplat2",	x-9f, 30f, 3f, 1f, true);
-				CreateSpawn("dplat3",	x+5f, 39f, 3f, 1f, true);
-				CreateSpawn("dplat4",	x+13f, 32f, 3f, 1f, true);
-				CreateSpawn("dcheck2",	x+14.5f, 37f, 3f, 3f, true);
-
-				CreateSpawn("dcheck3",	x+40.5f, 24f, 3f, 3f, true);
-				CreateSpawn("dplat5",	x+45.1f, 9f, 5f, 1f, true);
-				CreateSpawn("dcheck4",	x+57.5f, 13.5f, 3f, 3f, true);
-
-				CreateSpawn("dcheck5",	x+82.5f, 24.5f, 3f, 25f, true);
-				CreateSpawn("dplat6",	x+90.1f, 11f, 5f, 1f, true);
-				CreateSpawn("dplat7",	x+100.8f, 7.5f, 5f, 1f, true);
-
-				CreateSpawn("a3",	x+110.11f, 4f, 5f, 1f, true);//*/
-
-
-				//GameObject.Find("Void").AddComponent<DamageHero>().hazardType = 5;
-				//GameObject.Find("PermaVoid").AddComponent<DamageHero>().hazardType = 5;
 				//end boss stuff
-
 				var rootGOs = nextScene.GetRootGameObjects();
                 foreach (var go in rootGOs)
                 {
@@ -135,10 +104,6 @@ namespace ShadeLord
 
 		private IEnumerator position()
 		{
-			Modding.Logger.Log("Player:" + HeroController.instance.gameObject.transform.position);
-			Modding.Logger.Log("  Hazard Respawn Marker:" + PlayerData.instance.GetVector3("hazardRespawnLocation"));
-			Modding.Logger.Log("  Find Ground: " + HeroController.instance.gameObject.GetComponent<HeroController>().FindGroundPoint(PlayerData.instance.GetVector3("hazardRespawnLocation"), true));
-			Modding.Logger.Log("  Hero Spawn: " + SceneController.heroSpawn.position);
 			yield return new WaitForSeconds(3f);
 			StartCoroutine(position());
 		}
@@ -157,7 +122,6 @@ namespace ShadeLord
 			marker.respawnFacingRight = !obj.name.EndsWith("L");	// last letter is R
 
 			marker.transform.SetPositionZ(0);
-			marker.respawnFacingRight = true;
 
 			obj.SetActive(true);//*/
 		}
@@ -183,7 +147,6 @@ namespace ShadeLord
 		}
 		private void SetCameraLock(GameObject obj)
 		{
-			Modding.Logger.Log("set camera lock: "+ obj.GetComponentsInChildren<BoxCollider2D>()[1].gameObject.name);
 			CameraLockArea area = obj.AddComponent<CameraLockArea>();
 			Bounds bounds = obj.GetComponentsInChildren<BoxCollider2D>()[1].bounds;
 
