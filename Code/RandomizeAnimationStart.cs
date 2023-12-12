@@ -1,10 +1,16 @@
+/*/ 31-10-2023
+
+Randomly wait from 0 to 1 second before playing void tendril animation 
+
+Attach this script to all void tendrils
+
+/*/
+
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RandomizeAnimationStart : MonoBehaviour
 {
-    // Start is called before the first frame update
     void OnEnable()
     {
 		StartCoroutine(go());

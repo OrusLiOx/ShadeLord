@@ -1,11 +1,18 @@
+/*/ 31-10-2023
+
+Script to play a windup then beam loop animation and sound for beam upon enabling
+Intended for user to only have to worry about spawing and moving the beam
+
+Attach this script to all beam objects
+
+/*/
+
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Beam : MonoBehaviour
 {
 	private string anim1,anim2;
-	// Start is called before the first frame update
 
 	private void OnEnable()
 	{

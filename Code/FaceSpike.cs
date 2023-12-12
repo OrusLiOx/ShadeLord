@@ -1,5 +1,13 @@
+/*/ 31-10-2023
+
+Script to play animation and sound for face spike and adjust hit box upon enabling
+Intended for user to only have to worry about spawing the face spike
+
+Attach this script to all face spike objects (not including outline)
+
+/*/
+
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FaceSpike : MonoBehaviour
@@ -7,7 +15,7 @@ public class FaceSpike : MonoBehaviour
 	private Animator outline, anim;
 	private BoxCollider2D col;
 	private SpriteRenderer channel;
-	// Start is called before the first frame update
+
 	void OnEnable()
 	{
 		Transform[] t = transform.GetComponentsInChildren<Transform>();
@@ -19,7 +27,6 @@ public class FaceSpike : MonoBehaviour
 		StartCoroutine(go());
 	}
 
-	// Update is called once per frame
 	IEnumerator go()
 	{
 		anim.Play("Nothing");

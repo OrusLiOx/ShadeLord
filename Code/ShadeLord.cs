@@ -1,4 +1,12 @@
-﻿using Modding;
+﻿/*/ 20-11-2023
+
+"Main" script for mod
+
+Handles meta information and loads a bunch of stuff
+
+/*/
+
+using Modding;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +32,7 @@ namespace ShadeLord
         private Dictionary<string, (string, string)> preload = new Dictionary<string, (string, string)>()
         {
             ["Boss Scene Controller"] = ("GG_Radiance", "Boss Scene Controller"),
+            ["Hazard"] = ("GG_Radiance", "Cloud Hazard"),
             ["Godseeker"] = ("GG_Collector", "GG_Arena_Prefab/Godseeker Crowd"),
             ["Collector"] = ("GG_Collector", "Battle Scene/Jar Collector")
         };
@@ -42,11 +51,12 @@ namespace ShadeLord
             return preload.Values.ToList();
         }
 
+		// statue information
 		private string LangGet(string key, string sheettitle, string orig)
 		{
 			switch (key)
 			{
-				case "LORD_MAIN": return "Shade Lord";
+				case "LORD_MAIN": return "Lord of Shades";
 				case "LORD_SUB": return "";
 				case "LORD_SUPER": return "";
 				case "LORD_NAME": return "Shade Lord";
@@ -182,9 +192,19 @@ namespace ShadeLord
             self.tag = "TileMap";
         }
 
-		public void sendToLog(string s)
+		// Change music script from Pale Court
+		public static void PlayMusic(AudioClip clip)
 		{
-			Log(s);
+			MusicCue musicCue = ScriptableObject.CreateInstance<MusicCue>();
+			MusicCue.MusicChannelInfo channelInfo = new MusicCue.MusicChannelInfo();
+			ReflectionHelper.SetField(channelInfo, "clip", clip);
+
+			MusicCue.MusicChannelInfo[] channelInfos = new MusicCue.MusicChannelInfo[]
+			{
+				channelInfo, null, null, null, null, null
+			};
+			ReflectionHelper.SetField(musicCue, "channelInfos", channelInfos);
+			GameManager.instance.AudioManager.ApplyMusicCue(musicCue, 0, 0, false);
 		}
-    }
+	}
 }

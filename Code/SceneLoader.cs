@@ -1,3 +1,8 @@
+/*/ 20-11-2023
+
+Sets up ShadeLord scene
+
+/*/
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
@@ -9,15 +14,17 @@ namespace ShadeLord
 {
     internal class SceneLoader : MonoBehaviour
     {
-        internal static BossSceneController SceneController;
-		float x = 100;
+		internal static BossSceneController SceneController;
+		float x = 100; // center of stage
 
+		// Connect OnEnterHero and OnSceneChanage to proper events
         private void Awake()
         {
             On.GameManager.EnterHero += OnEnterHero;
             USceneManager.activeSceneChanged += OnSceneChange;
 		}
 
+		// Put player at correct position upon spawing + modify SceneManager
 		private void OnEnterHero(On.GameManager.orig_EnterHero orig, GameManager gm, bool additiveGateSearch)
 		{
 			orig(gm, additiveGateSearch);
@@ -26,12 +33,26 @@ namespace ShadeLord
 				HeroController.instance.transform.SetPosition2D
 				(HeroController.instance.gameObject.GetComponent<HeroController>().FindGroundPoint
 				(PlayerData.instance.GetVector3("hazardRespawnLocation")));
+
+				// scene manager
+				SceneManager sm = gm.sm;
+				sm.mapZone = GlobalEnums.MapZone.ABYSS_DEEP;
+				sm.isWindy = false;
+				sm.noParticles = true;
+				sm.environmentType = 5;//*/
 			}
 		}
+		// Set up scene and attach nessecary scripts
 		private void OnSceneChange(Scene prevScene, Scene nextScene)
-        {
-            if (nextScene.name == "GG_Shade_Lord")
-            {	
+        {/*
+			GameObject[] allObjects = FindObjectsOfType<GameObject>();
+			Modding.Logger.Log(prevScene.name + " to " + nextScene.name+ "----------------------");
+			foreach (GameObject obj in allObjects)
+			{
+				Modding.Logger.Log(obj.name + " " + obj.layer);
+			}//*/
+			if (nextScene.name == "GG_Shade_Lord")
+            {
 				// add properties to certain elements
 				// respawns, camera locks, hazards, etc
 				GameObject[] allObjects = FindObjectsOfType<GameObject>();
@@ -51,10 +72,9 @@ namespace ShadeLord
 						obj.GetComponent<SpriteRenderer>().material.shader = Shader.Find("Sprites/Default");
 					}
 				}
-
 				PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
 
-				// scene stuf
+				// scene stuff
 				var bsc = Instantiate(ShadeLord.GameObjects["Boss Scene Controller"]);
                 bsc.SetActive(true);
                 SceneController = bsc.GetComponent<BossSceneController>();
@@ -63,9 +83,9 @@ namespace ShadeLord
                 var godseeker = Instantiate(ShadeLord.GameObjects["Godseeker"], new Vector3(x, 75f, 18.39f), Quaternion.identity);
                 godseeker.SetActive(true);
                 godseeker.transform.localScale = Vector3.one * 1f;
-				
+
 				// boss stuff
-				GameObject.Find("ShadeLord").AddComponent<ShadeCtrl>();
+				GameObject.Find("ShadeLord").AddComponent<ShadeLordCtrl>();
 				//end boss stuff
 				var rootGOs = nextScene.GetRootGameObjects();
                 foreach (var go in rootGOs)
@@ -85,7 +105,6 @@ namespace ShadeLord
                         tileRend.material.shader = Shader.Find("Sprites/Default");
                     }
                 }
-				//StartCoroutine(position());
 			}
         }
 		private void SceneManagerOnStart(On.SceneManager.orig_Start orig, SceneManager self)
@@ -102,12 +121,16 @@ namespace ShadeLord
             On.GameManager.EnterHero -= OnEnterHero;
         }
 
+		// REMOVE WHEN DONE
+		// print position every 3 seconds 
 		private IEnumerator position()
 		{
 			yield return new WaitForSeconds(3f);
 			StartCoroutine(position());
 		}
 
+		// Turn given GameObject, obj, into a respawn point
+		// put an 'L' at the end of obj's name to make player spawn facing left
 		private void MakeRespawn(GameObject obj)
 		{
 			BoxCollider2D col = obj.GetComponent<BoxCollider2D>();
@@ -125,26 +148,9 @@ namespace ShadeLord
 
 			obj.SetActive(true);//*/
 		}
-		private static void CreateSpawn(string name, float x, float y, float xSize, float ySize, bool respawnFacingRight = true)
-		{
-			GameObject go = new GameObject(name);
-			go.transform.SetPosition2D(new Vector2(x, y));
-
-			BoxCollider2D box = go.AddComponent<BoxCollider2D>();
-			box.isTrigger = true;
-			box.size = new Vector2(xSize, ySize);
-
-			HazardRespawnMarker hrm = go.AddComponent<HazardRespawnMarker>();
-			HazardRespawnTrigger hrt = go.AddComponent<HazardRespawnTrigger>();
-			hrt.respawnMarker = hrm;
-			hrt.fireOnce = false;
-			hrm.respawnFacingRight = respawnFacingRight;
-
-			hrm.transform.SetPositionZ(0);
-			hrm.respawnFacingRight = true;
-
-			go.SetActive(true);
-		}
+		// Turn given GameObject, obj, into a camera lock area
+		// box collider of obj is the area the player must be in for the camera lock to apply
+		// obj must have a child with a box collider as the camera bounds
 		private void SetCameraLock(GameObject obj)
 		{
 			CameraLockArea area = obj.AddComponent<CameraLockArea>();
@@ -155,5 +161,5 @@ namespace ShadeLord
 			area.cameraYMax = bounds.max.y;
 			area.cameraYMin = bounds.min.y;//*/
 		}
-    }
+	}
 }

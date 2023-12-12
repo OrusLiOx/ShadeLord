@@ -1,5 +1,13 @@
+/*/ 31-10-2023
+
+Script to play animation and sound for spike and adjust hit box upon enabling
+Intended for user to only have to worry about spawing the spikes
+
+Attach this script to all spike objects (including outline)
+
+/*/
+
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Spike : MonoBehaviour

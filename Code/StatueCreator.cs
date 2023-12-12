@@ -1,6 +1,11 @@
+/*/ 31-10-2023
+
+Creates statue for Shade Lord
+
+/*/
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 namespace ShadeLord
 {

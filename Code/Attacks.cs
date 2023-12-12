@@ -1,3 +1,13 @@
+/*/ 20-11-2023
+
+Script to execute and stop Shade Lord's attacks
+
+Needs to be assigned:
+	GameObject target = what the boss is trying to attack
+	GameObject parent = obj to hold spikes
+
+/*/
+
 using System;
 using System.Collections.Generic;
 using System.Collections;
@@ -5,39 +15,45 @@ using UnityEngine;
 
 public class Attacks : MonoBehaviour
 {
-	public float xEdge, xCenter, yDef;
-	public GameObject target, parent;
+	public GameObject target;
 
-	public bool attacking;
-	private bool wait, forward, infiniteSpike, lastPhase;
+	// Helper variables
+	private float xEdge, xCenter, yDef;
+	private bool attacking, wait, forward, infiniteSpike, lastPhase;
+	private GameObject parent;
 
+	// Unity Components
 	private BoxCollider2D col;
 	private Animator anim;
 	private Rigidbody2D rig;
 	private AudioSource aud;
 
+	// Dicts for easy access to sound clips and objects needed for attacks
 	private Dictionary<string, GameObject> atts;
-	private Dictionary<string, AudioClip> sounds;
+	public Dictionary<string, AudioClip> sounds;
 
+	// set variables upon awake
 	private void Awake()
 	{
-		// set defaults
+		// Helper variables
 		xEdge = 18; xCenter = 100; yDef = 75.23f;
 		attacking = false;
+		wait = false;
 		infiniteSpike = false;
 		lastPhase = false;
 		parent = GameObject.Find("HoldAttacks");
 
-		// get unity components
+		// Unity Components
 		col = GetComponent<BoxCollider2D>();
 		anim = GetComponent<Animator>();
 		rig = GetComponent<Rigidbody2D>();
 		aud = GetComponent<AudioSource>();
 
-		// load dicts
+		// Load dicts
 		atts = new Dictionary<string, GameObject>();
 		sounds = new Dictionary<string, AudioClip>();
 
+		// Get attacks
 		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin" };
 		foreach (string n in names)
 		{
@@ -45,10 +61,12 @@ public class Attacks : MonoBehaviour
 			atts[n].SetActive(false);
 		}
 
+		// Get audio clips
 		foreach (AudioSource s in GameObject.Find("ShadeLord/SFX").GetComponents<AudioSource>())
 			sounds.Add(s.clip.name, s.clip);
 	}
 
+	// Attacks
 	public void Dash()
 	{
 		attacking = true;
@@ -57,8 +75,11 @@ public class Attacks : MonoBehaviour
 		IEnumerator Dash()
 		{
 			//	pick direction
-			bool goright = target.transform.position.x > xCenter;
-
+			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
+			if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
+			{
+				goright = target.transform.position.x > xCenter;
+			}
 			if (goright)
 			{
 				transform.localScale = new Vector3(1, 1, 1);
@@ -125,7 +146,7 @@ public class Attacks : MonoBehaviour
 			// cross slash windup
 			anim.Play("CrossSlashCharge1");
 
-			aDelay = 5; sDelay = 1.95f;
+			aDelay = 6; sDelay = 2.95f;
 			yield return new WaitForSeconds(sDelay / 12f);
 
 			// cross slash
@@ -147,7 +168,7 @@ public class Attacks : MonoBehaviour
 				transform.localScale = new Vector3(-1, 1, 1);
 
 			anim.Play("CrossSlashCharge2");
-			aDelay = 6; sDelay = 2.95f;
+			aDelay = 6.5f; sDelay = 3.45f;
 			yield return new WaitForSeconds(sDelay / 12f);
 
 			// sweep
@@ -204,7 +225,7 @@ public class Attacks : MonoBehaviour
 					GameObject s = Instantiate(atts["Spike"], parent.transform);
 					s.SetActive(true);
 					setPos(s.transform, offset, 66.42f);
-					offset += 2.4f;
+					offset += 2f;
 				}
 				yield return new WaitForSeconds(.7f);
 				// spikes go up
@@ -234,9 +255,8 @@ public class Attacks : MonoBehaviour
 		{
 			// pick location
 			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
-
 			Transform beam = atts["BeamOrigin"].transform;
-			SpriteRenderer head = transform.Find("BeamOrigin/head").GetComponent<SpriteRenderer>();
+			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
 			head.enabled = false;
 
 			setX(transform, UnityEngine.Random.Range(xCenter - 14, xCenter + 14));
@@ -331,12 +351,14 @@ public class Attacks : MonoBehaviour
 				{
 					GameObject s = Instantiate(atts["BurstSpike"], parent.transform);
 					s.SetActive(true);
-					setPos(s.transform, transform.position.x, transform.position.y - 2.22f);
+					setPos(s.transform, transform.position.x, transform.position.y - 2.22f, atts["BurstSpike"].transform.position.z);
 					s.transform.Rotate(new Vector3(0, 0, offset + k * 360f / seg));
 				}
 				yield return new WaitForSeconds(.7f);
 				playSound("SpikeUpLower");
 				offset += UnityEngine.Random.Range(10, (360f / seg) - 10);
+
+				yield return new WaitForSeconds(.3f);
 			}
 
 			// end
@@ -357,9 +379,13 @@ public class Attacks : MonoBehaviour
 		IEnumerator AimBeam(int beams)
 		{
 			// go to side
-			bool goright = target.transform.position.x > xCenter, stop = false;
+			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
+			if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
+			{
+				goright = target.transform.position.x > xCenter;
+			}
 			Transform beam = atts["BeamOrigin"].transform;
-			SpriteRenderer head = transform.Find("BeamOrigin/head").GetComponent<SpriteRenderer>();
+			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
 			head.enabled = false;
 
 			if (goright)
@@ -413,21 +439,19 @@ public class Attacks : MonoBehaviour
 				yield return new WaitForSeconds(.6f);
 			}
 
-			if (!stop)
-			{
-				// end
-				atts["BeamOrigin"].SetActive(false);
-				eyes(true);
-				yield return new WaitUntil(() => !wait);
+			// end
+			atts["BeamOrigin"].SetActive(false);
+			eyes(true);
+			yield return new WaitUntil(() => !wait);
 
-				yield return new WaitForSeconds(3 / 12f);
-				leave();
-				yield return new WaitUntil(() => !wait);
-				attacking = false;
-			}
+			yield return new WaitForSeconds(3 / 12f);
+			leave();
+			yield return new WaitUntil(() => !wait);
+			attacking = false;
 		}
 	}
 
+	// Misc Public functions 
 	public void Stop()
 	{
 		StopAllCoroutines();
@@ -440,6 +464,11 @@ public class Attacks : MonoBehaviour
 			g.SetActive(false);
 		attacking = false;
 		Hide();
+	}
+	public void Hide()
+	{
+		anim.Play("Nothing");
+		col.enabled = false;
 	}
 	public void Phase(int phase)
 	{
@@ -463,19 +492,13 @@ public class Attacks : MonoBehaviour
 				break;
 		}
 	}
-	public void Hide()
+
+	public bool isAttacking()
 	{
-		anim.Play("Nothing");
-		col.enabled = false;
+		return attacking;
 	}
 
-	private void resetHitBox()
-	{
-		col.size = new Vector2(3.86f, 4f);
-		col.offset = new Vector2(0f, -1.96f);
-		col.enabled = true;
-	}
-
+	// Common Coroutines
 	private void eyes(bool open)
 	{
 		StartCoroutine(eyes(open));
@@ -561,13 +584,7 @@ public class Attacks : MonoBehaviour
 		wait = false;
 	}
 
-
-	private void playSound(string clip)
-	{
-		//aud.clip = sounds[clip];
-		aud.GetComponent<AudioSource>().PlayOneShot(sounds[clip]);
-	}
-
+	// Simplify Unity actions
 	private void setX(Transform t, float x)
 	{
 		t.localPosition = new Vector3(x, t.localPosition.y, t.localPosition.z);
@@ -576,12 +593,31 @@ public class Attacks : MonoBehaviour
 	{
 		t.localPosition = new Vector3(t.localPosition.x, y, t.localPosition.z);
 	}
+	private void setZ(Transform t, float z)
+	{
+		t.localPosition = new Vector3(t.localPosition.x, t.localPosition.y, z);
+	}
 	private void setPos(Transform t, float x, float y)
 	{
 		t.localPosition = new Vector3(x, y, t.localPosition.z);
 	}
+	private void setPos(Transform t, float x, float y, float z)
+	{
+		t.localPosition = new Vector3(x, y,z);
+	}
 	private void rotate(Transform t, float r)
 	{
 		t.Rotate(new Vector3(0, 0, t.rotation.z + r));
+	}
+	private void playSound(string clip)
+	{
+		//aud.clip = sounds[clip];
+		aud.GetComponent<AudioSource>().PlayOneShot(sounds[clip]);
+	}
+	private void resetHitBox()
+	{
+		col.size = new Vector2(3.86f, 4f);
+		col.offset = new Vector2(0f, -1.96f);
+		col.enabled = true;
 	}
 }
