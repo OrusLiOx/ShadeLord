@@ -1,4 +1,4 @@
-/*/ 31-10-2023
+/*/
 
 Script to play animation and sound for face spike and adjust hit box upon enabling
 Intended for user to only have to worry about spawing the face spike

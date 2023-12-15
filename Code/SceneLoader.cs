@@ -1,4 +1,4 @@
-/*/ 20-11-2023
+/*/
 
 Sets up ShadeLord scene
 
@@ -44,13 +44,7 @@ namespace ShadeLord
 		}
 		// Set up scene and attach nessecary scripts
 		private void OnSceneChange(Scene prevScene, Scene nextScene)
-        {/*
-			GameObject[] allObjects = FindObjectsOfType<GameObject>();
-			Modding.Logger.Log(prevScene.name + " to " + nextScene.name+ "----------------------");
-			foreach (GameObject obj in allObjects)
-			{
-				Modding.Logger.Log(obj.name + " " + obj.layer);
-			}//*/
+        {
 			if (nextScene.name == "GG_Shade_Lord")
             {
 				// add properties to certain elements
@@ -80,9 +74,11 @@ namespace ShadeLord
                 SceneController = bsc.GetComponent<BossSceneController>();
                 StatueCreator.BossLevel = SceneController.BossLevel;
 
-                var godseeker = Instantiate(ShadeLord.GameObjects["Godseeker"], new Vector3(x, 75f, 18.39f), Quaternion.identity);
+                var godseeker = Instantiate(ShadeLord.GameObjects["Godseeker"], new Vector3(x, 72.2f, 14.9f), Quaternion.identity);
                 godseeker.SetActive(true);
-                godseeker.transform.localScale = Vector3.one * 1f;
+				foreach(SpriteRenderer sr in godseeker.GetComponentsInChildren<SpriteRenderer>())
+					sr.color = new Color(209/255f, 209 / 255f, 209 / 255f);
+                godseeker.transform.localScale = Vector3.one * .7f;
 
 				// boss stuff
 				GameObject.Find("ShadeLord").AddComponent<ShadeLordCtrl>();

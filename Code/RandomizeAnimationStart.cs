@@ -1,4 +1,4 @@
-/*/ 31-10-2023
+/*/
 
 Randomly wait from 0 to 1 second before playing void tendril animation 
 

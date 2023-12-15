@@ -1,4 +1,4 @@
-﻿/*/ 31-10-2023
+﻿/*/
  
 Controls Shade Lord behavior (phases, attacks, spawning, dying)
 
@@ -29,7 +29,7 @@ class ShadeLordCtrl : MonoBehaviour
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	private int[] hpMarkers = { 400, 450, 300, 750, 2200 };
+	private int[] hpMarkers = { 50,50,50,50,300};//{ 400, 450, 300, 750, 2200 };
 	private System.Random rand;
 	
 	private Attacks attacks;
@@ -38,6 +38,7 @@ class ShadeLordCtrl : MonoBehaviour
 	private Queue<GameObject> spawned;
 	private Queue<GameObject> tendrils;
 
+	private bool triggeredRocks;
 	private int phase;
 
 	// SETTING STUFF UP
@@ -84,7 +85,7 @@ class ShadeLordCtrl : MonoBehaviour
 		health.OnDeath += OnDeath;
 		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
-		
+
 		Spawn();
 	}
 	private void AssignValues()
@@ -99,6 +100,7 @@ class ShadeLordCtrl : MonoBehaviour
 		hpMarkers[4] = 0;//*/
 
 		phase = 0;
+		triggeredRocks = false;
 
 		gameObject.layer = 11;
 
@@ -178,7 +180,6 @@ class ShadeLordCtrl : MonoBehaviour
 		Modding.Logger.Log(self.hp + " " + hitinstance.DamageDealt);
 		// deal hit then check phase
 		orig(self, hitinstance);
-		/*/self.hp -= hitinstance.DamageDealt;
 		//hitEffect.RecieveHitEffect(hitinstance.Direction);
 		if (health.hp < hpMarkers[phase])
 		{
@@ -228,7 +229,7 @@ class ShadeLordCtrl : MonoBehaviour
 	private void Spawn()
 	{
 		GameObject[] allObjects = FindObjectsOfType<GameObject>();
-		GameObject hud = null;
+		GameObject hud = GameObject.Find("Hud Canvas");
 		IEnumerator Spawn()
 		{
 			ShadeLord.ShadeLord.PlayMusic(attacks.sounds["Silence"]);
@@ -245,7 +246,12 @@ class ShadeLordCtrl : MonoBehaviour
 
 			// APPEAR CLOSER
 			// lock movemnet
+			if (player.transform.GetPositionX() > transform.GetPositionX())
+				HeroController.instance.FaceLeft();
+			else
+				HeroController.instance.FaceRight();
 			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR ENTER", false);
+
 			// black screen
 			wall.transform.localPosition = new Vector3(0,0f,0);
 			yield return new WaitForSeconds(1/6f);
@@ -413,7 +419,6 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		float c = 1/20f;
 		Color scale = new Color(c, c, c, 0);
-		//foreach(GameObject go in GOs)
 		StartCoroutine(breakTerrain(go));
 
 		IEnumerator breakTerrain(GameObject go)
@@ -429,6 +434,24 @@ class ShadeLordCtrl : MonoBehaviour
 			yield return new WaitForSeconds(5f);
 
 			go.SetActive(false);
+
+			// rock particles
+			if (!triggeredRocks)
+			{
+				triggeredRocks = true;
+				foreach (Rigidbody2D rb in GameObject.Find("Terrain/RocksLeft").GetComponentsInChildren<Rigidbody2D>())
+				{
+					rb.gameObject.AddComponent<RockParticle>();
+				}
+				foreach (Rigidbody2D rb in GameObject.Find("Terrain/RocksRight").GetComponentsInChildren<Rigidbody2D>())
+				{
+					rb.gameObject.AddComponent<RockParticle>();
+				}
+				foreach (Rigidbody2D rb in GameObject.Find("Terrain/RocksFloor").GetComponentsInChildren<Rigidbody2D>())
+				{
+					rb.gameObject.AddComponent<RockParticle>();
+				}
+			}//*/
 		}
 		IEnumerator fade(SpriteRenderer sprite)
 		{

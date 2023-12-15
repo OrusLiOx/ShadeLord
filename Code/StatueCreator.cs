@@ -1,4 +1,4 @@
-/*/ 31-10-2023
+/*/
 
 Creates statue for Shade Lord
 

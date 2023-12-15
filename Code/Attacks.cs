@@ -1,4 +1,4 @@
-/*/ 20-11-2023
+/*/
 
 Script to execute and stop Shade Lord's attacks
 
@@ -83,20 +83,20 @@ public class Attacks : MonoBehaviour
 			if (goright)
 			{
 				transform.localScale = new Vector3(1, 1, 1);
-				setX(transform, xCenter - xEdge);
+				transform.SetPositionX(xCenter - xEdge);
 			}
 			else
 			{
 
 				transform.localScale = new Vector3(-1, 1, 1);
-				setX(transform, xCenter + xEdge);
+				transform.SetPositionX(xCenter + xEdge);
 			}
 			arrive();
 			yield return new WaitUntil(() => !wait);
 
 			// windup
 			anim.Play("DashWindup");
-			setY(transform, 68.04f);
+			transform.SetPositionY( 68.04f);
 			col.offset = new Vector2(0, 5.87f);
 			yield return new WaitForSeconds(1 / 12f);
 			col.offset = new Vector2(5.98f, 4.21f);
@@ -138,7 +138,7 @@ public class Attacks : MonoBehaviour
 				x = xCenter + xEdge - 5f;
 			else if (x < (xCenter - xEdge + 5f))
 				x = xCenter - xEdge + 5f;
-			setX(transform, x);
+			transform.SetPositionX(x);
 			arrive();
 
 			yield return new WaitUntil(() => !wait);
@@ -205,9 +205,9 @@ public class Attacks : MonoBehaviour
 		{
 			// go to random location
 			if (infiniteSpike)
-				setX(transform, xCenter);
+				transform.SetPositionX(xCenter);
 			else
-				setX(transform, UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
+				transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
 			arrive();
 			yield return new WaitUntil(() => !wait);
 
@@ -224,7 +224,7 @@ public class Attacks : MonoBehaviour
 				{
 					GameObject s = Instantiate(atts["Spike"], parent.transform);
 					s.SetActive(true);
-					setPos(s.transform, offset, 66.42f);
+					s.transform.SetPosition2D(offset, 66.42f);
 					offset += 2f;
 				}
 				yield return new WaitForSeconds(.7f);
@@ -254,12 +254,12 @@ public class Attacks : MonoBehaviour
 		IEnumerator SweepBeam()
 		{
 			// pick location
-			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
+			bool goright = target.transform.position.x > transform.position.x;
 			Transform beam = atts["BeamOrigin"].transform;
 			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
 			head.enabled = false;
 
-			setX(transform, UnityEngine.Random.Range(xCenter - 14, xCenter + 14));
+			transform.SetPositionX(UnityEngine.Random.Range(xCenter - 14, xCenter + 14));
 			if (goright)
 			{
 				transform.localScale = new Vector3(1, 1, 1);
@@ -272,11 +272,11 @@ public class Attacks : MonoBehaviour
 			if (lastPhase)
 			{
 				if (UnityEngine.Random.Range(0, 3f) > 1)
-					setX(transform, xCenter);
+					transform.SetPositionX(xCenter);
 				else if (goright)
-					setX(transform, xCenter - xEdge + 5);
+					transform.SetPositionX(xCenter - xEdge + 5);
 				else
-					setX(transform, xCenter + xEdge - 5);
+					transform.SetPositionX(xCenter + xEdge - 5);
 			}
 			arrive();
 			yield return new WaitUntil(() => !wait);
@@ -337,7 +337,7 @@ public class Attacks : MonoBehaviour
 			// go to random location
 			int seg = 5;
 			float offset = UnityEngine.Random.Range(0, 360f / seg);
-			setX(transform, UnityEngine.Random.Range(xCenter - 14, xCenter + 14));
+			transform.SetPositionX(UnityEngine.Random.Range(xCenter - 14, xCenter + 14));
 			arrive();
 			yield return new WaitUntil(() => !wait);
 			eyes(false);
@@ -351,7 +351,7 @@ public class Attacks : MonoBehaviour
 				{
 					GameObject s = Instantiate(atts["BurstSpike"], parent.transform);
 					s.SetActive(true);
-					setPos(s.transform, transform.position.x, transform.position.y - 2.22f, atts["BurstSpike"].transform.position.z);
+					s.transform.SetPosition3D(transform.position.x, transform.position.y - 2.22f, atts["BurstSpike"].transform.position.z);
 					s.transform.Rotate(new Vector3(0, 0, offset + k * 360f / seg));
 				}
 				yield return new WaitForSeconds(.7f);
@@ -391,12 +391,12 @@ public class Attacks : MonoBehaviour
 			if (goright)
 			{
 				transform.localScale = new Vector3(1, 1, 1);
-				setX(transform, xCenter - xEdge + 5);
+				transform.SetPositionX(xCenter - xEdge + 5);
 			}
 			else
 			{
 				transform.localScale = new Vector3(-1, 1, 1);
-				setX(transform, xCenter + xEdge - 5);
+				transform.SetPositionX(xCenter + xEdge - 5);
 			}
 			arrive(70.98f);
 			yield return new WaitUntil(() => !wait);
@@ -557,7 +557,7 @@ public class Attacks : MonoBehaviour
 	private IEnumerator arriveRoutine(float max)
 	{
 		wait = true;
-		setY(transform, 50f);
+		transform.SetPositionY( 50f);
 		resetHitBox();
 		if (forward)
 		{
@@ -579,7 +579,7 @@ public class Attacks : MonoBehaviour
 		}
 		yield return new WaitUntil(() => transform.position.y > max);
 		rig.velocity = new Vector2(0f, 0f);
-		setY(transform, max);
+		transform.SetPositionY( max);
 
 		wait = false;
 	}
