@@ -1,0 +1,540 @@
+fileFormatVersion: 2
+guid: 645bba3c494441d4b93c9d989f5c8d93
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1575546706317461907
+    second: Effect_StartTendril_0
+  - first:
+      213: 6092898585746707393
+    second: Effect_StartTendril_1
+  - first:
+      213: -5126097515862778354
+    second: Effect_StartTendril_2
+  - first:
+      213: -2451069624651190200
+    second: Effect_StartTendril_3
+  - first:
+      213: 7176122784853486419
+    second: Effect_StartTendril_4
+  - first:
+      213: 457888786827314820
+    second: Effect_StartTendril_5
+  - first:
+      213: 3748796395911650777
+    second: Effect_StartTendril_6
+  - first:
+      213: 50753889408493145
+    second: Effect_StartTendril_7
+  - first:
+      213: 9084821002313957800
+    second: Effect_StartTendril_8
+  - first:
+      213: -4839789117262372845
+    second: Effect_StartTendril_f8
+  - first:
+      213: -1913635432825273218
+    second: Effect_StartTendril_f7
+  - first:
+      213: -2796024340594002756
+    second: Effect_StartTendril_f6
+  - first:
+      213: -4101909850717997736
+    second: Effect_StartTendril_f5
+  - first:
+      213: 2372876147138700790
+    second: Effect_StartTendril_f4
+  - first:
+      213: 7196028132523763412
+    second: Effect_StartTendril_f3
+  - first:
+      213: 365315815688943815
+    second: Effect_StartTendril_f2
+  - first:
+      213: 1149054765352333248
+    second: Effect_StartTendril_f1
+  - first:
+      213: -8985987995156489064
+    second: Effect_StartTendril_f0
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Effect_StartTendril_0
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 8460
+        width: 868
+        height: 537
+      alignment: 9
+      pivot: {x: 0.9833042, y: 0.12758961}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 399c61db1677dd510800000000000000
+      internalID: 1575546706317461907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_1
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 7933
+        width: 947
+        height: 523
+      alignment: 9
+      pivot: {x: 0.9857202, y: 0.15195163}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c399ef6bf25e8450800000000000000
+      internalID: 6092898585746707393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_2
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 7461
+        width: 997
+        height: 469
+      alignment: 9
+      pivot: {x: 0.9854429, y: 0.23133287}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0e9cf2f7717cd8b0800000000000000
+      internalID: -5126097515862778354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_3
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 7010
+        width: 1019
+        height: 432
+      alignment: 9
+      pivot: {x: 0.986743, y: 0.30673105}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8407ae6a92d0cfdd0800000000000000
+      internalID: -2451069624651190200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_4
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 6562
+        width: 1034
+        height: 429
+      alignment: 9
+      pivot: {x: 0.9870171, y: 0.25743234}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35b67cfe6a5b69360800000000000000
+      internalID: 7176122784853486419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_5
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 6216
+        width: 1164
+        height: 338
+      alignment: 9
+      pivot: {x: 0.9884287, y: 0.91268}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4860a75fc6fba5600800000000000000
+      internalID: 457888786827314820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_6
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 5681
+        width: 997
+        height: 469
+      alignment: 9
+      pivot: {x: 0.98546016, y: 0.7622143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9dd1499c576660430800000000000000
+      internalID: 3748796395911650777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_7
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 5146
+        width: 947
+        height: 523
+      alignment: 9
+      pivot: {x: 0.985724, y: 0.8422497}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 956a92db46054b000800000000000000
+      internalID: 50753889408493145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_8
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 4607
+        width: 868
+        height: 537
+      alignment: 9
+      pivot: {x: 0.9832951, y: 0.86681104}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a18ee27194c31e70800000000000000
+      internalID: 9084821002313957800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_f8
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 3856
+        width: 868
+        height: 537
+      alignment: 9
+      pivot: {x: 0.983308, y: 0.13305801}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31066cda07d95dcb0800000000000000
+      internalID: -4839789117262372845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_f7
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 3331
+        width: 947
+        height: 523
+      alignment: 9
+      pivot: {x: 0.98575926, y: 0.15768263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7449d476b66175e0800000000000000
+      internalID: -1913635432825273218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_f6
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 2850
+        width: 997
+        height: 469
+      alignment: 9
+      pivot: {x: 0.9854591, y: 0.23769146}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb47c8b1da68239d0800000000000000
+      internalID: -2796024340594002756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_f5
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 2453
+        width: 1164
+        height: 338
+      alignment: 9
+      pivot: {x: 0.98841035, y: 0.08722393}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 855374f39b61317c0800000000000000
+      internalID: -4101909850717997736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_f4
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 2009
+        width: 1034
+        height: 429
+      alignment: 9
+      pivot: {x: 0.98696136, y: 0.74238044}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f52336a8462ee020800000000000000
+      internalID: 2372876147138700790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_f3
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 1558
+        width: 1019
+        height: 432
+      alignment: 9
+      pivot: {x: 0.9867979, y: 0.69328904}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d6ebc8d57d6dd360800000000000000
+      internalID: 7196028132523763412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_f2
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 1070
+        width: 997
+        height: 469
+      alignment: 9
+      pivot: {x: 0.9854986, y: 0.7686939}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c8b8f08cccd11500800000000000000
+      internalID: 365315815688943815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_f1
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 544
+        width: 947
+        height: 523
+      alignment: 9
+      pivot: {x: 0.9857571, y: 0.84799457}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0cfab4c983342ff00800000000000000
+      internalID: 1149054765352333248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_StartTendril_f0
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 3
+        width: 868
+        height: 537
+      alignment: 9
+      pivot: {x: 0.9833084, y: 0.8724084}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89cd5c8378b5b4380800000000000000
+      internalID: -8985987995156489064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

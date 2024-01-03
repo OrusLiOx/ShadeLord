@@ -1,0 +1,181 @@
+Using pre-set license
+Built from '2020.2/release' branch; Version is '2020.2.2f1 (068178b99f32) revision 426360'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10 Home; OS build 19045.3693; Version 2009; 64bit' Language: 'en' Physical Memory: 16111 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+ COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+C:/Users/ylily/Desktop/Things/_HollowKnightMod/UnderstandingShit/ShadeLord/Unity
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+55355
+Successfully changed project path to: C:/Users/ylily/Desktop/Things/_HollowKnightMod/UnderstandingShit/ShadeLord/Unity
+C:/Users/ylily/Desktop/Things/_HollowKnightMod/UnderstandingShit/ShadeLord/Unity
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 45.48 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.2.2f1 (068178b99f32)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/ylily/Desktop/Things/_HollowKnightMod/UnderstandingShit/ShadeLord/Unity/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1650 (ID=0x1f91)
+    Vendor:   
+    VRAM:     3951 MB
+    Driver:   31.0.15.3209
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56368
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.002616 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 52.46 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.615 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.001810 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 48.46 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.988 seconds
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.05 seconds
+Refreshing native plugins compatible for Editor in 0.34 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1821 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 86.5 MB.
+System memory in use after: 86.5 MB.
+
+Unloading 23 unused Assets to reduce memory usage. Loaded Objects now: 2270.
+Total: 2.217700 ms (FindLiveObjects: 0.293500 ms CreateObjectMapping: 0.091200 ms MarkObjects: 1.717500 ms  DeleteObjects: 0.114100 ms)
+
+========================================================================
+Received Import Request.
+  path: Assets/ShadeLord/Sprites/Cutscene/Start/Tendril.controller
+  artifactKey: Guid(909dec8392afe11478df3a93e5efca09) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ShadeLord/Sprites/Cutscene/Start/Tendril.controller using Guid(909dec8392afe11478df3a93e5efca09) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '34366a68a66fc4f1a8a73475e413ae30') in 0.070610 seconds
+  Import took 0.073896 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000364 seconds.
+  path: Assets/ShadeLord/Sprites/Cutscene/Start/TenddrilWiggle.anim
+  artifactKey: Guid(365c10b06ca0d3841a2f360f3555d712) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ShadeLord/Sprites/Cutscene/Start/TenddrilWiggle.anim using Guid(365c10b06ca0d3841a2f360f3555d712) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '10398fe3c89cfc627eca24f8f6594b2f') in 0.012616 seconds
+  Import took 0.015124 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.311263 seconds.
+  path: Assets/ShadeLord/Sprites/Cutscene/Start/TendrilWiggle.anim
+  artifactKey: Guid(365c10b06ca0d3841a2f360f3555d712) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ShadeLord/Sprites/Cutscene/Start/TendrilWiggle.anim using Guid(365c10b06ca0d3841a2f360f3555d712) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a53108a447230fb9ee5ca1dcec63e3ef') in 0.010072 seconds
+  Import took 0.015099 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.874225 seconds.
+  path: Assets/ShadeLord/Sprites/Cutscene/Start/TendrilWiggle.anim
+  artifactKey: Guid(365c10b06ca0d3841a2f360f3555d712) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ShadeLord/Sprites/Cutscene/Start/TendrilWiggle.anim using Guid(365c10b06ca0d3841a2f360f3555d712) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '29337f8179ee568330fae12977cd2f39') in 0.003762 seconds
+  Import took 0.006527 seconds .
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.23 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 50.2 MB.
+System memory in use after: 50.2 MB.
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2270.
+Total: 2.607000 ms (FindLiveObjects: 0.300300 ms CreateObjectMapping: 0.114100 ms MarkObjects: 2.083000 ms  DeleteObjects: 0.107900 ms)
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.19 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 50.5 MB.
+System memory in use after: 50.5 MB.
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2270.
+Total: 2.950400 ms (FindLiveObjects: 0.205700 ms CreateObjectMapping: 0.085800 ms MarkObjects: 2.531000 ms  DeleteObjects: 0.126400 ms)
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.10 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 50.7 MB.
+System memory in use after: 50.7 MB.
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2270.
+Total: 2.971600 ms (FindLiveObjects: 0.209300 ms CreateObjectMapping: 0.066600 ms MarkObjects: 2.560100 ms  DeleteObjects: 0.133800 ms)
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.12 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 50.8 MB.
+System memory in use after: 50.8 MB.
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2270.
+Total: 3.002400 ms (FindLiveObjects: 0.191400 ms CreateObjectMapping: 0.098700 ms MarkObjects: 2.606700 ms  DeleteObjects: 0.104500 ms)
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.21 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 51.2 MB.
+System memory in use after: 51.2 MB.
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2270.
+Total: 20.467300 ms (FindLiveObjects: 0.486200 ms CreateObjectMapping: 0.090700 ms MarkObjects: 19.746300 ms  DeleteObjects: 0.142200 ms)
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.04 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 51.4 MB.
+System memory in use after: 51.4 MB.
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2270.
+Total: 2.552000 ms (FindLiveObjects: 0.282400 ms CreateObjectMapping: 0.104200 ms MarkObjects: 2.066100 ms  DeleteObjects: 0.098200 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 7239.344038 seconds.
+  path: Assets/ShadeLord/ShadeLordAnimator.controller
+  artifactKey: Guid(563687760d718e3419a8200c1577490a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ShadeLord/ShadeLordAnimator.controller using Guid(563687760d718e3419a8200c1577490a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '364f8861b1b73f6aa555c6315bf3632e') in 0.032032 seconds
+  Import took 0.038483 seconds .
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file

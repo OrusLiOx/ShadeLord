@@ -53,13 +53,13 @@
     <UnityVersion>2020.2.2f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\ShadeLord\Scripts\Attacks.cs" />
     <Compile Include="Assets\Terrain\fade.cs" />
     <Compile Include="Assets\ShadeLord\Sprites\Beam\BeamAnimation.cs" />
     <Compile Include="Assets\VoidTendrils\RandomizeAnimationStart.cs" />
     <Compile Include="Assets\ShadeLord\Sprites\Spike\Spike.cs" />
     <Compile Include="Assets\ShadeLord\Sprites\FaceSpike\FaceSpike.cs" />
     <Compile Include="Assets\ShadeLord\Scripts\TestAnimations.cs" />
-    <Compile Include="Assets\ShadeLord\Scripts\Attacks.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
