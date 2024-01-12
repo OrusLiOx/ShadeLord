@@ -12,6 +12,7 @@ using UnityEngine;
 public class Attacks : MonoBehaviour
 {
 	public GameObject target;
+	private GameObject halo;
 
 	// Helper variables
 	private float xEdge, xCenter, yDef;
@@ -38,6 +39,7 @@ public class Attacks : MonoBehaviour
 		infiniteSpike = false;
 		lastPhase = false;
 		parent = GameObject.Find("HoldAttacks");
+		halo = GameObject.Find("ShadeLord/Halo");
 
 		// Unity Components
 		col = GetComponent<BoxCollider2D>();
@@ -53,7 +55,7 @@ public class Attacks : MonoBehaviour
 		sounds = new Dictionary<string, AudioClip>();
 
 		// Get attacks
-		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin" };
+		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin", "VoidBurst" };
 		foreach (string n in names)
 		{
 			atts.Add(n, GameObject.Find("ShadeLord/" + n));
@@ -95,12 +97,15 @@ public class Attacks : MonoBehaviour
 
 			// windup
 			anim.Play("DashWindup");
+			halo.transform.localPosition = new Vector2(.15f, 4.98f);
 			transform.SetPositionY( 68.04f);
 			col.offset = new Vector2(0, 5.87f);
 			yield return new WaitForSeconds(1 / 12f);
+			halo.transform.localPosition = new Vector2(6.1f, 3.53f);
 			col.offset = new Vector2(5.98f, 4.21f);
 			col.size = new Vector2(3.13f, 3.86f);
 			yield return new WaitForSeconds(1 / 12f);
+			halo.transform.localPosition = new Vector2(9.5f, 0.08f);
 			col.offset = new Vector2(9.3f, 0);
 			yield return new WaitForSeconds(12 / 12f);
 
@@ -110,6 +115,7 @@ public class Attacks : MonoBehaviour
 			aud.clip = sounds["DashLoop"];
 			aud.loop = true;
 
+			halo.transform.localPosition = new Vector2(11.23f, 0.04f);
 			col.offset = new Vector2(6, -.07f);
 			col.size = new Vector2(19, 2.36f);
 			atts["Dash"].SetActive(true);
@@ -121,6 +127,7 @@ public class Attacks : MonoBehaviour
 			yield return new WaitUntil(() => Mathf.Abs(transform.position.x - xCenter) > (xEdge + 20f));
 
 			// end
+			halo.transform.localPosition = new Vector2(0f, -2.62f);
 			atts["Dash"].SetActive(false);
 			Hide();
 			attacking = false;
@@ -255,6 +262,26 @@ public class Attacks : MonoBehaviour
 		IEnumerator SweepBeam()
 		{
 			// pick location
+			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
+			if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
+			{
+				goright = target.transform.position.x > xCenter;
+			}
+			Transform beam = atts["BeamOrigin"].transform;
+			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
+			head.enabled = false;
+
+			if (goright)
+			{
+				transform.localScale = new Vector3(1, 1, 1);
+				transform.SetPositionX(xCenter - xEdge + 5);
+			}
+			else
+			{
+				transform.localScale = new Vector3(-1, 1, 1);
+				transform.SetPositionX(xCenter + xEdge - 5);
+			}
+			/*
 			bool goright = target.transform.position.x > transform.position.x;
 			Transform beam = atts["BeamOrigin"].transform;
 			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
@@ -278,7 +305,7 @@ public class Attacks : MonoBehaviour
 					transform.SetPositionX(xCenter - xEdge + 5);
 				else
 					transform.SetPositionX(xCenter + xEdge - 5);
-			}
+			}*/
 			arrive();
 			yield return new WaitUntil(() => !wait);
 			yield return new WaitForSeconds(.3f);
@@ -305,12 +332,6 @@ public class Attacks : MonoBehaviour
 			for (int i = 0; i < incr; i++)
 			{
 				rotate(beam, end / incr);
-				yield return new WaitForSeconds(1.5f / incr);
-			}
-			transform.localScale = new Vector3(transform.localScale.x * -1, 1, 1);
-			for (int i = 0; i < incr; i++)
-			{
-				rotate(beam, -1 * end / incr);
 				yield return new WaitForSeconds(1.5f / incr);
 			}
 			
@@ -449,6 +470,58 @@ public class Attacks : MonoBehaviour
 			leave();
 			yield return new WaitUntil(() => !wait);
 			attacking = false;
+		}
+	}
+	public void VoidBurst()
+	{
+		attacking = true;
+		forward = true;
+		StartCoroutine(VoidBurst());
+
+		IEnumerator VoidBurst()
+		{
+			// pick rand location
+			transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
+			arrive();
+			yield return new WaitUntil(() => !wait);
+
+			// spawn orbs
+			float rotation = UnityEngine.Random.Range(0f,359f);
+			for (int k = (int)(xEdge / 6); k > 0; k--)
+			{
+				// pick random location
+				StartCoroutine(SpawnVoidBurst(
+					UnityEngine.Random.Range(xCenter-xEdge+4, xCenter + xEdge - 4), 
+					UnityEngine.Random.Range(yDef-7, yDef+3), 
+					rotation));
+			}
+
+			yield return new WaitForSeconds(4f);
+			leave();
+			yield return new WaitUntil(() => !wait);
+			attacking = false;
+
+		}
+		IEnumerator SpawnVoidBurst(float x, float y, float r)
+		{
+			Modding.Logger.Log(x + " " + y);
+			GameObject burst1 = Instantiate(atts["VoidBurst"]);
+			GameObject burst2 = Instantiate(atts["VoidBurst"]);
+
+			burst1.transform.SetPosition2D(x, y);
+			burst2.transform.SetPosition3D(x, y, burst1.transform.GetPositionZ()+.005f);
+
+			burst1.transform.SetRotationZ(r);
+			burst2.transform.SetRotationZ(r+45);
+
+			burst1.SetActive(true);
+			burst2.SetActive(true);
+
+			yield return new WaitForSeconds(1.5f);
+			burst1.GetComponent<VoidBurst>().Fire();
+
+			yield return new WaitForSeconds(1f);
+			burst2.GetComponent<VoidBurst>().Fire();
 		}
 	}
 

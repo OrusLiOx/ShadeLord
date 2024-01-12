@@ -24,13 +24,14 @@ class ShadeLordCtrl : MonoBehaviour
 	private GameObject player;
 	private HeroController hc;
 	private HealthManager health;
-	private IHitEffectReciever hitEffect;
+	private GameObject hitEffect;
 	private ExtraDamageable extDmg;
 
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	private int[] hpMarkers = { 50,50,50,50,300};//{ 400, 450, 300, 750, 2200 };
+	//private int[] hpMarkers = { 50,50,50,50,300};
+	private int[] hpMarkers = { 400, 450, 300, 750, 2200 };
 	private System.Random rand;
 	
 	private Attacks attacks;
@@ -44,7 +45,7 @@ class ShadeLordCtrl : MonoBehaviour
 	private bool triggeredRocks;
 	private int phase;
 
-	// SETTING STUFF UP
+	// setting up stuff
 	void Awake()
 	{
 		// generic unity stuff
@@ -65,12 +66,14 @@ class ShadeLordCtrl : MonoBehaviour
 		attacks.Hide();
 		atts = new List<Action>()
 		{
+		attacks.VoidBurst
+		/*
 			attacks.Dash,
 			attacks.SweepBeam,
 			attacks.CrossSlash,
 			attacks.FaceSpikes,
 			attacks.Spikes,
-			attacks.AimBeam
+			attacks.AimBeam/*/
 		};//*/
 
 		helper = gameObject.AddComponent<Helper>();
@@ -82,10 +85,11 @@ class ShadeLordCtrl : MonoBehaviour
 	}
 	void Start()
 	{
-		//hitEffect = gameObject.AddComponent<EnemyHitEffectsShade>();
+		hitEffect  = GameObject.Find("VoidParticle");
 		GameObject.Find("Start/Wall").transform.localPosition = new Vector3(0, -36.4f, 0);
 		health = gameObject.AddComponent<HealthManager>();
 		extDmg = gameObject.AddComponent<ExtraDamageable>();
+		GameObject.Find("Halo").AddComponent<Spin>();
 
 		AssignValues();
 		health.OnDeath += OnDeath;
@@ -151,6 +155,9 @@ class ShadeLordCtrl : MonoBehaviour
 				case "BurstSpike":
 					t.gameObject.AddComponent<FaceSpike>();
 					break;
+				case "VoidBurst":
+					t.gameObject.AddComponent<VoidBurst>();
+					break;
 				case "BeamOrigin":
 					foreach (Transform child in t.transform)
 					{
@@ -176,6 +183,7 @@ class ShadeLordCtrl : MonoBehaviour
 		}
 	}
 
+	// damage stuff
 	private void OnDeath()
 	{
 		gameObject.GetComponent<Attacks>().Stop();
@@ -184,15 +192,71 @@ class ShadeLordCtrl : MonoBehaviour
 	}
 	private void OnTakeDamage(On.HealthManager.orig_TakeDamage orig, HealthManager self, HitInstance hitinstance)
 	{
-		Modding.Logger.Log(self.hp + " " + hitinstance.DamageDealt);
+		Modding.Logger.Log(self.hp + " " + hitinstance.DamageDealt+ " " + hitinstance.Direction);
 		// deal hit then check phase
 		orig(self, hitinstance);
-		//hitEffect.RecieveHitEffect(hitinstance.Direction);
+		SpawnHitEffect(hitinstance.Direction);
 		if (health.hp < hpMarkers[phase])
 		{
 			nextPhase();
 		}//*/
 	}
+	private void SpawnHitEffect(float dir)
+	{
+		Color scale = new Color(0, 0, 0, 1 / 20f);
+		// spawn void particles (16 frames)
+		StartCoroutine(flicker());
+		for (float k = 0; k < 15; k++)
+		{
+			GameObject particle = Instantiate(hitEffect);
+			particle.transform.SetPosition2D(player.transform.position);
+			float s = UnityEngine.Random.Range(.1f, .2f);
+			particle.transform.SetScaleX(s);
+			particle.transform.SetScaleY(s);
+			float range = 5f, spread = 5f,
+				f1 = 20f + UnityEngine.Random.Range(-1 * range, range), f2 = UnityEngine.Random.Range(-1 * spread, spread);
+			switch (dir)
+			{
+				case 0f:
+					particle.GetComponent<Rigidbody2D>().velocity = new Vector2(f1, f2);
+					break;
+				case 90f:
+					particle.GetComponent<Rigidbody2D>().velocity = new Vector2(f2, f1);
+					break;
+				case 180f:
+					particle.GetComponent<Rigidbody2D>().velocity = new Vector2(-1* f1, f2);
+					break;
+				case 270f:
+					particle.GetComponent<Rigidbody2D>().velocity = new Vector2(f2, -1*f1);
+					break;
+			}
+			StartCoroutine(die(particle));
+		}
+		IEnumerator die(GameObject particle)
+		{
+			yield return new WaitForSeconds(UnityEngine.Random.Range(10/60f, 15/60f));
+
+			SpriteRenderer sprite = particle.GetComponent<SpriteRenderer>();
+			while (sprite.color.a > 0)
+			{
+				sprite.color -= scale;
+
+				yield return new WaitForSeconds(.1f);
+			}
+			Destroy(particle);
+		}
+		IEnumerator flicker()
+		{
+			gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+			for (int k = 0; k < 10; k++)
+			{
+				float c = .1f * k;
+				gameObject.GetComponent<SpriteRenderer>().color = new Color(c,c,c);
+				yield return new WaitForSeconds(1 / 60f);
+			}
+			gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+		}
+	}//*/
 
 	// Phase changes
 	private void nextPhase()
