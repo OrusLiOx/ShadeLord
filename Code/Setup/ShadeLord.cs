@@ -198,7 +198,6 @@ namespace ShadeLord.Setup
 			MusicCue musicCue = ScriptableObject.CreateInstance<MusicCue>();
 			MusicCue.MusicChannelInfo channelInfo = new MusicCue.MusicChannelInfo();
 			ReflectionHelper.SetField(channelInfo, "clip", clip);
-
 			MusicCue.MusicChannelInfo[] channelInfos = new MusicCue.MusicChannelInfo[]
 			{
 				channelInfo, null, null, null, null, null

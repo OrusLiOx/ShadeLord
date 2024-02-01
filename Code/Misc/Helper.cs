@@ -59,4 +59,25 @@ class Helper : MonoBehaviour
 		}
 		Destroy(gameObject);
 	}
+
+	public IEnumerator fadeTo(SpriteRenderer sprite, Color target, float time)
+	{
+		float frames = time*60;
+		Color 
+			r = new Color((target.r - sprite.color.r)/frames,0,0,0),
+			g = new Color(0,(target.g - sprite.color.g) / frames, 0,0),
+			b = new Color(0,0,(target.b - sprite.color.b) / frames, 0),
+			a = new Color(0,0,0,(target.a - sprite.color.a) / frames);
+
+		for(int i=0; i<frames;i++)
+		{
+			sprite.color += r;
+			sprite.color += g;
+			sprite.color += b;
+			sprite.color += a;
+
+			yield return new WaitForSeconds(1 / 60f);
+		}
+		sprite.color = target;
+	}
 }

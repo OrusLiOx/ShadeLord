@@ -4,34 +4,34 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: 7254387700860578409
-    second: Effect_VoidBurst_0
+    second: Start_0
   - first:
       213: 9183233400816555793
-    second: Effect_VoidBurst_1
+    second: Start_1
   - first:
       213: -5438113522340845074
-    second: Effect_VoidBurst_2
+    second: Fire_2
   - first:
       213: 5878100608756414338
-    second: Effect_VoidBurst_3
+    second: Retract_0
   - first:
       213: -7510831531849705118
-    second: Effect_VoidBurst_2
+    second: Fire_2
   - first:
       213: 5491314987398217423
-    second: Effect_VoidBurst_3
+    second: Retract_0
   - first:
       213: 9213739716425988673
-    second: Effect_VoidBurst_3
+    second: Retract_0
   - first:
       213: 1074905008003896672
-    second: Effect_VoidBurst_3
+    second: Retract_0
   - first:
       213: 348445157818341193
-    second: Effect_VoidBurst_r0
+    second: Fire_0
   - first:
       213: -6125587476079008714
-    second: Nothing
+    second: Fire_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -121,15 +121,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Effect_VoidBurst_0
+      name: Start_0
       rect:
         serializedVersion: 2
         x: 9
-        y: 2670
+        y: 2665
         width: 142
-        height: 130
+        height: 135
       alignment: 9
-      pivot: {x: 0.5, y: 0.008004056}
+      pivot: {x: 0.50016433, y: 0.04422743}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -142,15 +142,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_VoidBurst_1
+      name: Start_1
       rect:
         serializedVersion: 2
         x: 175
-        y: 2670
+        y: 2664
         width: 142
-        height: 130
+        height: 136
       alignment: 9
-      pivot: {x: 0.5, y: 0.008004056}
+      pivot: {x: 0.5003504, y: 0.051242605}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -163,15 +163,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_VoidBurst_4
+      name: Fire_2
       rect:
         serializedVersion: 2
-        x: 455
-        y: 14
-        width: 201
-        height: 2751
+        x: 346
+        y: 42
+        width: 179
+        height: 2749
       alignment: 9
-      pivot: {x: 0.5, y: 0.00017449398}
+      pivot: {x: 0.4972016, y: 0.002915432}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -184,15 +184,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_VoidBurst_r1
+      name: Retract_0
       rect:
         serializedVersion: 2
-        x: 1022
-        y: 28
-        width: 212
-        height: 2751
+        x: 554
+        y: 40
+        width: 179
+        height: 2747
       alignment: 9
-      pivot: {x: 0.5, y: 0.00016722476}
+      pivot: {x: 0.49743038, y: 0.0021623543}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -205,15 +205,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_VoidBurst_2
+      name: Retract_1
       rect:
         serializedVersion: 2
-        x: 29
-        y: 1879
-        width: 138
-        height: 754
+        x: 778
+        y: 31
+        width: 84
+        height: 2744
       alignment: 9
-      pivot: {x: 0.5, y: 0.0026262926}
+      pivot: {x: 0.5002383, y: 0.0007142798}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -226,15 +226,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_VoidBurst_r2
+      name: Retract_2
       rect:
         serializedVersion: 2
-        x: 253
-        y: 89
-        width: 159
-        height: 2203
+        x: 913
+        y: 8
+        width: 68
+        height: 2742
       alignment: 9
-      pivot: {x: 0.5062901, y: 0.00023606102}
+      pivot: {x: 0.50059867, y: 0.0006957134}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -247,15 +247,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_VoidBurst_r3
+      name: Retract_3
       rect:
         serializedVersion: 2
-        x: 1347
-        y: 291
-        width: 102
-        height: 1823
+        x: 1078
+        y: 28
+        width: 56
+        height: 2739
       alignment: 9
-      pivot: {x: 0.5050994, y: 0.00027430666}
+      pivot: {x: 0.5, y: 0.00032858207}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -268,15 +268,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_VoidBurst_3
+      name: Shadow
       rect:
         serializedVersion: 2
-        x: 17
-        y: 111
-        width: 172
-        height: 1634
+        x: 1214
+        y: 37
+        width: 235
+        height: 2751
       alignment: 9
-      pivot: {x: 0.5, y: 0.00548532}
+      pivot: {x: 0.5021619, y: 0.002892353}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -289,15 +289,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_VoidBurst_r0
+      name: Fire_0
       rect:
         serializedVersion: 2
-        x: 750
-        y: 14
-        width: 182
-        height: 2751
+        x: 11
+        y: 1911
+        width: 117
+        height: 748
       alignment: 9
-      pivot: {x: 0.5028395, y: 0.00017165791}
+      pivot: {x: 0.49563703, y: 0.008018616}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -310,15 +310,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nothing
+      name: Fire_1
       rect:
         serializedVersion: 2
-        x: 1403
-        y: 2662
-        width: 74
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 20
+        y: 167
+        width: 149
+        height: 1623
+      alignment: 9
+      pivot: {x: 0.49678153, y: 0.0055101435}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

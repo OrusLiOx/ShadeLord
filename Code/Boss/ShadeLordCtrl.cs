@@ -66,8 +66,9 @@ class ShadeLordCtrl : MonoBehaviour
 		attacks.Hide();
 		atts = new List<Action>()
 		{
-		attacks.VoidBurst
-		/*
+		attacks.VoidCircles
+		/*attacks.TendrilBurst
+		
 			attacks.Dash,
 			attacks.SweepBeam,
 			attacks.CrossSlash,
@@ -96,8 +97,8 @@ class ShadeLordCtrl : MonoBehaviour
 		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
 
-		Spawn();
-		//co = StartCoroutine(AttackChoice());
+		//Spawn();
+		co = StartCoroutine(AttackChoice());
 	}
 	private void AssignValues()
 	{
@@ -179,6 +180,10 @@ class ShadeLordCtrl : MonoBehaviour
 						dh.damageDealt = 2;
 					}
 					break;
+				case "VoidCircle":
+					t.gameObject.AddComponent<VoidCircle>();
+					t.gameObject.AddComponent<Spin>();
+					break;
 			}
 		}
 	}
@@ -203,7 +208,6 @@ class ShadeLordCtrl : MonoBehaviour
 	}
 	private void SpawnHitEffect(float dir)
 	{
-		Color scale = new Color(0, 0, 0, 1 / 20f);
 		// spawn void particles (16 frames)
 		StartCoroutine(flicker());
 		for (float k = 0; k < 15; k++)
@@ -231,19 +235,6 @@ class ShadeLordCtrl : MonoBehaviour
 					break;
 			}
 			StartCoroutine(die(particle));
-		}
-		IEnumerator die(GameObject particle)
-		{
-			yield return new WaitForSeconds(UnityEngine.Random.Range(10/60f, 15/60f));
-
-			SpriteRenderer sprite = particle.GetComponent<SpriteRenderer>();
-			while (sprite.color.a > 0)
-			{
-				sprite.color -= scale;
-
-				yield return new WaitForSeconds(.1f);
-			}
-			Destroy(particle);
 		}
 		IEnumerator flicker()
 		{
@@ -351,12 +342,13 @@ class ShadeLordCtrl : MonoBehaviour
 			// black screen
 			wall.transform.localPosition = new Vector3(0,0f,0);
 			foreach (SpriteRenderer s in bg)
-				s.color = new Color(.7f,.7f,.7f);
+				s.color = new Color(.5f,.5f,.5f);
 
 			// set stuff before reveal
 			vpSpawner.setDensity(30);
 			transform.SetPosition2D(100f, 75.23f);
 			anim.Play("NeutralSquint");
+			attacks.playSound("ScreamLong");
 
 			// reveal
 			yield return new WaitForSeconds(1/6f);
@@ -460,6 +452,30 @@ class ShadeLordCtrl : MonoBehaviour
 			StopCoroutine(co);
 			attacks.Stop();
 
+			// explode into void particles
+			attacks.playSound("Scream");
+			StartCoroutine(helper.fadeTo(GetComponent<SpriteRenderer>(),new Color(1,1,1,0), .2f));
+			// spawn a bunch of particles 
+			for (float k = 0; k < 100; k++)
+			{
+				GameObject particle = Instantiate(hitEffect);
+				// set position
+				particle.transform.SetPositionX(transform.position.x + UnityEngine.Random.Range(-1.5f, -1.5f));
+				particle.transform.SetPositionY(transform.position.y + UnityEngine.Random.Range(-2.37f,-11f));
+
+				// set scale
+				float s = UnityEngine.Random.Range(.1f, .2f);
+				particle.transform.SetScaleX(s);
+				particle.transform.SetScaleY(s);
+
+				// launch 
+				float range = 5f;
+				particle.GetComponent<Rigidbody2D>().velocity = new Vector2(UnityEngine.Random.Range(-1 * range, range), UnityEngine.Random.Range(-1 * range, range));
+
+				// destroy
+				StartCoroutine(die(particle));
+			}
+
 			// wait a bit
 			yield return new WaitForSeconds(.5f);
 
@@ -513,6 +529,7 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		IEnumerator Death()
 		{
+			attacks.playSound("ScreamLong");
 			// remove spawned attacks
 			foreach (GameObject obj in spawned)
 			{
@@ -526,8 +543,7 @@ class ShadeLordCtrl : MonoBehaviour
 			anim.Play("Death");
 			boxCol.enabled = false;
 			yield return null;
-			yield return new WaitForSeconds(.2f);
-			yield return new WaitForSeconds(1f);
+			yield return new WaitForSeconds(1.2f);
 
 			StatueCreator.WonFight = true;
 			var bsc = SceneLoader.SceneController.GetComponent<BossSceneController>();
@@ -613,7 +629,7 @@ class ShadeLordCtrl : MonoBehaviour
 		}
 	}
 
-	// ACTIONS
+	// actions
 	private IEnumerator AttackChoice()
 	{
 		// Pick attack
@@ -629,4 +645,14 @@ class ShadeLordCtrl : MonoBehaviour
 		// Repeat
 		co = StartCoroutine(AttackChoice());//*/
 	}
+
+	// helper
+	IEnumerator die(GameObject particle)
+	{
+		yield return new WaitForSeconds(UnityEngine.Random.Range(10 / 60f, 15 / 60f));
+		helper.fadeTo(particle.GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), 2f);
+		yield return new WaitForSeconds(2f);
+		Destroy(particle);
+	}
+
 }

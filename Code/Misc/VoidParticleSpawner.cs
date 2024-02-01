@@ -27,7 +27,7 @@ public class VoidParticleSpawner : MonoBehaviour
 		{
 			GameObject particle = Instantiate(template);
 			particle.transform.SetPosition3D(Random.Range(k, k+5), y,-1);
-			float scale = Random.Range(.05f, .1f);
+			float scale = Random.Range(.05f, .2f);
 			particle.transform.SetScaleX(scale);
 			particle.transform.SetScaleY(scale);
 			particle.GetComponent<Rigidbody2D>().velocity = new Vector2(0, Random.Range(1f, 5f));

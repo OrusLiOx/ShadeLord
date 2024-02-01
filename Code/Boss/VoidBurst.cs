@@ -3,31 +3,31 @@ using UnityEngine;
 
 public class VoidBurst : MonoBehaviour
 {
+	SpriteRenderer shadow;
+	Animator anim;
 	public void Start()
 	{
+		shadow = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
 		gameObject.GetComponent<BoxCollider2D>().enabled = false;
-		// create 3 clones of self as children
-		for (int i = 1; i <= 2; i++)
-		{
-			GameObject child = Instantiate(gameObject, transform);
-			Destroy(child.GetComponent<VoidBurst>());
-			child.transform.localEulerAngles = new Vector3(0, 0, 180 / i);
-			child.transform.position = transform.position;
-		}
+		anim = GetComponent<Animator>();
 		StartCoroutine(appear());
+
 		// appear
 		IEnumerator appear()
 		{
-			
+			Color gradient = new Color(0, 0, 0, .2f);
+			shadow.color = new Color(0, 0, 0, 0);
 			for (float i = .5f; i < 1; i += .1f)
 			{
 				transform.SetScaleX(i);
 				transform.SetScaleY(i);
+
+				shadow.color += gradient;
+
 				yield return new WaitForSeconds(1/60f);
 			}
 
-			foreach(Animator anim in GetComponentsInChildren<Animator>())
-				anim.Play("Flicker");
+			anim.Play("Flicker");
 		}
 	}
 
@@ -37,21 +37,28 @@ public class VoidBurst : MonoBehaviour
 		IEnumerator Fire()
 		{
 			// fire
-			foreach (Animator anim in GetComponentsInChildren<Animator>())
-				anim.Play("Fire");
+			anim.Play("Fire");
 			yield return new WaitForSeconds(3/12f);
 
 			// attack active
-			foreach (BoxCollider2D col in GetComponentsInChildren<BoxCollider2D>())
-				col.enabled = true;
+			GetComponent<BoxCollider2D>().enabled = true;
 
 			yield return new WaitForSeconds(5/12f);
+
 			// end
-			foreach (Animator anim in GetComponentsInChildren<Animator>())
-				anim.Play("Retract");
-			yield return new WaitForSeconds(2/12f);
-			foreach (BoxCollider2D col in GetComponentsInChildren<BoxCollider2D>())
-				col.enabled = false;
+			anim.Play("Retract");
+
+			Color gradient = new Color(0, 0, 0, .2f);
+			for (int i = 0; i < 5; i += 1)
+			{
+				shadow.color -= gradient;
+
+				yield return new WaitForSeconds(1 / 60f);
+			}
+
+			yield return new WaitForSeconds(1/12f);
+			GetComponent<BoxCollider2D>().enabled = false;
+			Destroy(gameObject);
 		}
 	}
 }

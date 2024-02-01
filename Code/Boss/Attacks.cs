@@ -55,16 +55,20 @@ public class Attacks : MonoBehaviour
 		sounds = new Dictionary<string, AudioClip>();
 
 		// Get attacks
-		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin", "VoidBurst" };
+		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin", "VoidBurst", "VoidCircle" };
 		foreach (string n in names)
 		{
 			atts.Add(n, GameObject.Find("ShadeLord/" + n));
 			atts[n].SetActive(false);
 		}
+		atts.Add("TendrilBurst", GameObject.Find("ShadeLord/Tendrils"));
+		atts["TendrilBurst"].GetComponent<BoxCollider2D>().enabled = false;
 
 		// Get audio clips
 		foreach (AudioSource s in GameObject.Find("ShadeLord/SFX").GetComponents<AudioSource>())
+		{
 			sounds.Add(s.clip.name, s.clip);
+		}
 	}
 
 	// Attacks
@@ -486,15 +490,17 @@ public class Attacks : MonoBehaviour
 			yield return new WaitUntil(() => !wait);
 
 			// spawn orbs
-			float rotation = UnityEngine.Random.Range(0f,359f);
+			//float rotation = UnityEngine.Random.Range(0f,359f);
 			for (int k = (int)(xEdge / 6); k > 0; k--)
 			{
 				// pick random location
-				StartCoroutine(SpawnVoidBurst(
-					UnityEngine.Random.Range(xCenter-xEdge+4, xCenter + xEdge - 4), 
-					UnityEngine.Random.Range(yDef-7, yDef+3), 
-					rotation));
+				float x = UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4),
+					  y = UnityEngine.Random.Range(yDef - 7, yDef + 3),
+					  rotation = UnityEngine.Random.Range(0f, 359f);
+				StartCoroutine(SpawnVoidBurst(x, y, 0, rotation, 1.5f));
+				StartCoroutine(SpawnVoidBurst(x, y, .005f, rotation+45, 1.5f));
 			}
+
 
 			yield return new WaitForSeconds(4f);
 			leave();
@@ -502,26 +508,134 @@ public class Attacks : MonoBehaviour
 			attacking = false;
 
 		}
-		IEnumerator SpawnVoidBurst(float x, float y, float r)
+		IEnumerator SpawnVoidBurst(float x, float y, float z, float r, float wait)
 		{
-			Modding.Logger.Log(x + " " + y);
-			GameObject burst1 = Instantiate(atts["VoidBurst"]);
-			GameObject burst2 = Instantiate(atts["VoidBurst"]);
+			List<GameObject> burst = new List<GameObject>();
+			for (int i = 0; i < 4; i++)
+				burst.Add(Instantiate(atts["VoidBurst"], parent.transform));
 
-			burst1.transform.SetPosition2D(x, y);
-			burst2.transform.SetPosition3D(x, y, burst1.transform.GetPositionZ()+.005f);
+			for (int i = 0; i < 4; i++)
+			{
+				burst[i].transform.SetPosition3D(x, y,z);
+				burst[i].transform.SetRotationZ(r + 90 * i);
+				burst[i].SetActive(true);
+			}
+			yield return new WaitForSeconds(wait);
 
-			burst1.transform.SetRotationZ(r);
-			burst2.transform.SetRotationZ(r+45);
+			for (int i = 0; i < 4; i++)
+			{
+				burst[i].GetComponent<VoidBurst>().Fire();
+			}
+			playSound("BeamBlast");
+		}
+	}
+	public void TendrilBurst()
+	{
+		attacking = true;
+		forward = true;
+		StartCoroutine(TendrilBurst());
+		IEnumerator TendrilBurst()
+		{
+			// setup
+			transform.SetPositionX(xCenter);
+			arrive();
 
-			burst1.SetActive(true);
-			burst2.SetActive(true);
+			GameObject tendrils = atts["TendrilBurst"];
+			tendrils.transform.SetScaleX(.1f);
+			tendrils.transform.SetScaleY(.1f);
+
+
+			yield return new WaitUntil(() => !wait);
+
+			// windup
+
+			// attack
+			tendrils.SetActive(true);
+
+			float increment = .9f/(12*.5f);
+			for (float s = .1f; s < 1; s += increment)
+			{
+				tendrils.transform.SetScaleX(s);
+				tendrils.transform.SetScaleY(s);
+				yield return new WaitForSeconds(1/12f);
+			}
+
+			GameObject.Find("ShadeLord/Tendrils").GetComponent<BoxCollider2D>().enabled = true;
+
+			playSound("Scream");
+			yield return new WaitForSeconds(3f);
+
+			for (float s = 1f; s > .1; s -= increment)
+			{
+				tendrils.transform.SetScaleX(s);
+				tendrils.transform.SetScaleY(s);
+				yield return new WaitForSeconds(1 / 12f);
+			}
+
+			// end
+			leave();
+			yield return new WaitUntil(() => !wait);
+			attacking = false;
+		}
+	}
+	public void VoidCircles()
+	{
+		attacking = true;
+		forward = true;
+		StartCoroutine(VoidCircles());
+		IEnumerator VoidCircles()
+		{
+			// setup
+			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().enabled = false;
+			transform.SetPositionX(xCenter);
+			arrive();
+			yield return new WaitWhile(() => wait);
+			yield return new WaitForSeconds(.5f);
+			anim.Play("NeutralSquint");
+			// spawn circle on self
+			GameObject obj = Instantiate(atts["VoidCircle"], parent.transform);
+			obj.GetComponent<VoidCircle>().size = 1f;
+			obj.transform.SetPosition3D(transform.GetPositionX(), transform.GetPositionY() - 2.37f, transform.GetPositionZ()+.001f);
+			obj.SetActive(true);
+			obj.GetComponent<VoidCircle>().Appear();
 
 			yield return new WaitForSeconds(1.5f);
-			burst1.GetComponent<VoidBurst>().Fire();
 
+			anim.Play("NeutralIdle");
+			playSound("Scream");
+			obj.GetComponent<VoidCircle>().Fire();
+			yield return new WaitForSeconds(.5f);
+
+			// pick random points to spawn
+			float curX = xCenter - xEdge-2.5f + UnityEngine.Random.Range(5f,9f);
+			while (curX< xCenter + xEdge)
+			{
+				StartCoroutine(MakeCircle(curX));
+				yield return new WaitForSeconds(.2f);
+				curX += UnityEngine.Random.Range(5f, 9f);
+			}
+
+			yield return new WaitForSeconds(.5f);
+
+			// end
+			leave();
+			yield return new WaitUntil(() => !wait);
+			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().enabled = true;
 			yield return new WaitForSeconds(1f);
-			burst2.GetComponent<VoidBurst>().Fire();
+			attacking = false;
+		}
+		IEnumerator MakeCircle(float curX)
+		{
+			GameObject obj = Instantiate(atts["VoidCircle"], parent.transform);
+			obj.transform.SetPosition2D(curX, UnityEngine.Random.Range(67f, 76f));
+			obj.SetActive(true);
+			obj.GetComponent<VoidCircle>().size = .3f;
+			obj.GetComponent<VoidCircle>().Appear();
+
+			yield return new WaitForSeconds(1.5f);
+
+			obj.GetComponent<VoidCircle>().Fire();
+			playSound("BeamBlast");
 		}
 	}
 
@@ -663,7 +777,7 @@ public class Attacks : MonoBehaviour
 	{
 		t.Rotate(new Vector3(0, 0, t.rotation.z + r));
 	}
-	private void playSound(string clip)
+	public void playSound(string clip)
 	{
 		//aud.clip = sounds[clip];
 		aud.GetComponent<AudioSource>().PlayOneShot(sounds[clip]);
