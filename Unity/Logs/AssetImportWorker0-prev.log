@@ -15,11 +15,11 @@ C:/Users/ylily/Desktop/Things/_HollowKnightMod/UnderstandingShit/ShadeLord/Unity
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-55155
+49738
 Successfully changed project path to: C:/Users/ylily/Desktop/Things/_HollowKnightMod/UnderstandingShit/ShadeLord/Unity
 C:/Users/ylily/Desktop/Things/_HollowKnightMod/UnderstandingShit/ShadeLord/Unity
 Using Asset Import Pipeline V2.
-Refreshing native plugins compatible for Editor in 40.62 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 36.24 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2020.2.2f1 (068178b99f32)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Editor/Data/Resources/UnitySubsystems
@@ -35,131 +35,202 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
 Mono config path = 'C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56260
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56780
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.002874 seconds.
+Registered in 0.002595 seconds.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 48.81 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 33.84 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Invoked RoslynAnalysisRunner static constructor.
 RoslynAnalysisRunner will not be running.
 RoslynAnalysisRunner has terminated.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.319 seconds
+- Completed reload, in  1.129 seconds
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.001604 seconds.
+Registered in 0.001126 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 39.03 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 35.28 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Invoked RoslynAnalysisRunner static constructor.
 RoslynAnalysisRunner will not be running.
 RoslynAnalysisRunner has terminated.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.071 seconds
+- Completed reload, in  0.941 seconds
 Platform modules already initialized, skipping
 ========================================================================
 Worker process is ready to serve import requests
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.07 seconds
-Refreshing native plugins compatible for Editor in 0.62 ms, found 1 plugins.
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.09 seconds
+Refreshing native plugins compatible for Editor in 0.35 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 1821 Unused Serialized files (Serialized files now loaded: 0)
 System memory in use before: 86.5 MB.
 System memory in use after: 86.5 MB.
 
 Unloading 23 unused Assets to reduce memory usage. Loaded Objects now: 2270.
-Total: 3.470900 ms (FindLiveObjects: 0.297300 ms CreateObjectMapping: 0.102600 ms MarkObjects: 2.895000 ms  DeleteObjects: 0.173700 ms)
+Total: 1.965300 ms (FindLiveObjects: 0.183900 ms CreateObjectMapping: 0.088200 ms MarkObjects: 1.573000 ms  DeleteObjects: 0.119300 ms)
 
 ========================================================================
 Received Import Request.
-  path: Assets/ShadeLord/SFX/ScreamShort.wav
-  artifactKey: Guid(d72be563e3166e54398435062e21cb9f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ShadeLord/SFX/ScreamShort.wav using Guid(d72be563e3166e54398435062e21cb9f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cae6ae74a0f636817ffede181f807faf') in 0.191968 seconds
-  Import took 0.196251 seconds .
+  path: Assets/Misc/Misc
+  artifactKey: Guid(05eb9e3ff38ee7a45a23ba7395b4104c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Misc/Misc using Guid(05eb9e3ff38ee7a45a23ba7395b4104c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7cc9c928df22b8a15f622519b5d2264e') in 0.019973 seconds
+  Import took 0.022539 seconds .
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.31 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 50.2 MB.
+System memory in use after: 50.2 MB.
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2270.
+Total: 2.105900 ms (FindLiveObjects: 0.195400 ms CreateObjectMapping: 0.070000 ms MarkObjects: 1.743900 ms  DeleteObjects: 0.095800 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001167 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.37 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.847 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.52 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1816 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 86.9 MB.
+System memory in use after: 86.9 MB.
+
+Unloading 12 unused Assets to reduce memory usage. Loaded Objects now: 2273.
+Total: 1.965600 ms (FindLiveObjects: 0.164500 ms CreateObjectMapping: 0.063300 ms MarkObjects: 1.633500 ms  DeleteObjects: 0.103200 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001149 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.35 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.836 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.34 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1816 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 87.2 MB.
+System memory in use after: 87.2 MB.
+
+Unloading 12 unused Assets to reduce memory usage. Loaded Objects now: 2276.
+Total: 2.139900 ms (FindLiveObjects: 0.239700 ms CreateObjectMapping: 0.077900 ms MarkObjects: 1.724700 ms  DeleteObjects: 0.096900 ms)
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000348 seconds.
-  path: Assets/ShadeLord/SFX/ScreamLong.wav
-  artifactKey: Guid(b1e77300fe2842c48a5a963302c5d023) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ShadeLord/SFX/ScreamLong.wav using Guid(b1e77300fe2842c48a5a963302c5d023) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd0ba90c29f13b31d81c983bdc19858ce') in 0.020157 seconds
-  Import took 0.024328 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000368 seconds.
-  path: Assets/ShadeLord/SFX/Scream.wav
-  artifactKey: Guid(d82611f92b7cecb4595604abd2985fa4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ShadeLord/SFX/Scream.wav using Guid(d82611f92b7cecb4595604abd2985fa4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b100005925ba0a78f5458f021c884941') in 0.019385 seconds
-  Import took 0.023085 seconds .
+  Time since last request: 465.909445 seconds.
+  path: Assets/ShadeLord/Sprites/Cutscene/Start/Tendril.controller
+  artifactKey: Guid(909dec8392afe11478df3a93e5efca09) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ShadeLord/Sprites/Cutscene/Start/Tendril.controller using Guid(909dec8392afe11478df3a93e5efca09) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c3a55618feb68e631dbfc23e277ca0f3') in 0.071776 seconds
+  Import took 0.074550 seconds .
 
 ========================================================================
 Received Prepare
-Refreshing native plugins compatible for Editor in 3.38 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 2.37 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 53.5 MB.
-System memory in use after: 53.5 MB.
+System memory in use before: 51.0 MB.
+System memory in use after: 51.0 MB.
 
-Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2279.
-Total: 3.851900 ms (FindLiveObjects: 0.451000 ms CreateObjectMapping: 0.198800 ms MarkObjects: 3.041000 ms  DeleteObjects: 0.159200 ms)
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2276.
+Total: 2.896100 ms (FindLiveObjects: 0.200400 ms CreateObjectMapping: 0.099200 ms MarkObjects: 2.474600 ms  DeleteObjects: 0.120900 ms)
 
 ========================================================================
 Received Prepare
-Refreshing native plugins compatible for Editor in 3.31 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 2.13 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 53.7 MB.
-System memory in use after: 53.7 MB.
+System memory in use before: 51.4 MB.
+System memory in use after: 51.4 MB.
 
-Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2279.
-Total: 2.583500 ms (FindLiveObjects: 0.209400 ms CreateObjectMapping: 0.063500 ms MarkObjects: 2.145600 ms  DeleteObjects: 0.163600 ms)
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2276.
+Total: 2.614800 ms (FindLiveObjects: 0.259100 ms CreateObjectMapping: 0.127900 ms MarkObjects: 2.118900 ms  DeleteObjects: 0.107700 ms)
 
 ========================================================================
 Received Prepare
-Refreshing native plugins compatible for Editor in 2.47 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 2.33 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 53.9 MB.
-System memory in use after: 53.9 MB.
+System memory in use before: 51.6 MB.
+System memory in use after: 51.6 MB.
 
-Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2279.
-Total: 3.394900 ms (FindLiveObjects: 0.206200 ms CreateObjectMapping: 0.082300 ms MarkObjects: 2.991100 ms  DeleteObjects: 0.113800 ms)
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2276.
+Total: 3.094600 ms (FindLiveObjects: 0.292300 ms CreateObjectMapping: 0.105600 ms MarkObjects: 2.587900 ms  DeleteObjects: 0.107000 ms)
 
 ========================================================================
 Received Prepare
-Refreshing native plugins compatible for Editor in 2.20 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 2.03 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 54.0 MB.
-System memory in use after: 54.0 MB.
+System memory in use before: 51.9 MB.
+System memory in use after: 51.9 MB.
 
-Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2279.
-Total: 3.120100 ms (FindLiveObjects: 0.608500 ms CreateObjectMapping: 0.106700 ms MarkObjects: 2.304700 ms  DeleteObjects: 0.098200 ms)
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2276.
+Total: 2.858100 ms (FindLiveObjects: 0.326200 ms CreateObjectMapping: 0.088800 ms MarkObjects: 2.349500 ms  DeleteObjects: 0.092600 ms)
 
 ========================================================================
 Received Prepare
-Refreshing native plugins compatible for Editor in 2.26 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 2.17 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 54.4 MB.
-System memory in use after: 54.4 MB.
+System memory in use before: 52.0 MB.
+System memory in use after: 52.0 MB.
 
-Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2279.
-Total: 2.555500 ms (FindLiveObjects: 0.266400 ms CreateObjectMapping: 0.093100 ms MarkObjects: 2.089400 ms  DeleteObjects: 0.105400 ms)
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2276.
+Total: 2.935900 ms (FindLiveObjects: 0.203700 ms CreateObjectMapping: 0.070200 ms MarkObjects: 2.552900 ms  DeleteObjects: 0.107500 ms)
 
 ========================================================================
 Received Prepare
 Refreshing native plugins compatible for Editor in 2.08 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 54.6 MB.
-System memory in use after: 54.6 MB.
+System memory in use before: 51.3 MB.
+System memory in use after: 51.3 MB.
 
-Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2279.
-Total: 2.478800 ms (FindLiveObjects: 0.268200 ms CreateObjectMapping: 0.103000 ms MarkObjects: 2.011300 ms  DeleteObjects: 0.095300 ms)
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2276.
+Total: 2.483200 ms (FindLiveObjects: 0.173700 ms CreateObjectMapping: 0.069000 ms MarkObjects: 2.141700 ms  DeleteObjects: 0.097800 ms)
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.21 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 51.5 MB.
+System memory in use after: 51.5 MB.
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2276.
+Total: 2.784600 ms (FindLiveObjects: 0.188000 ms CreateObjectMapping: 0.089300 ms MarkObjects: 2.387000 ms  DeleteObjects: 0.118500 ms)
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.09 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 51.8 MB.
+System memory in use after: 51.8 MB.
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2276.
+Total: 2.627100 ms (FindLiveObjects: 0.177800 ms CreateObjectMapping: 0.070800 ms MarkObjects: 2.278700 ms  DeleteObjects: 0.099000 ms)
 
 AssetImportWorkerClient::OnTransportError - code=2 error=End of file

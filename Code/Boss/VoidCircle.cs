@@ -40,8 +40,6 @@ public class VoidCircle : MonoBehaviour
 			}
 			gameObject.transform.SetScaleX(size);
 			gameObject.transform.SetScaleY(size);
-			sprite.color = new Color(1, 1, 1, 1);
-			outline.color = new Color(1, 1, 1, 1);
 		}
 	}
 
@@ -53,18 +51,18 @@ public class VoidCircle : MonoBehaviour
 			SpriteRenderer burstSprite = burst.GetComponent<SpriteRenderer>();
 			float incr = 60f*.1f;
 			// burst appear
-			// appear white
 			for (float i = 0; i < incr; i +=1)
 			{
 				float c = .5f / incr * i;
 				burstSprite.color = new Color(c, c, c, i/incr);
 				yield return new WaitForSeconds(1/60f);
 			}
+			outline.enabled = false;
 			col.enabled = true;
 			for (float i = 0; i < incr; i+=1)
 			{
 				float c = .5f-(.5f / incr * i);
-				burstSprite.color = new Color(c, c, c, c*2);
+				burstSprite.color = new Color(0, 0, 0, c*2);
 				yield return new WaitForSeconds(1 / 60f);
 			}
 			col.enabled = false;

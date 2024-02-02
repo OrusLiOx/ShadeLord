@@ -55,7 +55,7 @@ public class Attacks : MonoBehaviour
 		sounds = new Dictionary<string, AudioClip>();
 
 		// Get attacks
-		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin", "VoidBurst", "VoidCircle" };
+		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin", "VoidBurst", "VoidCircle", "TendrilWindup" };
 		foreach (string n in names)
 		{
 			atts.Add(n, GameObject.Find("ShadeLord/" + n));
@@ -540,19 +540,33 @@ public class Attacks : MonoBehaviour
 			transform.SetPositionX(xCenter);
 			arrive();
 
+			yield return new WaitUntil(() => !wait);
+
+			// windup
 			GameObject tendrils = atts["TendrilBurst"];
 			tendrils.transform.SetScaleX(.1f);
 			tendrils.transform.SetScaleY(.1f);
 
 
-			yield return new WaitUntil(() => !wait);
+			anim.Play("NeutralClose");
+			atts["TendrilWindup"].SetActive(true);
+			Transform windup = atts["TendrilWindup"].transform.GetChild(1);
+			for (float f = .5f; f < 1.5f; f += .2f)
+			{
+				windup.SetScaleX(f);
 
-			// windup
+				yield return new WaitForSeconds(1 / 12f);
+			}
+			windup.SetScaleX(1.5f);
+			yield return new WaitForSeconds(1f);
 
 			// attack
+			float increment = .9f/(12*.3f);
 			tendrils.SetActive(true);
-
-			float increment = .9f/(12*.5f);
+			anim.Play("Roar");
+			playSound("Scream");
+			playSound("TendrilsEmerge");
+			playSound("TendrilWhip");
 			for (float s = .1f; s < 1; s += increment)
 			{
 				tendrils.transform.SetScaleX(s);
@@ -560,18 +574,20 @@ public class Attacks : MonoBehaviour
 				yield return new WaitForSeconds(1/12f);
 			}
 
-			GameObject.Find("ShadeLord/Tendrils").GetComponent<BoxCollider2D>().enabled = true;
+			tendrils.GetComponent<PolygonCollider2D>().enabled = true;
+			yield return new WaitForSeconds(2f);
+			tendrils.GetComponent<PolygonCollider2D>().enabled = false;
 
-			playSound("Scream");
-			yield return new WaitForSeconds(3f);
-
-			for (float s = 1f; s > .1; s -= increment)
+			for (float s = 1f; s > 0; s -= increment)
 			{
 				tendrils.transform.SetScaleX(s);
 				tendrils.transform.SetScaleY(s);
+				windup.SetScaleX(1.5f*s);
 				yield return new WaitForSeconds(1 / 12f);
 			}
-
+			yield return new WaitForSeconds(.5f);
+			atts["TendrilWindup"].SetActive(false);
+			tendrils.SetActive(false);
 			// end
 			leave();
 			yield return new WaitUntil(() => !wait);
@@ -587,11 +603,12 @@ public class Attacks : MonoBehaviour
 		{
 			// setup
 			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().enabled = false;
-			transform.SetPositionX(xCenter);
+			transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
 			arrive();
 			yield return new WaitWhile(() => wait);
 			yield return new WaitForSeconds(.5f);
-			anim.Play("NeutralSquint");
+			playSound("BeamCharge");
+			anim.Play("RoarWait");
 			// spawn circle on self
 			GameObject obj = Instantiate(atts["VoidCircle"], parent.transform);
 			obj.GetComponent<VoidCircle>().size = 1f;
@@ -601,8 +618,9 @@ public class Attacks : MonoBehaviour
 
 			yield return new WaitForSeconds(1.5f);
 
-			anim.Play("NeutralIdle");
+			anim.Play("Roar");
 			playSound("Scream");
+			playSound("BeamBlast");
 			obj.GetComponent<VoidCircle>().Fire();
 			yield return new WaitForSeconds(.5f);
 
@@ -614,8 +632,8 @@ public class Attacks : MonoBehaviour
 				yield return new WaitForSeconds(.2f);
 				curX += UnityEngine.Random.Range(5f, 9f);
 			}
-
-			yield return new WaitForSeconds(.5f);
+			anim.Play("NeutralIdle");
+			yield return new WaitForSeconds(1f);
 
 			// end
 			leave();

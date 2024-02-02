@@ -66,16 +66,15 @@ class ShadeLordCtrl : MonoBehaviour
 		attacks.Hide();
 		atts = new List<Action>()
 		{
-		attacks.VoidCircles
-		/*attacks.TendrilBurst
-		
-			attacks.Dash,
-			attacks.SweepBeam,
-			attacks.CrossSlash,
-			attacks.FaceSpikes,
-			attacks.Spikes,
-			attacks.AimBeam/*/
-		};//*/
+			//attacks.VoidCircles,
+			attacks.TendrilBurst//,
+			//attacks.Dash,
+			//attacks.SweepBeam,
+			//attacks.CrossSlash,
+			//attacks.FaceSpikes,
+			//attacks.Spikes,
+			//attacks.AimBeam
+		};
 
 		helper = gameObject.AddComponent<Helper>();
 
@@ -349,6 +348,7 @@ class ShadeLordCtrl : MonoBehaviour
 			transform.SetPosition2D(100f, 75.23f);
 			anim.Play("NeutralSquint");
 			attacks.playSound("ScreamLong");
+			GameObject.Find("ShadeLord/Tendrils").GetComponent<PolygonCollider2D>().enabled = false;
 
 			// reveal
 			yield return new WaitForSeconds(1/6f);
