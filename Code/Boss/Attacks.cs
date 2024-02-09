@@ -16,7 +16,8 @@ public class Attacks : MonoBehaviour
 
 	// Helper variables
 	private float xEdge, xCenter, yDef;
-	private bool attacking, wait, forward, infiniteSpike, lastPhase;
+	private int sweepPos;
+	private bool attacking, wait, forward, infiniteSpike, lastPhase, fireOnce, platPhase;
 	private GameObject parent;
 
 	// Unity Components
@@ -34,10 +35,13 @@ public class Attacks : MonoBehaviour
 	{
 		// Helper variables
 		xEdge = 18; xCenter = 100; yDef = 75.23f;
+		sweepPos = 0;
 		attacking = false;
 		wait = false;
 		infiniteSpike = false;
 		lastPhase = false;
+		platPhase = false;
+		fireOnce = false;
 		parent = GameObject.Find("HoldAttacks");
 		halo = GameObject.Find("ShadeLord/Halo");
 
@@ -223,13 +227,35 @@ public class Attacks : MonoBehaviour
 			arrive();
 			yield return new WaitUntil(() => !wait);
 
+			// first set
+			anim.Play("RoarWait");
+			// generate spikes
+			float offset = xCenter - xEdge + UnityEngine.Random.Range(0, 2.4f);
+
+			playSound("BeamCharge");
+			while (offset < xCenter + xEdge)
+			{
+				GameObject s = Instantiate(atts["Spike"], parent.transform);
+				s.SetActive(true);
+				s.transform.SetPosition2D(offset, 66.42f);
+				offset += 2f;
+			}
+			yield return new WaitForSeconds(.7f);
+			// spikes go up
+			playSound("Scream");
+			playSound("SpikeUpLower");
+			anim.Play("Roar");
+			yield return new WaitForSeconds(1f + 3/12f);
+
+			if(!infiniteSpike)
+				leave();
+
 			// fire 3 sets of spikes with random offset
-			int i = 3;
+			int i = 2;
 			while (i > 0 || infiniteSpike)
 			{
-				anim.Play("NeutralSquint");
 				// generate spikes
-				float offset = xCenter - xEdge + UnityEngine.Random.Range(0, 2.4f);
+				offset = xCenter - xEdge + UnityEngine.Random.Range(0, 2.4f);
 
 				playSound("BeamCharge");
 				while (offset < xCenter + xEdge)
@@ -242,18 +268,12 @@ public class Attacks : MonoBehaviour
 				yield return new WaitForSeconds(.7f);
 				// spikes go up
 				playSound("SpikeUpLower");
-				anim.Play("NeutralBlank");
-				yield return new WaitForSeconds(3 / 12f);
-
-				anim.Play("NeutralOpen");
-				yield return new WaitForSeconds(1f);
+				yield return new WaitForSeconds(1f + 3 / 12f);
 				i--;
 			}
 
 			// end
-			yield return new WaitForSeconds(.4f);
-			leave();
-			yield return new WaitUntil(() => !wait);
+			yield return new WaitForSeconds(2f);
 			attacking = false;
 		}
 	}
@@ -266,56 +286,68 @@ public class Attacks : MonoBehaviour
 		IEnumerator SweepBeam()
 		{
 			// pick location
-			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
-			if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
-			{
-				goright = target.transform.position.x > xCenter;
-			}
-			Transform beam = atts["BeamOrigin"].transform;
-			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
-			head.enabled = false;
-
-			if (goright)
-			{
-				transform.localScale = new Vector3(1, 1, 1);
-				transform.SetPositionX(xCenter - xEdge + 5);
-			}
-			else
-			{
-				transform.localScale = new Vector3(-1, 1, 1);
-				transform.SetPositionX(xCenter + xEdge - 5);
-			}
-			/*
-			bool goright = target.transform.position.x > transform.position.x;
-			Transform beam = atts["BeamOrigin"].transform;
-			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
-			head.enabled = false;
-
-			transform.SetPositionX(UnityEngine.Random.Range(xCenter - 14, xCenter + 14));
-			if (goright)
-			{
-				transform.localScale = new Vector3(1, 1, 1);
-			}
-			else
-			{
-				transform.localScale = new Vector3(-1, 1, 1);
-			}
-
+			bool goright=true;
 			if (lastPhase)
 			{
-				if (UnityEngine.Random.Range(0, 3f) > 1)
-					transform.SetPositionX(xCenter);
-				else if (goright)
+				int i = UnityEngine.Random.Range(0, 2);
+				if (i >= sweepPos)
+					i++;
+				sweepPos = i;
+				switch (i)
+				{
+					case 0: // center
+						transform.SetPositionX(xCenter);
+						goright = UnityEngine.Random.Range(0, 2) == 0;
+						break;
+					case 1: // on left
+						transform.SetPositionX(xCenter - xEdge + 9);
+						goright = true;
+						break;
+					case 2: // on right
+						transform.SetPositionX(xCenter + xEdge - 9);
+						goright = false;
+						break;
+				}
+			}
+			else if (platPhase)
+			{
+				transform.SetPositionX(xCenter);
+				goright = target.transform.position.x > xCenter;
+			}
+			else
+			{
+				goright = UnityEngine.Random.Range(0, 1f) > .5f;
+				if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
+				{
+					goright = target.transform.position.x > xCenter;
+				}
+
+
+				if (goright)
+				{
 					transform.SetPositionX(xCenter - xEdge + 5);
+				}
 				else
+				{
 					transform.SetPositionX(xCenter + xEdge - 5);
-			}*/
+				}
+			}
+			
+			if (!goright)
+				transform.localScale = new Vector3(-1, 1, 1);
+			else
+				transform.localScale = new Vector3(1, 1, 1);
+
+			Transform beam = atts["BeamOrigin"].transform;
+			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
+			head.enabled = false;
+
 			arrive();
 			yield return new WaitUntil(() => !wait);
 			yield return new WaitForSeconds(.3f);
 
 			// charge
-			beam.rotation = transform.rotation;
+			beam.SetRotationZ(0f);
 			anim.Play("SweepBeamCharge");
 			playSound("BeamCharge");
 			atts["BeamOrigin"].SetActive(true);
@@ -329,16 +361,14 @@ public class Attacks : MonoBehaviour
 			head.enabled = true;
 
 			// rotation
-			int incr = 40;
-			float end = -60f;
-			yield return new WaitForSeconds(1 / 24f);
+			float speed = -120f/90f;
 
-			for (int i = 0; i < incr; i++)
+			for (float f = 0f; f >= -60f; f += speed)
 			{
-				rotate(beam, end / incr);
-				yield return new WaitForSeconds(1.5f / incr);
+				beam.SetRotationZ(f);
+				yield return new WaitForSeconds(1 / 60f);
 			}
-			
+
 			// end
 			atts["BeamOrigin"].SetActive(false);
 			aud.Stop();
@@ -538,6 +568,8 @@ public class Attacks : MonoBehaviour
 		{
 			// setup
 			transform.SetPositionX(xCenter);
+			if(platPhase)
+				transform.SetPositionX(target.transform.GetPositionX());
 			arrive();
 
 			yield return new WaitUntil(() => !wait);
@@ -548,7 +580,7 @@ public class Attacks : MonoBehaviour
 			tendrils.transform.SetScaleY(.1f);
 
 
-			anim.Play("NeutralClose");
+			//anim.Play("NeutralClose");
 			atts["TendrilWindup"].SetActive(true);
 			Transform windup = atts["TendrilWindup"].transform.GetChild(1);
 			for (float f = .5f; f < 1.5f; f += .2f)
@@ -563,8 +595,8 @@ public class Attacks : MonoBehaviour
 			// attack
 			float increment = .9f/(12*.3f);
 			tendrils.SetActive(true);
-			anim.Play("Roar");
-			playSound("Scream");
+			anim.Play("NeutralSquint");
+			//playSound("Scream");
 			playSound("TendrilsEmerge");
 			playSound("TendrilWhip");
 			for (float s = .1f; s < 1; s += increment)
@@ -578,6 +610,7 @@ public class Attacks : MonoBehaviour
 			yield return new WaitForSeconds(2f);
 			tendrils.GetComponent<PolygonCollider2D>().enabled = false;
 
+			anim.Play("NeutralIdle");
 			for (float s = 1f; s > 0; s -= increment)
 			{
 				tendrils.transform.SetScaleX(s);
@@ -598,12 +631,31 @@ public class Attacks : MonoBehaviour
 	{
 		attacking = true;
 		forward = true;
-		StartCoroutine(VoidCircles());
+		if(lastPhase)
+			StartCoroutine(SpamCircles());
+		else
+			StartCoroutine(VoidCircles());
+
 		IEnumerator VoidCircles()
 		{
 			// setup
 			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().enabled = false;
 			transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
+			if (lastPhase)
+			{
+				switch (UnityEngine.Random.Range(0,3))
+				{
+					case 0:
+						transform.SetPositionX(xCenter);
+						break;
+					case 1:
+						transform.SetPositionX(xCenter - xEdge + 4);
+						break;
+					case 2:
+						transform.SetPositionX(xCenter + xEdge - 4);
+						break;
+				}
+			}
 			arrive();
 			yield return new WaitWhile(() => wait);
 			yield return new WaitForSeconds(.5f);
@@ -622,16 +674,20 @@ public class Attacks : MonoBehaviour
 			playSound("Scream");
 			playSound("BeamBlast");
 			obj.GetComponent<VoidCircle>().Fire();
-			yield return new WaitForSeconds(.5f);
+			//yield return new WaitForSeconds(.5f);
 
 			// pick random points to spawn
 			float curX = xCenter - xEdge-2.5f + UnityEngine.Random.Range(5f,9f);
+			float wait2 = 1.5f;
 			while (curX< xCenter + xEdge)
 			{
-				StartCoroutine(MakeCircle(curX));
-				yield return new WaitForSeconds(.2f);
+				StartCoroutine(MakeCircle(curX, UnityEngine.Random.Range(67f, 76f)));
+				yield return new WaitForSeconds(.15f);
+				wait2 -= .15f;
 				curX += UnityEngine.Random.Range(5f, 9f);
 			}
+			if(wait2>0)
+				yield return new WaitForSeconds(wait2);
 			anim.Play("NeutralIdle");
 			yield return new WaitForSeconds(1f);
 
@@ -642,10 +698,25 @@ public class Attacks : MonoBehaviour
 			yield return new WaitForSeconds(1f);
 			attacking = false;
 		}
-		IEnumerator MakeCircle(float curX)
+		IEnumerator SpamCircles()
+		{
+
+			StartCoroutine(MakeCircle(target.transform.position.x +UnityEngine.Random.Range(0f,10f), target.transform.position.y + UnityEngine.Random.Range(-3f,3f)));	
+			StartCoroutine(MakeCircle(target.transform.position.x +UnityEngine.Random.Range(-10f,0f), target.transform.position.y + UnityEngine.Random.Range(-3f,3f)));	
+			
+
+			for (int n = UnityEngine.Random.Range(0, 3); n > 0; n--)
+			{
+				StartCoroutine(MakeCircle(target.transform.position.x + UnityEngine.Random.Range(-7f, 7f), target.transform.position.y + UnityEngine.Random.Range(-5f, 5f)));
+			}
+
+			yield return new WaitForSeconds(2f);
+			StartCoroutine(SpamCircles());
+		}
+		IEnumerator MakeCircle(float x, float y)
 		{
 			GameObject obj = Instantiate(atts["VoidCircle"], parent.transform);
-			obj.transform.SetPosition2D(curX, UnityEngine.Random.Range(67f, 76f));
+			obj.transform.SetPosition2D(x, y);
 			obj.SetActive(true);
 			obj.GetComponent<VoidCircle>().size = .3f;
 			obj.GetComponent<VoidCircle>().Appear();
@@ -669,7 +740,7 @@ public class Attacks : MonoBehaviour
 		foreach (GameObject g in atts.Values)
 			g.SetActive(false);
 		attacking = false;
-		Hide();
+		//Hide();
 	}
 	public void Hide()
 	{
@@ -690,11 +761,14 @@ public class Attacks : MonoBehaviour
 				break;
 			case 3:
 				infiniteSpike = false;
+				platPhase = true;
 				xEdge = 43.5f;
 				break;
 			case 4:
-				xEdge = 17.71f; xCenter = 217.61f; yDef = 9.7f;
+				xEdge = 17.71f; xCenter = 217.61f; yDef = 14f;
 				lastPhase = true;
+				platPhase = false;
+				fireOnce = true;
 				break;
 		}
 	}
@@ -735,20 +809,29 @@ public class Attacks : MonoBehaviour
 		IEnumerator leave()
 		{
 			wait = true;
-			if (forward)
+			if (fireOnce)
 			{
-				anim.Play("NeutralLeave");
+				Hide();
+				transform.localScale = new Vector3(1, 1, 1);
+				fireOnce = false;
 			}
 			else
 			{
-				anim.Play("SideLeave");
+				if (forward)
+				{
+					anim.Play("NeutralLeave");
+				}
+				else
+				{
+					anim.Play("SideLeave");
+				}
+				yield return new WaitForSeconds(2 / 12f);
+				rig.velocity = new Vector2(0f, -30f);
+				yield return new WaitUntil(() => transform.position.y < yDef - 20);
+				rig.velocity = new Vector2(0f, 0f);
+				Hide();
+				transform.localScale = new Vector3(1, 1, 1);
 			}
-			yield return new WaitForSeconds(2 / 12f);
-			rig.velocity = new Vector2(0f, -30f);
-			yield return new WaitUntil(() => transform.position.y < yDef - 20);
-			rig.velocity = new Vector2(0f, 0f);
-			Hide();
-			transform.localScale = new Vector3(1, 1, 1);
 			wait = false;
 		}
 	}
@@ -763,7 +846,8 @@ public class Attacks : MonoBehaviour
 	private IEnumerator arriveRoutine(float max)
 	{
 		wait = true;
-		transform.SetPositionY(50f);
+		transform.SetPositionY(max-25f);
+		halo.SetActive(true);
 		resetHitBox();
 		if (forward)
 		{
@@ -790,7 +874,7 @@ public class Attacks : MonoBehaviour
 		wait = false;
 	}
 
-	// Simplify Unity actions
+	// helpers
 	private void rotate(Transform t, float r)
 	{
 		t.Rotate(new Vector3(0, 0, t.rotation.z + r));

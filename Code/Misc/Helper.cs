@@ -50,34 +50,55 @@ class Helper : MonoBehaviour
 		rig.gravityScale = .7f;
 		rig.velocity = new Vector2(UnityEngine.Random.Range(0, 30f) - 15f, UnityEngine.Random.Range(0, 10f) - 5f);
 		yield return new WaitForSeconds(10f);
-		SpriteRenderer sprite = gameObject.GetComponent<SpriteRenderer>();
-		Color c = new Color(0, 0, 0, 1 / 20f);
-		while (sprite.color.a > 0)
-		{
-			sprite.color -= c;
-			yield return new WaitForSeconds(1 / 30f);
-		}
-		Destroy(gameObject);
+		Destroy(rig.gameObject);
 	}
 
-	public IEnumerator fadeTo(SpriteRenderer sprite, Color target, float time)
+
+	public void fadeTo(SpriteRenderer sprite, Color target, float time)
 	{
-		float frames = time*60;
-		Color 
-			r = new Color((target.r - sprite.color.r)/frames,0,0,0),
-			g = new Color(0,(target.g - sprite.color.g) / frames, 0,0),
-			b = new Color(0,0,(target.b - sprite.color.b) / frames, 0),
-			a = new Color(0,0,0,(target.a - sprite.color.a) / frames);
-
-		for(int i=0; i<frames;i++)
+		StartCoroutine(fadeTo());
+		IEnumerator fadeTo()
 		{
-			sprite.color += r;
-			sprite.color += g;
-			sprite.color += b;
-			sprite.color += a;
+			float frames = time * 60;
+			float
+				r = (target.r - sprite.color.r) / frames,
+				g = (target.g - sprite.color.g) / frames,
+				b = (target.b - sprite.color.b) / frames,
+				a = (target.a - sprite.color.a) / frames;
+			float[] addVals = { 0, 0, 0, 0 };
+			float[] subVals = { 0, 0, 0, 0 };
 
-			yield return new WaitForSeconds(1 / 60f);
+			if (r < 0)
+				subVals[0] = r * -1;
+			else
+				addVals[0] = r * 1;
+
+			if (g < 0)
+				subVals[1] = g * -1;
+			else
+				addVals[1] = g * 1;
+
+			if (b < 0)
+				subVals[2] = b * -1;
+			else
+				addVals[2] = b * 1;
+
+			if (a < 0)
+				subVals[3] = a * -1;
+			else
+				addVals[3] = a * 1;//*/
+
+			Color add = new Color(addVals[0], addVals[1], addVals[2], addVals[3]),
+				sub = new Color(subVals[0], subVals[1], subVals[2], subVals[3]);
+
+			for (int i = 0; i < frames; i++)
+			{
+				sprite.color += add;
+				sprite.color -= sub;
+
+				yield return new WaitForSeconds(1 / 60f);
+			}
+			sprite.color = target;
 		}
-		sprite.color = target;
 	}
 }

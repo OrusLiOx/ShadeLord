@@ -30,8 +30,8 @@ class ShadeLordCtrl : MonoBehaviour
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	//private int[] hpMarkers = { 50,50,50,50,300};
-	private int[] hpMarkers = { 400, 450, 300, 750, 2200 };
+	private int[] hpMarkers = { 50,50,50,50,300};
+	//private int[] hpMarkers = { 400, 450, 300, 750, 2200 };
 	private System.Random rand;
 	
 	private Attacks attacks;
@@ -66,14 +66,12 @@ class ShadeLordCtrl : MonoBehaviour
 		attacks.Hide();
 		atts = new List<Action>()
 		{
-			//attacks.VoidCircles,
-			attacks.TendrilBurst//,
-			//attacks.Dash,
-			//attacks.SweepBeam,
-			//attacks.CrossSlash,
-			//attacks.FaceSpikes,
-			//attacks.Spikes,
-			//attacks.AimBeam
+			attacks.TendrilBurst,
+			attacks.Dash,
+			attacks.SweepBeam,
+			attacks.CrossSlash,
+			attacks.FaceSpikes,
+			attacks.Spikes
 		};
 
 		helper = gameObject.AddComponent<Helper>();
@@ -90,14 +88,13 @@ class ShadeLordCtrl : MonoBehaviour
 		health = gameObject.AddComponent<HealthManager>();
 		extDmg = gameObject.AddComponent<ExtraDamageable>();
 		GameObject.Find("Halo").AddComponent<Spin>();
-
 		AssignValues();
 		health.OnDeath += OnDeath;
 		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
 
 		//Spawn();
-		co = StartCoroutine(AttackChoice());
+		FastSpawn();
 	}
 	private void AssignValues()
 	{
@@ -254,22 +251,15 @@ class ShadeLordCtrl : MonoBehaviour
 		phase++;
 		switch (phase)
 		{
-			case 1: // add lingering spikes
-				//((Action)Tendrils).Invoke();
+			case 1:
+				atts.Add(attacks.VoidCircles);
+				StopCoroutine(co);
+				co = StartCoroutine(phase2());
 				break;
 			case 2: // spam phase
 				atts = new List<Action>() { attacks.Spikes };
 				break;
 			case 3: // platform phase
-				atts = new List<Action>()
-				{
-					attacks.Dash,
-					attacks.SweepBeam,
-					attacks.CrossSlash,
-					attacks.FaceSpikes,
-					attacks.AimBeam
-				};
-				attacks.Stop();
 				ToPlatform();
 				break;
 			case 4: // descend phase
@@ -285,8 +275,156 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.Phase(phase);
 			Modding.Logger.Log("Shade Lord Phase: " + phase);
 		}
+
+		IEnumerator phase2()
+		{
+			atts.Add(attacks.VoidCircles);
+
+			yield return new WaitWhile(() => attacks.isAttacking());//*/
+			yield return new WaitForSeconds(1f);
+			attacks.VoidCircles();
+			yield return new WaitWhile(() => attacks.isAttacking());
+			co = StartCoroutine(AttackChoice());
+		}
 	}
-	
+
+	private void FastSpawn()
+	{
+		GameObject[] allObjects = FindObjectsOfType<GameObject>();
+		GameObject hud = GameObject.Find("Hud Canvas");
+		IEnumerator Spawn()
+		{
+			transform.SetPositionY(-2f);
+			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["Silence"]);
+			vpSpawner.set(55, 145, 64);
+			vpSpawner.setActive(true);
+			GameObject.Find("Start").transform.SetPosition3D(0, 3.5f, 38f);
+			hud.transform.SetPositionX(hud.transform.GetPositionX() + 100);
+			GameObject wall = GameObject.Find("Start/Wall");
+			SpriteRenderer wallSprite = GameObject.Find("Start/Wall/Black").GetComponent<SpriteRenderer>();
+			SpriteRenderer titleSprite = GameObject.Find("Start/Title").GetComponent<SpriteRenderer>();
+			Color c = new Color(0, 0, 0, .5f);
+			GameObject[] camLocks = {
+				GameObject.Find("Terrain/Area1/CameraLock"),
+				GameObject.Find("Terrain/Area2/CameraLock")
+			};
+			//foreach (GameObject go in camLocks)
+			//	go.SetActive(false);
+
+			/*/ START ANIMATION
+			//*/
+
+			yield return new WaitForSeconds(1f);
+
+			// APPEAR CLOSER / SCREAM
+			// lock movemnet
+			if (player.transform.GetPositionX() > transform.GetPositionX())
+				HeroController.instance.FaceLeft();
+			else
+				HeroController.instance.FaceRight();
+			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR ENTER", false);
+
+			// black screen
+			wall.transform.localPosition = new Vector3(0, 0f, 0);
+
+			// set stuff before reveal
+			vpSpawner.setDensity(30);
+			transform.SetPosition2D(100f, 75.23f);
+			anim.Play("NeutralSquint");
+			attacks.playSound("ScreamLong");
+			GameObject.Find("ShadeLord/Tendrils").GetComponent<PolygonCollider2D>().enabled = false;
+
+			// reveal
+			yield return new WaitForSeconds(1 / 6f);
+			c = new Color(0, 0, 0, 1 / 7f);
+			while (wallSprite.color.a > 0)
+			{
+				wallSprite.color -= c;
+				yield return new WaitForSeconds(1 / 30f);
+			}
+			yield return new WaitForSeconds(3f);
+
+			// TITLE CARD
+			// wall rise
+			wall.transform.localPosition = new Vector3(0, -33.1f, 0);
+			wallSprite.color = new Color(0, 0, 0, 1);
+			while (wall.transform.localPosition.y < 0f)
+			{
+				wall.transform.localPosition = new Vector3(0, wall.transform.localPosition.y + 7f, 0);
+				yield return new WaitForSeconds(1 / 30f);
+			}
+			wall.transform.localPosition = new Vector3(0, 0f, 0);
+
+			// hide lord
+			GameObject.Find("ShadeLord/Tendrils").SetActive(false);
+			transform.SetPositionY(-2f);
+
+			// text appear, then leave
+			vpSpawner.setDensity(1);
+			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
+			while (titleSprite.color.a < 1)
+			{
+				titleSprite.color += c;
+				yield return new WaitForSeconds(1 / 30f);
+			}
+
+
+			c = new Color(0, 0, 0, 1 / 13f);
+			while (titleSprite.color.a > 0)
+			{
+				titleSprite.color -= c;
+				yield return new WaitForSeconds(1 / 30f);
+			}
+			// black box disappear
+			c = new Color(0, 0, 0, 1 / 7f);
+			while (wallSprite.color.a > 0)
+			{
+				wallSprite.color -= c;
+				yield return new WaitForSeconds(1 / 30f);
+			}
+
+			// hud appear
+			hud.transform.SetScaleX(.9f);
+			hud.transform.SetScaleY(.9f);
+			hud.transform.SetPositionX(hud.transform.GetPositionX() - 100);
+
+			for (int i = 1; i <= 5; i++)
+			{
+				float scale = .9f + (.1f / 6) * i;
+				hud.transform.SetScaleX(scale);
+				hud.transform.SetScaleY(scale);
+				yield return new WaitForSeconds(1 / 60f);
+			}
+			hud.transform.SetScaleX(1);
+			hud.transform.SetScaleY(1);
+
+			// GO
+			title.SetActive(false);
+			GameObject.Find("Terrain/CameraLock").SetActive(false);
+			//foreach (GameObject go in camLocks)
+			//	go.SetActive(true);
+			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR EXIT", false);
+			yield return new WaitForSeconds(1f);
+			co = StartCoroutine(AttackChoice());
+		}
+
+		List<GameObject> startTendrils = new List<GameObject>();
+		List<GameObject> voidTendrils = new List<GameObject>();
+		foreach (GameObject obj in allObjects)
+		{
+			if (obj.name == "white_palace_particles" || obj.name == "default_particles")
+				obj.SetActive(false);
+			else if (obj.name == "Hud Canvas")
+				hud = obj;
+			else if (obj.name.Contains("ShortTendril"))
+				voidTendrils.Add(obj);
+			else if (obj.name.Contains("StartTendril"))
+				startTendrils.Add(obj);
+		}
+		helper.randomizeAnimStart(voidTendrils, "ShortAnim", 12);
+		helper.randomizeAnimStart(startTendrils, "TendrilWiggle", 8);
+		StartCoroutine(Spawn());
+	}
 	private void Spawn()
 	{
 		GameObject[] allObjects = FindObjectsOfType<GameObject>();
@@ -451,16 +589,21 @@ class ShadeLordCtrl : MonoBehaviour
 			// stop all and disapear into void particles
 			StopCoroutine(co);
 			attacks.Stop();
-
+			
 			// explode into void particles
 			attacks.playSound("Scream");
-			StartCoroutine(helper.fadeTo(GetComponent<SpriteRenderer>(),new Color(1,1,1,0), .2f));
+
+			helper.fadeTo(gameObject.GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .3f);
+			helper.fadeTo(GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>(), new Color(1,1,1,0), .3f);
+
+			GetComponent<BoxCollider2D>().enabled = false;
+
 			// spawn a bunch of particles 
 			for (float k = 0; k < 100; k++)
 			{
 				GameObject particle = Instantiate(hitEffect);
 				// set position
-				particle.transform.SetPositionX(transform.position.x + UnityEngine.Random.Range(-1.5f, -1.5f));
+				particle.transform.SetPositionX(transform.position.x + UnityEngine.Random.Range(-3f, 3f));
 				particle.transform.SetPositionY(transform.position.y + UnityEngine.Random.Range(-2.37f,-11f));
 
 				// set scale
@@ -477,21 +620,30 @@ class ShadeLordCtrl : MonoBehaviour
 			}
 
 			// wait a bit
+			vpSpawner.setDensity(5f);
 			yield return new WaitForSeconds(.5f);
 
 			// void particles raise from floor and terrain breaks
-			GameObject[] GOs =
-			{
-				GameObject.Find("Terrain/Area1"),
-				GameObject.Find("Terrain/Area1/Floor"),
-				GameObject.Find("Terrain/Area1/LeftWall"),
-				GameObject.Find("Terrain/Area1/RightWall")
-			};
 			breakTerrain(GameObject.Find("Terrain/Area1"));
-
+			
 			// Wait a bit then start attacking again
-			yield return new WaitForSeconds(5f);
-			atts.Remove(attacks.Spikes);
+			yield return new WaitForSeconds(2.5f);
+			vpSpawner.setDensity(1f);
+			yield return new WaitForSeconds(4f);
+			
+			transform.SetPositionY(0f);
+			GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+			
+			atts = new List<Action>()
+			{
+				attacks.VoidCircles,
+				attacks.TendrilBurst,
+				attacks.Dash,
+				attacks.SweepBeam,
+				attacks.CrossSlash,
+				attacks.FaceSpikes
+			};
 
 			co = StartCoroutine(AttackChoice());
 		}
@@ -502,13 +654,54 @@ class ShadeLordCtrl : MonoBehaviour
 		IEnumerator ToEnd()
 		{
 			atts = new List<Action>() { };
+			GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
+			GameObject leftWall = GameObject.Find("Terrain/Area3/WallL");
+			cameraLock.SetActive(false);
+			leftWall.SetActive(false);
 
+			// wait till current attack done
+			yield return new WaitWhile(attacks.isAttacking);
+			StopCoroutine(co);
+			// explode into particles
+			helper.fadeTo(gameObject.GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .3f);
+			helper.fadeTo(GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .3f);
+
+			GetComponent<BoxCollider2D>().enabled = false;
+
+			for (float k = 0; k < 100; k++)
+			{
+				GameObject particle = Instantiate(hitEffect);
+				// set position
+				particle.transform.SetPositionX(transform.position.x + UnityEngine.Random.Range(-3f, 3f));
+				particle.transform.SetPositionY(transform.position.y + UnityEngine.Random.Range(-2.37f, -11f));
+
+				// set scale
+				float s = UnityEngine.Random.Range(.1f, .2f);
+				particle.transform.SetScaleX(s);
+				particle.transform.SetScaleY(s);
+
+				// launch 
+				float range = 3f;
+				particle.GetComponent<Rigidbody2D>().velocity = new Vector2(UnityEngine.Random.Range(-1 * range, range), UnityEngine.Random.Range(5f, 3f));
+
+				// destroy
+				StartCoroutine(die(particle));
+			}
+			// terrain break 1
+			GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
 			GameObject[] go = { GameObject.Find("Terrain/Area2/Mid") };
 			breakTerrain(GameObject.Find("Terrain/Area2/Mid"));
-			GameObject.Find("Terrain/VoidHazardTemp").SetActive(false);
+			GameObject hazard = GameObject.Find("Terrain/VoidHazardTemp");
+			
+			yield return new WaitForSeconds(5f);
+			hazard.GetComponent<Rigidbody2D>().gravityScale = .2f;
+			
+			// start spamming
+			attacks.VoidCircles();
 
-			// break side plats
-			yield return new WaitForSeconds(10f);
+			// terrain break 2
+			yield return new WaitForSeconds(5f);
+			hazard.SetActive(false);
 			breakTerrain(GameObject.Find("Terrain/Area2/EdgeLeft"));
 			breakTerrain(GameObject.Find("Terrain/Area2/EdgeRight"));
 			breakTerrain(GameObject.Find("Terrain/Area2/Left (1)"));
@@ -517,8 +710,16 @@ class ShadeLordCtrl : MonoBehaviour
 			atts = new List<Action>() { attacks.SweepBeam };
 
 			// Wait till reach end section
-			yield return new WaitWhile(()=> player.transform.GetPositionX()<208);
-			GameObject.Find("Terrain/Area3/CameraLock").SetActive(true);
+			yield return new WaitWhile(()=> player.transform.GetPositionX()<210);
+
+			GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+
+			cameraLock.SetActive(true);
+			leftWall.SetActive(true);
+			attacks.Stop();
+			yield return new WaitForSeconds(1f);
+			co = StartCoroutine(AttackChoice());
 
 			GameObject[] GOs = { GameObject.Find("Terrain/Descend/Section2/Plat1"), GameObject.Find("Terrain/Descend/Section2/Plat2")};
 			breakTerrain(GameObject.Find("Terrain/Descend/Section2"));
@@ -561,22 +762,20 @@ class ShadeLordCtrl : MonoBehaviour
 
 	private void breakTerrain(GameObject go)
 	{
-		float c = 1/20f;
+		float c = 1/120f;
 		Color scale = new Color(c, c, c, 0);
 		StartCoroutine(breakTerrain(go));
 
 		IEnumerator breakTerrain(GameObject go)
 		{
-			SpriteRenderer sprite = go.GetComponentInChildren<SpriteRenderer>();
-
+			// fade to black
 			foreach (SpriteRenderer s in go.GetComponentsInChildren<SpriteRenderer>())
 			{
 				StartCoroutine(fade(s));
 			}
 
-			// fade to black
 			yield return new WaitForSeconds(5f);
-
+			vpSpawner.setDensity(1f);
 			go.SetActive(false);
 
 			// rock particles
@@ -593,7 +792,7 @@ class ShadeLordCtrl : MonoBehaviour
 			{
 				sprite.color -= scale;
 
-				yield return new WaitForSeconds(.1f);
+				yield return new WaitForSeconds(1/60f);
 			}
 		}
 	}
@@ -639,10 +838,12 @@ class ShadeLordCtrl : MonoBehaviour
 		curr.Invoke();
 		// Wait till last attack is done
 		yield return new WaitWhile(() => attacks.isAttacking());//*/
-		
+
 		// delay between attacks
-		yield return new WaitForSeconds(1f);
+		if(phase != 4)
+			yield return new WaitForSeconds(1f);
 		// Repeat
+
 		co = StartCoroutine(AttackChoice());//*/
 	}
 

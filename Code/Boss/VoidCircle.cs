@@ -24,7 +24,6 @@ public class VoidCircle : MonoBehaviour
 
 		burst = transform.GetChild(1).gameObject;
 		burst.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
-		burst.transform.SetPositionZ(-.01f);
 		outline = transform.GetChild(0).GetComponent<SpriteRenderer>();
 
 		StartCoroutine(Appear());
