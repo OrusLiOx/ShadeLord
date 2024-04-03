@@ -93,8 +93,8 @@ class ShadeLordCtrl : MonoBehaviour
 		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
 
-		//Spawn();
-		FastSpawn();
+		Spawn();
+		//FastSpawn();
 	}
 	private void AssignValues()
 	{
@@ -431,6 +431,10 @@ class ShadeLordCtrl : MonoBehaviour
 		GameObject hud = GameObject.Find("Hud Canvas");
 		IEnumerator Spawn()
 		{
+			GameObject obj1 = GameObject.Find("Terrain/Area2/RespawnL");
+			GameObject obj2 = GameObject.Find("Terrain/Area2/RespawnR");
+			obj1.SetActive(false);
+			obj2.SetActive(false);
 			transform.SetPositionY(-2f);
 			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["Silence"]);
 			vpSpawner.set(55, 145, 64);
@@ -447,6 +451,12 @@ class ShadeLordCtrl : MonoBehaviour
 			};
 			foreach (GameObject go in camLocks)
 				go.SetActive(false);
+
+			GameObject obj3 = GameObject.Find("Terrain/CameraLock");
+			obj3.transform.SetPositionZ(0);
+			obj3.SetActive(false);
+			yield return new WaitForSeconds(.1f);
+			obj3.SetActive(true);
 
 			// START ANIMATION
 			yield return new WaitForSeconds(3f);
@@ -556,8 +566,10 @@ class ShadeLordCtrl : MonoBehaviour
 			hud.transform.SetScaleY(1);
 
 			// GO
+			obj1.SetActive(true);
+			obj2.SetActive(true);
 			title.SetActive(false);
-			GameObject.Find("Terrain/CameraLock").SetActive(false);
+			obj3.SetActive(false);
 			foreach (GameObject go in camLocks)
 				go.SetActive(true);
 			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR EXIT", false);
@@ -688,7 +700,7 @@ class ShadeLordCtrl : MonoBehaviour
 				StartCoroutine(die(particle));
 			}
 			// terrain break 1
-			GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
+			//GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
 			GameObject[] go = { GameObject.Find("Terrain/Area2/Mid") };
 			breakTerrain(GameObject.Find("Terrain/Area2/Mid"));
 			GameObject hazard = GameObject.Find("Terrain/VoidHazardTemp");
@@ -718,7 +730,7 @@ class ShadeLordCtrl : MonoBehaviour
 			cameraLock.SetActive(true);
 			leftWall.SetActive(true);
 			attacks.Stop();
-			yield return new WaitForSeconds(1f);
+			yield return new WaitForSeconds(3f);
 			co = StartCoroutine(AttackChoice());
 
 			GameObject[] GOs = { GameObject.Find("Terrain/Descend/Section2/Plat1"), GameObject.Find("Terrain/Descend/Section2/Plat2")};

@@ -242,7 +242,7 @@ public class Attacks : MonoBehaviour
 			}
 			yield return new WaitForSeconds(.7f);
 			// spikes go up
-			playSound("Scream");
+			//playSound("Scream");
 			playSound("SpikeUpLower");
 			anim.Play("Roar");
 			yield return new WaitForSeconds(1f + 3/12f);
@@ -618,7 +618,7 @@ public class Attacks : MonoBehaviour
 				windup.SetScaleX(1.5f*s);
 				yield return new WaitForSeconds(1 / 12f);
 			}
-			yield return new WaitForSeconds(.5f);
+			yield return new WaitForSeconds(.3f);
 			atts["TendrilWindup"].SetActive(false);
 			tendrils.SetActive(false);
 			// end
@@ -681,7 +681,7 @@ public class Attacks : MonoBehaviour
 			float wait2 = 1.5f;
 			while (curX< xCenter + xEdge)
 			{
-				StartCoroutine(MakeCircle(curX, UnityEngine.Random.Range(67f, 76f)));
+				StartCoroutine(MakeCircle(curX, UnityEngine.Random.Range(66f, 76f), 1.5f));
 				yield return new WaitForSeconds(.15f);
 				wait2 -= .15f;
 				curX += UnityEngine.Random.Range(5f, 9f);
@@ -689,10 +689,11 @@ public class Attacks : MonoBehaviour
 			if(wait2>0)
 				yield return new WaitForSeconds(wait2);
 			anim.Play("NeutralIdle");
-			yield return new WaitForSeconds(1f);
+			yield return new WaitForSeconds(.5f);
 
 			// end
 			leave();
+			yield return new WaitForSeconds(.5f);
 			yield return new WaitUntil(() => !wait);
 			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().enabled = true;
 			yield return new WaitForSeconds(1f);
@@ -700,20 +701,23 @@ public class Attacks : MonoBehaviour
 		}
 		IEnumerator SpamCircles()
 		{
-
-			StartCoroutine(MakeCircle(target.transform.position.x +UnityEngine.Random.Range(0f,10f), target.transform.position.y + UnityEngine.Random.Range(-3f,3f)));	
-			StartCoroutine(MakeCircle(target.transform.position.x +UnityEngine.Random.Range(-10f,0f), target.transform.position.y + UnityEngine.Random.Range(-3f,3f)));	
-			
-
-			for (int n = UnityEngine.Random.Range(0, 3); n > 0; n--)
+			float tileSize = 10;
+			int xMax = 5;
+			int yMax = 5;
+			for (int n = 0; n < xMax; n++)
 			{
-				StartCoroutine(MakeCircle(target.transform.position.x + UnityEngine.Random.Range(-7f, 7f), target.transform.position.y + UnityEngine.Random.Range(-5f, 5f)));
+				for (int m = 0; m < yMax; m++)
+				{
+					float x = target.transform.position.x + n*tileSize - xMax/2 * tileSize + UnityEngine.Random.Range(-5f, 5f);
+					float y = target.transform.position.y + m*tileSize - yMax/2 * tileSize + UnityEngine.Random.Range(-5f, 5f);
+					StartCoroutine(MakeCircle(x, y, 1f));
+				}
 			}
 
-			yield return new WaitForSeconds(2f);
+			yield return new WaitForSeconds(1f);
 			StartCoroutine(SpamCircles());
 		}
-		IEnumerator MakeCircle(float x, float y)
+		IEnumerator MakeCircle(float x, float y, float wait)
 		{
 			GameObject obj = Instantiate(atts["VoidCircle"], parent.transform);
 			obj.transform.SetPosition2D(x, y);
@@ -721,7 +725,7 @@ public class Attacks : MonoBehaviour
 			obj.GetComponent<VoidCircle>().size = .3f;
 			obj.GetComponent<VoidCircle>().Appear();
 
-			yield return new WaitForSeconds(1.5f);
+			yield return new WaitForSeconds(wait);
 
 			obj.GetComponent<VoidCircle>().Fire();
 			playSound("BeamBlast");

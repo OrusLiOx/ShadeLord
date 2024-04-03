@@ -66,7 +66,7 @@ public class VoidCircle : MonoBehaviour
 			}
 			col.enabled = false;
 			// burst fade
-			incr = 60*.5f;
+			incr = 60*.2f;
 			sprite.color = new Color(1, 1, 1, 0);
 			outline.color = new Color(1, 1, 1, 0);
 			for (float i = 0; i < incr; i+=1)
