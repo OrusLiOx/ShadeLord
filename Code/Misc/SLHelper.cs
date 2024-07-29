@@ -10,7 +10,7 @@ using System.Collections;
 using UnityEngine;
 
 
-class Helper : MonoBehaviour
+class SLHelper : MonoBehaviour
 {
 // randomize animation times
 	public void randomizeAnimStart(List<GameObject> objs, string anim, int frames)

@@ -56,6 +56,7 @@ public class VoidCircle : MonoBehaviour
 				burstSprite.color = new Color(c, c, c, i/incr);
 				yield return new WaitForSeconds(1/60f);
 			}
+			GetComponent<AudioSource>().Play();
 			outline.enabled = false;
 			col.enabled = true;
 			for (float i = 0; i < incr; i+=1)

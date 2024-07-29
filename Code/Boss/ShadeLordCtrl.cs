@@ -30,12 +30,12 @@ class ShadeLordCtrl : MonoBehaviour
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	private int[] hpMarkers = { 50,50,50,50,300};
-	//private int[] hpMarkers = { 400, 450, 300, 750, 2200 };
+	//private int[] hpMarkers = { 50,50,50,50,300};
+	private int[] hpMarkers = { 400, 450, 300, 750, 2200 };
 	private System.Random rand;
 	
 	private Attacks attacks;
-	private Helper helper;
+	private SLHelper helper;
 	private VoidParticleSpawner vpSpawner;
 
 	// trackers
@@ -64,6 +64,8 @@ class ShadeLordCtrl : MonoBehaviour
 		attacks = gameObject.AddComponent<Attacks>();
 		attacks.target = player;
 		attacks.Hide();
+
+		/*
 		atts = new List<Action>()
 		{
 			attacks.TendrilBurst,
@@ -72,9 +74,15 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.CrossSlash,
 			attacks.FaceSpikes,
 			attacks.Spikes
-		};
+		};//*/
 
-		helper = gameObject.AddComponent<Helper>();
+		//*
+		atts = new List<Action>()
+		{
+			attacks.AimBeam
+		};//*/
+
+		helper = gameObject.AddComponent<SLHelper>();
 
 		vpSpawner = gameObject.AddComponent<VoidParticleSpawner>();
 
@@ -93,8 +101,8 @@ class ShadeLordCtrl : MonoBehaviour
 		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
 
-		Spawn();
-		//FastSpawn();
+		//Spawn();
+		FastSpawn();
 	}
 	private void AssignValues()
 	{

@@ -923,7 +923,7 @@ GameObject:
   - component: {fileID: 65937631}
   - component: {fileID: 65937633}
   - component: {fileID: 65937632}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Blast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1025,7 +1025,8 @@ GameObject:
   - component: {fileID: 102011304}
   - component: {fileID: 102011305}
   - component: {fileID: 102011306}
-  m_Layer: 11
+  - component: {fileID: 102011307}
+  m_Layer: 22
   m_Name: VoidCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1040,7 +1041,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 102011303}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.300003, y: -24.300003, z: -0.3}
+  m_LocalPosition: {x: -1.9000015, y: 17.900002, z: -0.3}
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_Children:
   - {fileID: 2052976458}
@@ -1115,6 +1116,102 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.000015258789}
   serializedVersion: 2
   m_Radius: 10.23
+--- !u!82 &102011307
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102011303}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 91a56e9c87c8e53498ba7805677f1763, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &116685038
 GameObject:
   m_ObjectHideFlags: 0
@@ -1183,7 +1280,7 @@ GameObject:
   - component: {fileID: 117502413}
   - component: {fileID: 117502415}
   - component: {fileID: 117502414}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: blast1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1664,7 +1761,7 @@ GameObject:
   - component: {fileID: 156205626}
   - component: {fileID: 156205625}
   - component: {fileID: 156205627}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1679,7 +1776,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 156205623}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.31, y: -9.38, z: -0.002}
+  m_LocalPosition: {x: 0.30999756, y: -9.379997, z: -0.0019999966}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 947276519}
@@ -2061,7 +2158,7 @@ GameObject:
   - component: {fileID: 179618765}
   - component: {fileID: 179618767}
   - component: {fileID: 179618766}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: StartTendrilR4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2351,7 +2448,7 @@ GameObject:
   m_Component:
   - component: {fileID: 241801602}
   - component: {fileID: 241801603}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Gradient1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2632,7 +2729,7 @@ GameObject:
   - component: {fileID: 265906422}
   - component: {fileID: 265906421}
   - component: {fileID: 265906420}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: HitEffect (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3163,6 +3260,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
 --- !u!1 &387411307
@@ -3466,7 +3567,7 @@ GameObject:
   - component: {fileID: 410607841}
   - component: {fileID: 410607843}
   - component: {fileID: 410607842}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: StartTendrilL3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3869,7 +3970,7 @@ GameObject:
   - component: {fileID: 451538618}
   - component: {fileID: 451538620}
   - component: {fileID: 451538619}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: StartTendrilR2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4173,7 +4274,7 @@ GameObject:
   - component: {fileID: 458825204}
   - component: {fileID: 458825206}
   - component: {fileID: 458825205}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: StartTendrilL4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4534,6 +4635,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
 --- !u!4 &481022858 stripped
@@ -4704,6 +4809,10 @@ PrefabInstance:
     - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
       propertyPath: m_Name
       value: Beam (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
@@ -5429,6 +5538,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
 --- !u!4 &567902005 stripped
@@ -5699,6 +5812,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
 --- !u!4 &586991352 stripped
@@ -5819,7 +5936,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 599204811}
-  m_Layer: 11
+  - component: {fileID: 599204812}
+  m_Layer: 22
   m_Name: Offset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5856,6 +5974,102 @@ Transform:
   m_Father: {fileID: 1012994430}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &599204812
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599204810}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &601777799
 GameObject:
   m_ObjectHideFlags: 0
@@ -6081,7 +6295,7 @@ GameObject:
   - component: {fileID: 608207292}
   - component: {fileID: 608207291}
   - component: {fileID: 608207290}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: HitEffect (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7771,7 +7985,7 @@ GameObject:
   - component: {fileID: 767335775}
   - component: {fileID: 767335776}
   - component: {fileID: 767335777}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: StartTendrilL2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8255,7 +8469,7 @@ GameObject:
   - component: {fileID: 796702418}
   - component: {fileID: 796702417}
   - component: {fileID: 796702416}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: HitEffect (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8929,6 +9143,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
 --- !u!1 &869666927
@@ -8940,7 +9158,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 869666928}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: HitEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8954,8 +9172,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869666927}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.25, y: -1.24, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -9.25, y: -1.2399979, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 608207289}
@@ -9572,6 +9790,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
 --- !u!1 &944311547
@@ -9668,7 +9890,7 @@ GameObject:
   - component: {fileID: 947276520}
   - component: {fileID: 947276522}
   - component: {fileID: 947276523}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10555,7 +10777,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 997600281}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Gradient
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10753,7 +10975,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1012994430}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: BeamOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10767,8 +10989,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1012994429}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: -2.05, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2, y: -2.050003, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1915646489}
@@ -10964,7 +11186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1036394702}
   - component: {fileID: 1036394704}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Sweep
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10978,8 +11200,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1036394701}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.01}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.009999998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 980365322}
@@ -11168,6 +11390,10 @@ PrefabInstance:
     - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
       propertyPath: m_Name
       value: Beam (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
@@ -11734,6 +11960,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
 --- !u!1001 &1160604585
@@ -11790,6 +12020,10 @@ PrefabInstance:
     - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
       propertyPath: m_Name
       value: Beam (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
@@ -12587,7 +12821,7 @@ GameObject:
   - component: {fileID: 1233851833}
   - component: {fileID: 1233851835}
   - component: {fileID: 1233851834}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: StartTendrilR1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12761,7 +12995,7 @@ Transform:
   m_GameObject: {fileID: 1242845569}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 4, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 203534363}
   m_RootOrder: 0
@@ -12989,7 +13223,7 @@ GameObject:
   - component: {fileID: 1270643872}
   - component: {fileID: 1270643874}
   - component: {fileID: 1270643873}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: StartTendrilL1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13881,6 +14115,10 @@ PrefabInstance:
     - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
       propertyPath: m_Name
       value: Beam (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
@@ -16509,7 +16747,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1418980870}
   - component: {fileID: 1418980872}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: CrossSlash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16523,8 +16761,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1418980869}
-  m_LocalRotation: {x: 0, y: 0, z: 0.28501922, w: 0.95852184}
-  m_LocalPosition: {x: 0, y: 0, z: -0.01}
+  m_LocalRotation: {x: -0, y: -0, z: 0.28501922, w: 0.95852184}
+  m_LocalPosition: {x: 0, y: 0, z: -0.009999998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1632194238}
@@ -16988,7 +17226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1469632802}
   - component: {fileID: 1469632803}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Burst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17367,7 +17605,7 @@ GameObject:
   - component: {fileID: 1501943975}
   - component: {fileID: 1501943974}
   - component: {fileID: 1501943976}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: BurstSpike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17381,8 +17619,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1501943972}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.22, z: -0.02}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -2.2200012, z: -0.020000003}
   m_LocalScale: {x: 1, y: 1.5, z: 1}
   m_Children:
   - {fileID: 1722170536}
@@ -17725,7 +17963,7 @@ GameObject:
   - component: {fileID: 1537624445}
   - component: {fileID: 1537624444}
   - component: {fileID: 1537624443}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: HitEffect (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17891,6 +18129,10 @@ PrefabInstance:
     - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
       propertyPath: m_Name
       value: Beam (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
@@ -18779,7 +19021,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1632194238}
   - component: {fileID: 1632194239}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: CrossSlash (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19022,7 +19264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1649192760}
   - component: {fileID: 1649192761}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Dash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19036,8 +19278,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649192759}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.3, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.30000305, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 980365322}
@@ -19300,7 +19542,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1661787774}
   - component: {fileID: 1661787775}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19383,7 +19625,7 @@ GameObject:
   - component: {fileID: 1668634451}
   - component: {fileID: 1668634452}
   - component: {fileID: 1668634453}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Tendrils
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19397,8 +19639,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1668634450}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -5.35, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -5.3499985, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1270643872}
@@ -19526,6 +19768,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
 --- !u!1001 &1690380459
@@ -19583,6 +19829,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
 --- !u!4 &1690380460 stripped
@@ -19601,7 +19851,7 @@ GameObject:
   - component: {fileID: 1717018500}
   - component: {fileID: 1717018502}
   - component: {fileID: 1717018501}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: StartTendrilR5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19703,7 +19953,7 @@ GameObject:
   - component: {fileID: 1722170536}
   - component: {fileID: 1722170538}
   - component: {fileID: 1722170537}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20117,7 +20367,7 @@ GameObject:
   - component: {fileID: 1766011083}
   - component: {fileID: 1766011085}
   - component: {fileID: 1766011084}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: blast2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21806,7 +22056,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1915646489}
   - component: {fileID: 1915646490}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21933,6 +22183,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam
       objectReference: {fileID: 0}
+    - target: {fileID: 788657497652188920, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
+      propertyPath: m_Layer
+      value: 22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8e31f6bd3c47642b3924ff22c971df, type: 3}
 --- !u!4 &1946454662 stripped
@@ -21949,7 +22203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1958479080}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Blast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22401,7 +22655,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1990392187}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: TendrilWindup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22415,7 +22669,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1990392186}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -22595,7 +22849,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1999167237}
   - component: {fileID: 1999167238}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Gradient2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22787,7 +23041,7 @@ GameObject:
   - component: {fileID: 2021160978}
   - component: {fileID: 2021160980}
   - component: {fileID: 2021160979}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: StartTendrilL5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23466,7 +23720,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2052976458}
   - component: {fileID: 2052976459}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23549,7 +23803,7 @@ GameObject:
   - component: {fileID: 2057791347}
   - component: {fileID: 2057791349}
   - component: {fileID: 2057791348}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: StartTendrilR3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24524,7 +24778,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2143135705}
   - component: {fileID: 2143135706}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: Channel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24608,7 +24862,7 @@ GameObject:
   - component: {fileID: 2147470036}
   - component: {fileID: 2147470035}
   - component: {fileID: 2147470037}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: VoidBurst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24623,7 +24877,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2147470033}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -14.370003, y: -0.13000488, z: -0.01}
+  m_LocalPosition: {x: -14.370003, y: -0.13000488, z: -0.009999998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1661787774}

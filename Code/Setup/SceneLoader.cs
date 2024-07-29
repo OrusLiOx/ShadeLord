@@ -56,12 +56,13 @@ namespace ShadeLord.Setup
 					else if (obj.name.Equals("CameraLock"))
 						SetCameraLock(obj);
 					else if (obj.name.Contains("VoidHazard"))
-						obj.AddComponent<DamageHero>().hazardType = 2;//*/
+						obj.AddComponent<DamageHero>().hazardType = 2;
 
 					if (obj.GetComponent<SpriteRenderer>() != null)
 					{
 						obj.GetComponent<SpriteRenderer>().material.shader = Shader.Find("Sprites/Default");
 					}
+					
 				}
 				PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
 

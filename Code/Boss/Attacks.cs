@@ -59,6 +59,7 @@ public class Attacks : MonoBehaviour
 		sounds = new Dictionary<string, AudioClip>();
 
 		// Get attacks
+		atts.Add("Beam", GameObject.Find("ShadeLord/BeamOrigin/Offset"));
 		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin", "VoidBurst", "VoidCircle", "TendrilWindup" };
 		foreach (string n in names)
 		{
@@ -74,13 +75,42 @@ public class Attacks : MonoBehaviour
 			sounds.Add(s.clip.name, s.clip);
 		}
 	}
-
+	/*
+	 * GameObject obj;
+		atts.Add("Beam", GameObject.Find("BeamOrigin/Offset"));
+		Dictionary<string, Vector3> dict = new Dictionary<string, Vector3>();
+		dict.Add("Dash", new Vector3(0f,-.3f,0));
+		dict.Add("CrossSlash", new Vector3(0,0, -0.01f));
+		dict.Add("Sweep", new Vector3(0,0, -0.01f));
+		dict.Add("BurstSpike", new Vector3(0,-2.22f, -.2f));
+		dict.Add("Spike", new Vector3(.31f, -9.38f, -.002f));
+		dict.Add("BeamOrigin", new Vector3(-2, -2.05f,0));
+		dict.Add("VoidBurst", new Vector3(-14.37f, -0.1300049f,-.01f));
+		dict.Add("VoidCircle", new Vector3(-1.9f,17.9f,-.3f));
+		dict.Add("TendrilWindup", new Vector3(0,0,0));
+		foreach (string n in dict.Keys)
+		{
+			obj = GameObject.Find(n);
+			obj.transform.SetParent(transform);
+			obj.transform.position = dict[n];
+			atts.Add(n, obj);
+			atts[n].SetActive(false);
+		}
+		obj = GameObject.Find("Tendrils");
+		obj.transform.SetParent(transform);
+		obj.transform.position = new Vector3(0, -5.349998f, 0);
+		atts.Add("TendrilBurst", obj);
+		atts["TendrilBurst"].GetComponent<BoxCollider2D>().enabled = false;
+	//*/
 	// Attacks
+	// sharp shadow from one side of the stage to the other
 	public void Dash()
 	{
 		attacking = true;
 		forward = false;
-		StartCoroutine(Dash());
+		StartCoroutine(DashV2());
+
+		// dash across stage three times starting at the bottom and acending each dash
 		IEnumerator Dash()
 		{
 			//	pick direction
@@ -119,20 +149,37 @@ public class Attacks : MonoBehaviour
 
 			// go
 			anim.Play("DashLoop");
-			playSound("BeamBlast");
-			aud.clip = sounds["DashLoop"];
-			aud.loop = true;
+			for (int i = 0; i < 3; i++)
+			{
+				playSound("DashStart");
+				aud.clip = sounds["DashLoop"];
+				aud.loop = true;
 
-			halo.transform.localPosition = new Vector2(11.23f, 0.04f);
-			col.offset = new Vector2(6, -.07f);
-			col.size = new Vector2(19, 2.36f);
-			atts["Dash"].SetActive(true);
-			if (goright)
-				rig.velocity = new Vector2(25f, 0f);
-			else
-				rig.velocity = new Vector2(-25f, 0f);
+				halo.transform.localPosition = new Vector2(11.23f, 0.04f);
+				col.offset = new Vector2(6, -.07f);
+				col.size = new Vector2(19, 2.36f);
+				atts["Dash"].SetActive(true);
+				if (goright)
+					rig.velocity = new Vector2(50f, 0f);
+				else
+					rig.velocity = new Vector2(-50f, 0f);
 
-			yield return new WaitUntil(() => Mathf.Abs(transform.position.x - xCenter) > (xEdge + 20f));
+				yield return new WaitUntil(() => Mathf.Abs(transform.position.x - xCenter) > (xEdge + 20f));
+
+				goright = !goright;
+				if (goright)
+				{
+					transform.localScale = new Vector3(1, 1, 1);
+					transform.SetPositionX(xCenter - xEdge - 10f);
+				}
+				else
+				{
+
+					transform.localScale = new Vector3(-1, 1, 1);
+					transform.SetPositionX(xCenter + xEdge + 10f);
+				}
+				transform.SetPositionY(transform.GetPositionY() + 5f);
+			}
 
 			// end
 			halo.transform.localPosition = new Vector2(0f, -2.62f);
@@ -140,7 +187,104 @@ public class Attacks : MonoBehaviour
 			Hide();
 			attacking = false;
 		}
+		
+		// dash towards player location 3 times
+		IEnumerator DashV2()
+		{
+			float dir = 0, x, y = 0;
+			/*
+			anim.Play("DashLoop");
+			transform.position = new Vector2(xCenter, yDef);
+			while (true)
+			{
+				x = transform.position.x - target.transform.position.x;
+				y = transform.position.y - target.transform.position.y;
+				if (x == 0)
+					x = .001f;
+				dir = (float)Math.Atan((y / x)) * 180.0f / (float)Math.PI;
+				Modding.Logger.Log(dir);
+				if (x > 0)
+				{
+					transform.SetScaleX(-1);
+				}
+				else
+					transform.SetScaleX(1);
+				transform.SetRotationZ(dir);
+				Vector2 force = new Vector2(x, y).normalized * -10f;
+				rig.velocity = force;
+				yield return new WaitForSeconds(.1f);
+			}//*/
+			// pick direction
+			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
+			if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
+			{
+				goright = target.transform.position.x > xCenter;
+			}
+			if (goright)
+			{
+				transform.localScale = new Vector3(1, 1, 1);
+				transform.SetPositionX(xCenter - xEdge - 30);
+				x = -1;
+			}
+			else
+			{
+
+				transform.localScale = new Vector3(-1, 1, 1);
+				transform.SetPositionX(xCenter + xEdge + 30);
+				dir = (float)Math.PI;
+				x = 1;
+			}
+			arrive();
+			yield return new WaitWhile(() => wait);
+
+			// setup
+			anim.Play("DashLoop");
+			transform.SetPositionY(68.04f);
+			halo.transform.localPosition = new Vector2(11.23f, 0.04f);
+			col.offset = new Vector2(6, -.07f);
+			col.size = new Vector2(19, 2.36f);
+
+			Modding.Logger.Log("Dash");
+			// go
+			for (int i = 0; i < 3; i++)
+			{
+				x = transform.position.x - target.transform.position.x;
+				y = transform.position.y - target.transform.position.y;
+				if (x == 0)
+					x = .001f;
+				dir = (float)Math.Atan((y / x)) * 180.0f / (float)Math.PI;//*
+				if (x > 0)
+				{
+					transform.SetScaleX(-1);
+				}
+				else
+					transform.SetScaleX(1);
+				transform.SetRotationZ(dir);//*/
+				Modding.Logger.Log(transform.position + " " + target.transform.position + " " + dir);
+
+				// dash
+				playSound("DashStart");
+				atts["Dash"].SetActive(true);
+				rig.velocity = new Vector2(x, y).normalized * -50f;
+
+				yield return new WaitForSeconds(3f);
+				//yield return new WaitUntil(() => (Mathf.Abs(transform.position.x - xCenter) > (xEdge + 20f) || Mathf.Abs(transform.position.y - 76.1f) > 20f));
+
+				// dash finish
+				atts["Dash"].SetActive(false);
+				rig.velocity = new Vector2(0f, 0f);
+			}
+
+			// end
+			halo.transform.localPosition = new Vector2(0f, -2.62f);
+			transform.SetRotationZ(0);
+
+			transform.SetScaleX(1);
+			Hide();
+			attacking = false;
+		}
 	}
+	// Facing the camera, slash in an x in front of self, then sweeping slash across the floor
 	public void CrossSlash()
 	{
 		attacking = true;
@@ -211,6 +355,7 @@ public class Attacks : MonoBehaviour
 			attacking = false;
 		}
 	}
+	// Spikes shoot out of the floor
 	public void Spikes()
 	{
 		attacking = true;
@@ -277,6 +422,7 @@ public class Attacks : MonoBehaviour
 			attacking = false;
 		}
 	}
+	// fire beam that sweeps across the screen
 	public void SweepBeam()
 	{
 		attacking = true;
@@ -382,6 +528,7 @@ public class Attacks : MonoBehaviour
 			attacking = false;
 		}
 	}
+	// fire several spikes out of its face
 	public void FaceSpikes()
 	{
 		attacking = true;
@@ -426,139 +573,7 @@ public class Attacks : MonoBehaviour
 			attacking = false;
 		}
 	}
-	public void AimBeam()
-	{
-		attacking = true;
-		forward = false;
-		StartCoroutine(AimBeam(4));
-
-		IEnumerator AimBeam(int beams)
-		{
-			// go to side
-			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
-			if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
-			{
-				goright = target.transform.position.x > xCenter;
-			}
-			Transform beam = atts["BeamOrigin"].transform;
-			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
-			head.enabled = false;
-
-			if (goright)
-			{
-				transform.localScale = new Vector3(1, 1, 1);
-				transform.SetPositionX(xCenter - xEdge + 5);
-			}
-			else
-			{
-				transform.localScale = new Vector3(-1, 1, 1);
-				transform.SetPositionX(xCenter + xEdge - 5);
-			}
-			arrive(70.98f);
-			yield return new WaitUntil(() => !wait);
-			yield return new WaitForSeconds(.3f);
-
-			anim.Play("Body");
-			head.enabled = true;
-
-			//fire 4 beams
-			for (int i = 0; i < beams; i++)
-			{
-				// too close
-				if (Math.Abs(target.transform.position.x - transform.position.x) < 7f && target.transform.position.y - 15f < transform.position.y)
-				{
-					i = beams;
-				}
-
-				// targeting
-				float x = (beam.transform.position.x + 0.91f) - (target.transform.position.x);
-				float y = (beam.transform.position.y + .7f) - (target.transform.position.y);
-				double deg = Math.Atan((y / x)) * 180.0 / Math.PI;
-
-				deg = (Math.Min(Math.Max(deg, -35), 17));
-				if (!goright)
-				{
-					//-35, 17
-					deg *= -1;
-				}
-
-				// charge
-				playSound("BeamCharge");
-				atts["BeamOrigin"].SetActive(false);
-				atts["BeamOrigin"].SetActive(true);
-				beam.rotation = transform.rotation;
-				beam.Rotate(new Vector3(0, 0, (float)deg));
-				yield return new WaitForSeconds(1f);
-
-				// fire
-				playSound("BeamBlast");
-				yield return new WaitForSeconds(.6f);
-			}
-
-			// end
-			atts["BeamOrigin"].SetActive(false);
-			eyes(true);
-			yield return new WaitUntil(() => !wait);
-
-			yield return new WaitForSeconds(3 / 12f);
-			leave();
-			yield return new WaitUntil(() => !wait);
-			attacking = false;
-		}
-	}
-	public void VoidBurst()
-	{
-		attacking = true;
-		forward = true;
-		StartCoroutine(VoidBurst());
-
-		IEnumerator VoidBurst()
-		{
-			// pick rand location
-			transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
-			arrive();
-			yield return new WaitUntil(() => !wait);
-
-			// spawn orbs
-			//float rotation = UnityEngine.Random.Range(0f,359f);
-			for (int k = (int)(xEdge / 6); k > 0; k--)
-			{
-				// pick random location
-				float x = UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4),
-					  y = UnityEngine.Random.Range(yDef - 7, yDef + 3),
-					  rotation = UnityEngine.Random.Range(0f, 359f);
-				StartCoroutine(SpawnVoidBurst(x, y, 0, rotation, 1.5f));
-				StartCoroutine(SpawnVoidBurst(x, y, .005f, rotation+45, 1.5f));
-			}
-
-
-			yield return new WaitForSeconds(4f);
-			leave();
-			yield return new WaitUntil(() => !wait);
-			attacking = false;
-
-		}
-		IEnumerator SpawnVoidBurst(float x, float y, float z, float r, float wait)
-		{
-			List<GameObject> burst = new List<GameObject>();
-			for (int i = 0; i < 4; i++)
-				burst.Add(Instantiate(atts["VoidBurst"], parent.transform));
-
-			for (int i = 0; i < 4; i++)
-			{
-				burst[i].transform.SetPosition3D(x, y,z);
-				burst[i].transform.SetRotationZ(r + 90 * i);
-				burst[i].SetActive(true);
-			}
-			yield return new WaitForSeconds(wait);
-
-			for (int i = 0; i < 4; i++)
-			{
-				burst[i].GetComponent<VoidBurst>().Fire();
-			}
-			playSound("BeamBlast");
-		}
-	}
+	// tendrils emerge from the sides of the boss
 	public void TendrilBurst()
 	{
 		attacking = true;
@@ -627,6 +642,7 @@ public class Attacks : MonoBehaviour
 			attacking = false;
 		}
 	}
+	// pure vessel focus
 	public void VoidCircles()
 	{
 		attacking = true;
@@ -728,10 +744,193 @@ public class Attacks : MonoBehaviour
 			yield return new WaitForSeconds(wait);
 
 			obj.GetComponent<VoidCircle>().Fire();
-			playSound("BeamBlast");
+			//playSound("BeamBlast");
+		}
+	}
+	// void beams
+	public void VoidBeams()
+	{
+		attacking = true;
+		forward = true;
+		StartCoroutine(VoidBeams());
+		IEnumerator VoidBeams()
+		{
+			yield return new WaitForSeconds(1f);
 		}
 	}
 
+	// UNUSED
+	// spawn several orbs that explode into crosses
+	public void VoidBurst()
+	{
+		attacking = true;
+		forward = true;
+		StartCoroutine(VoidBurst());
+
+		IEnumerator VoidBurst()
+		{
+			// pick rand location
+			transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
+			arrive();
+			yield return new WaitUntil(() => !wait);
+
+			// spawn orbs
+			//float rotation = UnityEngine.Random.Range(0f,359f);
+			for (int k = (int)(xEdge / 6); k > 0; k--)
+			{
+				// pick random location
+				float x = UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4),
+					  y = UnityEngine.Random.Range(yDef - 7, yDef + 3),
+					  rotation = UnityEngine.Random.Range(0f, 359f);
+				StartCoroutine(SpawnVoidBurst(x, y, 0, rotation, 1.5f));
+				StartCoroutine(SpawnVoidBurst(x, y, .005f, rotation + 45, 1.5f));
+			}
+
+
+			yield return new WaitForSeconds(4f);
+			leave();
+			yield return new WaitUntil(() => !wait);
+			attacking = false;
+
+		}
+		IEnumerator SpawnVoidBurst(float x, float y, float z, float r, float wait)
+		{
+			List<GameObject> burst = new List<GameObject>();
+			for (int i = 0; i < 4; i++)
+				burst.Add(Instantiate(atts["VoidBurst"], parent.transform));
+
+			for (int i = 0; i < 4; i++)
+			{
+				burst[i].transform.SetPosition3D(x, y, z);
+				burst[i].transform.SetRotationZ(r + 90 * i);
+				burst[i].SetActive(true);
+			}
+			yield return new WaitForSeconds(wait);
+
+			for (int i = 0; i < 4; i++)
+			{
+				burst[i].GetComponent<VoidBurst>().Fire();
+			}
+			playSound("BeamBlast");
+		}
+	}
+	// fire beam at player that remains in place while several vertical beams sequentially fire at the player 
+	public void AimBeam()
+	{
+		attacking = true;
+		forward = false;
+		StartCoroutine(AimBeam());
+
+		IEnumerator AimBeam()
+		{
+			List<GameObject> beams = new List<GameObject>();
+			// go to side further away from player
+			bool goright = target.transform.position.x > xCenter;
+
+			Transform beam = atts["BeamOrigin"].transform;
+			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
+			head.enabled = false;
+
+			if (goright)
+			{
+				transform.localScale = new Vector3(1, 1, 1);
+				transform.SetPositionX(xCenter - xEdge + 2.5f);
+			}
+			else
+			{
+				transform.localScale = new Vector3(-1, 1, 1);
+				transform.SetPositionX(xCenter + xEdge - 2.5f);
+			}
+			arrive();
+			yield return new WaitUntil(() => !wait);
+			yield return new WaitForSeconds(.3f);
+
+			anim.Play("Body");
+			head.enabled = true;
+
+			// FIRE MAIN BEAM
+			// targeting
+			float deg = getAngle(beam, target);
+
+			deg = (Math.Min(Math.Max(deg, -35), 17));
+			if (!goright)
+			{
+				//-35, 17
+				deg *= -1;
+			}
+
+			// charge
+			playSound("BeamCharge");
+			atts["BeamOrigin"].SetActive(false);
+			atts["BeamOrigin"].SetActive(true);
+			beam.SetRotationZ(deg);
+			/*
+			while (true)
+			{
+				yield return new WaitForSeconds(.1f);
+				deg = getAngle(beam, target);
+
+				deg = (Math.Min(Math.Max(deg, -35), 17));
+				if (!goright)
+				{
+					//-35, 17
+					deg *= -1;
+				}
+
+				// charge
+				beam.SetRotationZ(deg);
+			}//*/
+			//*
+			yield return new WaitForSeconds(1f);
+
+			// fire
+			playSound("BeamBlast");
+			yield return new WaitForSeconds(1f);
+
+			// fire vertical beams
+			for (int i = 0; i < 4; i++)
+			{
+				Modding.Logger.Log(i);
+
+				// fire
+				GameObject b = spawnVerticalBeam(yDef - 10f);
+				beams.Add(b);
+				b.transform.SetPositionZ(b.transform.GetPositionZ()+i*.001f);
+				yield return new WaitForSeconds(1f);
+				playSound("BeamBlast");
+			}
+			//*/
+			yield return new WaitForSeconds(1f);
+			foreach (GameObject obj in beams)
+				Destroy(obj);
+
+			// end
+			atts["BeamOrigin"].SetActive(false);
+			eyes(true);
+			yield return new WaitUntil(() => !wait);
+			leave();
+			yield return new WaitUntil(() => !wait);
+			attacking = false;
+		}
+	}
+	private GameObject spawnVerticalBeam(float y)
+	{
+		GameObject beam = Instantiate(atts["Beam"], parent.transform);
+		/*
+		beam.transform.SetPositionY(60f);
+		beam.transform.SetPositionX(target.transform.GetPositionX() + UnityEngine.Random.Range(-1f, 1f));
+		beam.transform.SetRotationZ(getAngle(beam, target));//*/
+
+		float angle = UnityEngine.Random.Range(-10f,10f);
+		beam.transform.SetRotationZ(angle + 90);// UnityEngine.Random.Range(100f, 80f));
+		beam.transform.SetPositionY(60f);
+		beam.transform.SetPositionX(target.transform.GetPositionX()+Mathf.Tan(angle/180f*(float)Math.PI)*(target.transform.position.y - 60f));
+
+		Modding.Logger.Log(beam.transform.position.x + " " + beam.transform.position.y + " " + beam.transform.rotation.z);
+		Modding.Logger.Log(target.transform.position.x + " " + target.transform.position.y);
+		beam.SetActive(true);
+		return beam;
+	}
 	// Misc Public functions 
 	public void Stop()
 	{
@@ -893,5 +1092,25 @@ public class Attacks : MonoBehaviour
 		col.size = new Vector2(3.86f, 4f);
 		col.offset = new Vector2(0f, -1.96f);
 		col.enabled = true;
+	}
+
+	private float getAngle(Transform from, Transform to)
+	{
+		float x = (transform.position.x) - (to.transform.position.x);
+		float y = (transform.position.y) - (to.transform.position.y+.5f);
+		Modding.Logger.Log((float)(Math.Atan((y / x)) * 180.0 / Math.PI));
+		return (float)(Math.Atan((y / x)) * 180.0 / Math.PI);
+	}
+	private float getAngle(GameObject from, GameObject to)
+	{
+		return getAngle(from.transform, to.transform);
+	}
+	private float getAngle(Transform from, GameObject to)
+	{
+		return getAngle(from, to.transform);
+	}
+	private float getAngle(GameObject from, Transform to)
+	{
+		return getAngle(from.transform, to);
 	}
 }
