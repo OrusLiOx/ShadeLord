@@ -900,7 +900,7 @@ public class Attacks : MonoBehaviour
 				playSound("BeamBlast");
 			}
 			//*/
-			yield return new WaitForSeconds(1f);
+			yield return new WaitForSeconds(3f);
 			foreach (GameObject obj in beams)
 				Destroy(obj);
 
@@ -921,13 +921,16 @@ public class Attacks : MonoBehaviour
 		beam.transform.SetPositionX(target.transform.GetPositionX() + UnityEngine.Random.Range(-1f, 1f));
 		beam.transform.SetRotationZ(getAngle(beam, target));//*/
 
+		/*
 		float angle = UnityEngine.Random.Range(-10f,10f);
 		beam.transform.SetRotationZ(angle + 90);// UnityEngine.Random.Range(100f, 80f));
 		beam.transform.SetPositionY(60f);
-		beam.transform.SetPositionX(target.transform.GetPositionX()+Mathf.Tan(angle/180f*(float)Math.PI)*(target.transform.position.y - 60f));
+		beam.transform.SetPositionX(target.transform.GetPositionX()+Mathf.Tan(angle/180f*(float)Math.PI)*(target.transform.position.y - 60f));//*/
 
-		Modding.Logger.Log(beam.transform.position.x + " " + beam.transform.position.y + " " + beam.transform.rotation.z);
-		Modding.Logger.Log(target.transform.position.x + " " + target.transform.position.y);
+		beam.transform.SetRotationZ(90f);// UnityEngine.Random.Range(100f, 80f));
+		beam.transform.SetPositionY(60f);
+		beam.transform.SetPositionX(target.transform.GetPositionX());
+
 		beam.SetActive(true);
 		return beam;
 	}

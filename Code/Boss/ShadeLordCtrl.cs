@@ -30,8 +30,8 @@ class ShadeLordCtrl : MonoBehaviour
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	//private int[] hpMarkers = { 50,50,50,50,300};
-	private int[] hpMarkers = { 400, 450, 300, 750, 2200 };
+	private int[] hpMarkers = { 50,50,50,50,300};
+	//private int[] hpMarkers = { 400, 450, 300, 750, 2200 };
 	private System.Random rand;
 	
 	private Attacks attacks;
@@ -776,8 +776,9 @@ class ShadeLordCtrl : MonoBehaviour
 
 			Destroy(gameObject);
 		}
-
-		StartCoroutine(Death());
+		ShadeLord.Setup.ShadeLord.DreamDelayed();
+		Destroy(gameObject);
+		//StartCoroutine(Death());
 	}
 
 	private void breakTerrain(GameObject go)

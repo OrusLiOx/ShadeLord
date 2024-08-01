@@ -77,7 +77,6 @@ namespace ShadeLord.Setup
 				GameObjects.Add(name, preloadedObjects[scene][path]);
 			}//*/
 			LoadAssets();
-
 			ModHooks.AfterSavegameLoadHook += AfterSaveGameLoad;
 			ModHooks.GetPlayerVariableHook += GetVariableHook;
 			ModHooks.LanguageGetHook += LangGet;
@@ -204,6 +203,17 @@ namespace ShadeLord.Setup
 			};
 			ReflectionHelper.SetField(musicCue, "channelInfos", channelInfos);
 			GameManager.instance.AudioManager.ApplyMusicCue(musicCue, 0, 0, false);
+		}
+
+		public static void DreamDelayed()
+		{
+			StatueCreator.WonFight = true;
+
+			var bsc = SceneLoader.SceneController.GetComponent<BossSceneController>();
+			GameObject transition = UObject.Instantiate(bsc.transitionPrefab);
+			PlayMakerFSM transitionsFSM = transition.LocateMyFSM("Transitions");
+			transitionsFSM.SetState("Out Statue");
+			bsc.DoDreamReturn();
 		}
 	}
 }

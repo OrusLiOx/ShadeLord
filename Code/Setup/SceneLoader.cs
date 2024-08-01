@@ -35,7 +35,7 @@ namespace ShadeLord.Setup
 
 				// scene manager
 				SceneManager sm = gm.sm;
-				sm.mapZone = GlobalEnums.MapZone.ABYSS_DEEP;
+				sm.mapZone = GlobalEnums.MapZone.GODS_GLORY;
 				sm.isWindy = false;
 				sm.noParticles = true;
 				sm.environmentType = 5;//*/
