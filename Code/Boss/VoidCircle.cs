@@ -13,6 +13,7 @@ public class VoidCircle : MonoBehaviour
 
 	public void Start()
 	{
+		GetComponent<AudioSource>().outputAudioMixerGroup = HeroController.instance.gameObject.GetComponent<AudioSource>().outputAudioMixerGroup;
 	}
 	public void Appear()
 	{

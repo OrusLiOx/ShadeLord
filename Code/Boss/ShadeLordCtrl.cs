@@ -79,7 +79,7 @@ class ShadeLordCtrl : MonoBehaviour
 		//*
 		atts = new List<Action>()
 		{
-			attacks.AimBeam
+			attacks.Dash
 		};//*/
 
 		helper = gameObject.AddComponent<SLHelper>();
@@ -88,7 +88,7 @@ class ShadeLordCtrl : MonoBehaviour
 
 		// trackers
 		tendrils = new Queue<GameObject>();
-	}
+	} 
 	void Start()
 	{
 		hitEffect  = GameObject.Find("VoidParticle");
@@ -741,8 +741,8 @@ class ShadeLordCtrl : MonoBehaviour
 			yield return new WaitForSeconds(3f);
 			co = StartCoroutine(AttackChoice());
 
-			GameObject[] GOs = { GameObject.Find("Terrain/Descend/Section2/Plat1"), GameObject.Find("Terrain/Descend/Section2/Plat2")};
-			breakTerrain(GameObject.Find("Terrain/Descend/Section2"));
+			//GameObject[] GOs = { GameObject.Find("Terrain/Descend/Section2/Plat1"), GameObject.Find("Terrain/Descend/Section2/Plat2")};
+			//breakTerrain(GameObject.Find("Terrain/Descend/Section2"));
 		}
 		StartCoroutine(ToEnd());
 	}
