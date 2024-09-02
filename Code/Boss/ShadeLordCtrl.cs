@@ -36,7 +36,6 @@ class ShadeLordCtrl : MonoBehaviour
 	
 	private Attacks attacks;
 	private SLHelper helper;
-	private VoidParticleSpawner vpSpawner;
 
 	// trackers
 	private Queue<GameObject> spawned;
@@ -84,8 +83,6 @@ class ShadeLordCtrl : MonoBehaviour
 
 		helper = gameObject.AddComponent<SLHelper>();
 
-		vpSpawner = gameObject.AddComponent<VoidParticleSpawner>();
-
 		// trackers
 		tendrils = new Queue<GameObject>();
 	} 
@@ -101,8 +98,8 @@ class ShadeLordCtrl : MonoBehaviour
 		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
 
-		//Spawn();
-		FastSpawn();
+		Spawn();
+		//FastSpawn();
 	}
 	private void AssignValues()
 	{
@@ -304,8 +301,7 @@ class ShadeLordCtrl : MonoBehaviour
 		{
 			transform.SetPositionY(-2f);
 			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["Silence"]);
-			vpSpawner.set(55, 145, 64);
-			vpSpawner.setActive(true);
+
 			GameObject.Find("Start").transform.SetPosition3D(0, 3.5f, 38f);
 			hud.transform.SetPositionX(hud.transform.GetPositionX() + 100);
 			GameObject wall = GameObject.Find("Start/Wall");
@@ -316,11 +312,6 @@ class ShadeLordCtrl : MonoBehaviour
 				GameObject.Find("Terrain/Area1/CameraLock"),
 				GameObject.Find("Terrain/Area2/CameraLock")
 			};
-			//foreach (GameObject go in camLocks)
-			//	go.SetActive(false);
-
-			/*/ START ANIMATION
-			//*/
 
 			yield return new WaitForSeconds(1f);
 
@@ -336,8 +327,6 @@ class ShadeLordCtrl : MonoBehaviour
 			wall.transform.localPosition = new Vector3(0, 0f, 0);
 
 			// set stuff before reveal
-			vpSpawner.setDensity(30);
-			transform.SetPosition2D(100f, 75.23f);
 			anim.Play("NeutralSquint");
 			attacks.playSound("ScreamLong");
 			GameObject.Find("ShadeLord/Tendrils").GetComponent<PolygonCollider2D>().enabled = false;
@@ -368,7 +357,6 @@ class ShadeLordCtrl : MonoBehaviour
 			transform.SetPositionY(-2f);
 
 			// text appear, then leave
-			vpSpawner.setDensity(1);
 			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
 			while (titleSprite.color.a < 1)
 			{
@@ -409,8 +397,6 @@ class ShadeLordCtrl : MonoBehaviour
 			// GO
 			title.SetActive(false);
 			GameObject.Find("Terrain/CameraLock").SetActive(false);
-			//foreach (GameObject go in camLocks)
-			//	go.SetActive(true);
 			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR EXIT", false);
 			yield return new WaitForSeconds(1f);
 			co = StartCoroutine(AttackChoice());
@@ -439,14 +425,13 @@ class ShadeLordCtrl : MonoBehaviour
 		GameObject hud = GameObject.Find("Hud Canvas");
 		IEnumerator Spawn()
 		{
+			ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
 			GameObject obj1 = GameObject.Find("Terrain/Area2/RespawnL");
 			GameObject obj2 = GameObject.Find("Terrain/Area2/RespawnR");
 			obj1.SetActive(false);
 			obj2.SetActive(false);
 			transform.SetPositionY(-2f);
 			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["Silence"]);
-			vpSpawner.set(55, 145, 64);
-			vpSpawner.setActive(true);
 			GameObject.Find("Start").transform.SetPosition3D(0, 3.5f, 38f);
 			hud.transform.SetPositionX(hud.transform.GetPositionX()+100);
 			GameObject wall = GameObject.Find("Start/Wall");
@@ -466,6 +451,9 @@ class ShadeLordCtrl : MonoBehaviour
 			yield return new WaitForSeconds(.1f);
 			obj3.SetActive(true);
 
+			emission.rateOverTime = 5f;
+			GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().Play();
+
 			// START ANIMATION
 			yield return new WaitForSeconds(3f);
 			SpriteRenderer[] bg = {
@@ -478,7 +466,7 @@ class ShadeLordCtrl : MonoBehaviour
 				GameObject.Find("Terrain/Background/Start/Bg_Start_1").GetComponent<SpriteRenderer>(),
 				GameObject.Find("Terrain/Background/Start/Bg_Start_0").GetComponent<SpriteRenderer>()
 			};
-			vpSpawner.setDensity(15);
+			emission.rateOverTime = 10f;
 			for (int i = 0; i< 4; i++)
 				fadeToBlack(bg[i], 1 / 60f, 0);
 			for (int i = 4; i < 8; i++)
@@ -500,7 +488,7 @@ class ShadeLordCtrl : MonoBehaviour
 				s.color = new Color(.5f,.5f,.5f);
 
 			// set stuff before reveal
-			vpSpawner.setDensity(30);
+			emission.rateOverTime = 50f;
 			transform.SetPosition2D(100f, 75.23f);
 			anim.Play("NeutralSquint");
 			attacks.playSound("ScreamLong");
@@ -534,7 +522,7 @@ class ShadeLordCtrl : MonoBehaviour
 			transform.SetPositionY(-2f);
 
 			// text appear, then leave
-			vpSpawner.setDensity(1);
+			emission.rateOverTime = 3f;
 			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
 			while (titleSprite.color.a<1)
 			{
@@ -638,9 +626,9 @@ class ShadeLordCtrl : MonoBehaviour
 				// destroy
 				StartCoroutine(die(particle));
 			}
-
+			ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
 			// wait a bit
-			vpSpawner.setDensity(5f);
+			emission.rateOverTime = 10f;
 			yield return new WaitForSeconds(.5f);
 
 			// void particles raise from floor and terrain breaks
@@ -648,7 +636,7 @@ class ShadeLordCtrl : MonoBehaviour
 			
 			// Wait a bit then start attacking again
 			yield return new WaitForSeconds(2.5f);
-			vpSpawner.setDensity(1f);
+			emission.rateOverTime = 3f;
 			yield return new WaitForSeconds(4f);
 			
 			transform.SetPositionY(0f);
@@ -796,7 +784,6 @@ class ShadeLordCtrl : MonoBehaviour
 			}
 
 			yield return new WaitForSeconds(5f);
-			vpSpawner.setDensity(1f);
 			go.SetActive(false);
 
 			// rock particles

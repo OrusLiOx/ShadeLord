@@ -69,6 +69,8 @@ public class Attacks : MonoBehaviour
 		atts.Add("TendrilBurst", GameObject.Find("ShadeLord/Tendrils"));
 		atts["TendrilBurst"].GetComponent<BoxCollider2D>().enabled = false;
 
+		atts.Add("DashTelegraph", GameObject.Find("DashTelegraphParticles"));
+
 		// Get audio clips
 		foreach (AudioSource s in GameObject.Find("ShadeLord/SFX").GetComponents<AudioSource>())
 		{
@@ -192,6 +194,9 @@ public class Attacks : MonoBehaviour
 		IEnumerator DashV2()
 		{
 			float dir = 0, x, y = 0;
+			ParticleSystem.EmissionModule em = atts["DashTelegraph"].GetComponent<ParticleSystem>().emission;
+			ParticleSystem.ShapeModule shape = atts["DashTelegraph"].GetComponent<ParticleSystem>().shape;
+			atts["DashTelegraph"].SetActive(true);
 
 			// pick direction
 			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
@@ -203,7 +208,8 @@ public class Attacks : MonoBehaviour
 			{
 				transform.localScale = new Vector3(1, 1, 1);
 				transform.SetPositionX(xCenter - xEdge - 30);
-				x = xCenter + xEdge + 30;
+				dir = 0;
+				x = -1;
 			}
 			else
 			{
@@ -211,10 +217,11 @@ public class Attacks : MonoBehaviour
 				transform.localScale = new Vector3(-1, 1, 1);
 				transform.SetPositionX(xCenter + xEdge + 30);
 				dir = (float)Math.PI;
-				x = xCenter - xEdge - 30;
+				x = 1;
 			}
 			arrive();
 			yield return new WaitWhile(() => wait);
+			halo.SetActive(false);
 
 			// setup
 			anim.Play("DashLoop");
@@ -225,24 +232,11 @@ public class Attacks : MonoBehaviour
 			col.size = new Vector2(19, 2.36f);
 
 			Modding.Logger.Log("Dash");
+			atts["dashTelegraph"].GetComponent<ParticleSystem>().Play();
 			// go
 			for (int i = 0; i < 3; i++)
 			{
-				if (goright)
-				{
-					transform.SetPositionX(xCenter - xEdge - 15);
-					x = -2 * xEdge;
-				}
-				else
-				{
-					transform.SetPositionX(xCenter + xEdge + 15);
-					x = 2 * xEdge;
-				}
-
-				//*
-				x = transform.GetPositionX() - target.transform.GetPositionX();
-				y = transform.GetPositionY() - target.transform.GetPositionY();//*/
-
+				// calc angles and stuff
 				if (x == 0)
 					x = .001f;
 				dir = (float)Math.Atan((y / x)) * 180.0f / (float)Math.PI;//*
@@ -254,19 +248,30 @@ public class Attacks : MonoBehaviour
 					transform.SetScaleX(1);
 				transform.SetRotationZ(dir);
 
+				//Modding.Logger.Log(transform.position + " (" + x + ", " + y + ")" + transform.GetRotation2D());
+
+				// telegraph
+				atts["DashTelegraph"].transform.position = transform.position;
+				if (x > 0)
+				{
+					shape.rotation = new Vector3(0, dir - 90, 0);
+				}
+				else
+				{
+					shape.rotation = new Vector3(0, dir + 90, 0);
+				}
+				em.rateOverTime = 30f;
+				yield return new WaitForSeconds(2f);
+				em.rateOverTime = 0f;
+
 				// dash
 				playSound("DashStart");
 				atts["Dash"].SetActive(true);
 				rig.velocity = new Vector2(x, y).normalized * -50f;
-				
-				/*
-				if (goright)
-					yield return new WaitUntil(() =>(transform.GetPositionX() > xCenter + xEdge + 10));
-				else
 
-					yield return new WaitUntil(() => (transform.GetPositionX() < xCenter - xEdge - 10));//*/
 
-				yield return new WaitForSeconds(3f);
+				yield return new WaitForSeconds(1.5f);
+
 
 				// dash finish
 				atts["Dash"].SetActive(false);
@@ -274,9 +279,24 @@ public class Attacks : MonoBehaviour
 
 				goright = !goright;
 
-				transform.SetPositionY(yDef+10);
-				y = 10;
+				if (goright)
+				{
+					transform.SetPositionX(xCenter - xEdge - 15);
+					x = -2 * xEdge;
+				}
+				else
+				{
+					transform.SetPositionX(xCenter + xEdge + 15);
+					x = 2 * xEdge;
+				}
+				transform.SetPositionY(yDef + 10);
+
+				//*
+				x = transform.GetPositionX() - target.transform.GetPositionX();
+				y = transform.GetPositionY() - target.transform.GetPositionY();//*/
 			}
+
+			atts["dashTelegraph"].GetComponent<ParticleSystem>().Stop();
 			// end
 			halo.transform.localPosition = new Vector2(0f, -2.62f);
 			transform.SetRotationZ(0);

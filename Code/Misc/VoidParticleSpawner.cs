@@ -14,7 +14,8 @@ using UnityEngine;
 
 public class VoidParticleSpawner : MonoBehaviour
 {
-	float minX, maxX, y, density, prev;
+	float minX, maxX, y, density, prev, yScale, xScale;
+	float velMin=1, velMax=5;
 	GameObject template = GameObject.Find("VoidParticle");
 	Color scale = new Color(0, 0, 0, 1/20f);
 	Coroutine co;
@@ -25,17 +26,19 @@ public class VoidParticleSpawner : MonoBehaviour
 		// randomlly spawn particle between minX and maxX
 		for (float k = minX; k < maxX; k+=5)
 		{
-			GameObject particle = Instantiate(template);
-			particle.transform.SetPosition3D(Random.Range(k, k+5), y,-1);
+			GameObject particle = Instantiate(template, transform);
+			particle.transform.localPosition = new Vector3(Random.Range(k, k+5), y,-1f);
+			if (minX == -2)
+				Modding.Logger.Log(particle.transform.position);
 			float scale = Random.Range(.05f, .2f);
 			particle.transform.SetScaleX(scale);
 			particle.transform.SetScaleY(scale);
-			particle.GetComponent<Rigidbody2D>().velocity = new Vector2(0, Random.Range(1f, 5f));
+			particle.GetComponent<Rigidbody2D>().velocity = new Vector2(xScale, yScale)* Random.Range(velMin, velMax);
 			StartCoroutine(die(particle));
 		}
 
 		// wait
-		yield return new WaitForSeconds(1/density);
+		yield return new WaitForSeconds(1f/density);
 		co = StartCoroutine(spawn());
 	}
 	IEnumerator die(GameObject particle)
@@ -60,12 +63,14 @@ public class VoidParticleSpawner : MonoBehaviour
 	{
 		minX = min;
 		maxX = max;
+		updateVelocity();
 	}
 	public void set(float min, float max, float newy)
 	{
 		minX = min;
 		maxX = max;
 		y = newy;
+		updateVelocity();
 	}
 	public void set(float min, float max, float newy, float d)
 	{
@@ -73,6 +78,27 @@ public class VoidParticleSpawner : MonoBehaviour
 		maxX = max;
 		y = newy;
 		density = d;
+		updateVelocity();
+	}
+	private void updateVelocity()
+	{
+		float converted = (transform.GetRotation2D() + 90) / 180 * Mathf.PI;
+		yScale = Mathf.Sin(converted);
+		xScale = Mathf.Cos(converted);
+		Modding.Logger.Log(xScale + " " + yScale);
+	}
+	public void setVelocityRange(float min, float max)
+	{
+		if (min > max)
+		{
+			velMin = max;
+			velMax = min;
+		}
+		else
+		{
+			velMin = min;
+			velMax = max;
+		}
 	}
 	public void setActive(bool a)
 	{
