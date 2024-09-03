@@ -29,6 +29,7 @@ public class Attacks : MonoBehaviour
 	// Dicts for easy access to sound clips and objects needed for attacks
 	private Dictionary<string, GameObject> atts;
 	public Dictionary<string, AudioClip> sounds;
+	private GameObject[] emitters = { null,null,null};
 
 	// set variables upon awake
 	private void Awake()
@@ -70,6 +71,10 @@ public class Attacks : MonoBehaviour
 		atts["TendrilBurst"].GetComponent<BoxCollider2D>().enabled = false;
 
 		atts.Add("DashTelegraph", GameObject.Find("DashTelegraphParticles"));
+		for (int i = 0; i < 3; i++)
+		{
+			emitters[i] = Instantiate(atts["DashTelegraph"]);
+		}
 
 		// Get audio clips
 		foreach (AudioSource s in GameObject.Find("ShadeLord/SFX").GetComponents<AudioSource>())
@@ -77,33 +82,7 @@ public class Attacks : MonoBehaviour
 			sounds.Add(s.clip.name, s.clip);
 		}
 	}
-	/*
-	 * GameObject obj;
-		atts.Add("Beam", GameObject.Find("BeamOrigin/Offset"));
-		Dictionary<string, Vector3> dict = new Dictionary<string, Vector3>();
-		dict.Add("Dash", new Vector3(0f,-.3f,0));
-		dict.Add("CrossSlash", new Vector3(0,0, -0.01f));
-		dict.Add("Sweep", new Vector3(0,0, -0.01f));
-		dict.Add("BurstSpike", new Vector3(0,-2.22f, -.2f));
-		dict.Add("Spike", new Vector3(.31f, -9.38f, -.002f));
-		dict.Add("BeamOrigin", new Vector3(-2, -2.05f,0));
-		dict.Add("VoidBurst", new Vector3(-14.37f, -0.1300049f,-.01f));
-		dict.Add("VoidCircle", new Vector3(-1.9f,17.9f,-.3f));
-		dict.Add("TendrilWindup", new Vector3(0,0,0));
-		foreach (string n in dict.Keys)
-		{
-			obj = GameObject.Find(n);
-			obj.transform.SetParent(transform);
-			obj.transform.position = dict[n];
-			atts.Add(n, obj);
-			atts[n].SetActive(false);
-		}
-		obj = GameObject.Find("Tendrils");
-		obj.transform.SetParent(transform);
-		obj.transform.position = new Vector3(0, -5.349998f, 0);
-		atts.Add("TendrilBurst", obj);
-		atts["TendrilBurst"].GetComponent<BoxCollider2D>().enabled = false;
-	//*/
+
 	// Attacks
 	// sharp shadow from one side of the stage to the other
 	public void Dash()
@@ -194,16 +173,16 @@ public class Attacks : MonoBehaviour
 		IEnumerator DashV2()
 		{
 			float dir = 0, x, y = 0;
-			ParticleSystem.EmissionModule em = atts["DashTelegraph"].GetComponent<ParticleSystem>().emission;
-			ParticleSystem.ShapeModule shape = atts["DashTelegraph"].GetComponent<ParticleSystem>().shape;
+			
 			atts["DashTelegraph"].SetActive(true);
 
 			// pick direction
-			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
+			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;/*
 			if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
 			{
 				goright = target.transform.position.x > xCenter;
 			}
+			goright = target.transform.position.x > xCenter;//*/
 			if (goright)
 			{
 				transform.localScale = new Vector3(1, 1, 1);
@@ -232,14 +211,13 @@ public class Attacks : MonoBehaviour
 			col.size = new Vector2(19, 2.36f);
 
 			Modding.Logger.Log("Dash");
-			atts["dashTelegraph"].GetComponent<ParticleSystem>().Play();
 			// go
 			for (int i = 0; i < 3; i++)
 			{
 				// calc angles and stuff
 				if (x == 0)
 					x = .001f;
-				dir = (float)Math.Atan((y / x)) * 180.0f / (float)Math.PI;//*
+				dir = (float)Math.Atan((y / x)) * 180.0f / (float)Mathf.PI;//*
 				if (x > 0)
 				{
 					transform.SetScaleX(-1);
@@ -248,20 +226,32 @@ public class Attacks : MonoBehaviour
 					transform.SetScaleX(1);
 				transform.SetRotationZ(dir);
 
-				//Modding.Logger.Log(transform.position + " (" + x + ", " + y + ")" + transform.GetRotation2D());
 
 				// telegraph
-				atts["DashTelegraph"].transform.position = transform.position;
+				//emitters[i].transform.position = new Vector3(xCenter-xEdge, yDef+4.5f, 0);
+				//emitters[i].transform.position = (new Vector3(xCenter, yDef + 2, 0) + transform.position)/2;
+				//emitters[i].transform.position = transform.position;
+				
+				emitters[i].transform.position = new Vector2(
+					Mathf.Clamp(transform.GetPositionX(), xCenter-xEdge, xCenter + xEdge), 
+					Mathf.Clamp(transform.GetPositionY(), yDef-10f, yDef+4.5f));//*/
+				emitters[i].SetActive(true);
+				ParticleSystem.EmissionModule em = emitters[i].GetComponent<ParticleSystem>().emission;
+				ParticleSystem.ShapeModule shape = emitters[i].GetComponent<ParticleSystem>().shape;
+				
+				
 				if (x > 0)
 				{
-					shape.rotation = new Vector3(0, dir - 90, 0);
+					shape.rotation = new Vector3(0, -90-dir, 0);
 				}
 				else
 				{
-					shape.rotation = new Vector3(0, dir + 90, 0);
+					shape.rotation = new Vector3(0, 90-dir, 0);
 				}
-				em.rateOverTime = 30f;
-				yield return new WaitForSeconds(2f);
+				//shape.rotation = new Vector3(0, 180, 0);
+
+				em.rateOverTime = 100f;
+				yield return new WaitForSeconds(1.5f);
 				em.rateOverTime = 0f;
 
 				// dash
@@ -279,24 +269,28 @@ public class Attacks : MonoBehaviour
 
 				goright = !goright;
 
+				Vector2 newPos = new Vector2(0,yDef+4.5f);
 				if (goright)
 				{
-					transform.SetPositionX(xCenter - xEdge - 15);
-					x = -2 * xEdge;
+					//transform.SetPositionX(xCenter - xEdge - 15);
+					newPos.x = xCenter - xEdge;
+					x = (xCenter - xEdge) - target.transform.GetPositionX();
+					//x = -2 * xEdge;
 				}
 				else
 				{
-					transform.SetPositionX(xCenter + xEdge + 15);
-					x = 2 * xEdge;
-				}
-				transform.SetPositionY(yDef + 10);
+					//transform.SetPositionX(xCenter + xEdge + 15);
 
-				//*
-				x = transform.GetPositionX() - target.transform.GetPositionX();
-				y = transform.GetPositionY() - target.transform.GetPositionY();//*/
+					newPos.x = xCenter + xEdge;
+					x = (xCenter + xEdge) - target.transform.GetPositionX();
+					//x = 2 * xEdge;
+				}
+
+				y = yDef+4.5f - target.transform.GetPositionY();
+				
+				transform.position = newPos + (new Vector2(x, y).normalized * 16.6f);
 			}
 
-			atts["dashTelegraph"].GetComponent<ParticleSystem>().Stop();
 			// end
 			halo.transform.localPosition = new Vector2(0f, -2.62f);
 			transform.SetRotationZ(0);

@@ -60,6 +60,7 @@
     <Compile Include="Assets\ShadeLord\Sprites\Spike\Spike.cs" />
     <Compile Include="Assets\ShadeLord\Sprites\FaceSpike\FaceSpike.cs" />
     <Compile Include="Assets\ShadeLord\Scripts\TestAnimations.cs" />
+    <Compile Include="Assets\particleTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

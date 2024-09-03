@@ -98,8 +98,8 @@ class ShadeLordCtrl : MonoBehaviour
 		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
 
-		Spawn();
-		//FastSpawn();
+		//Spawn();
+		FastSpawn();
 	}
 	private void AssignValues()
 	{
@@ -300,99 +300,10 @@ class ShadeLordCtrl : MonoBehaviour
 		IEnumerator Spawn()
 		{
 			transform.SetPositionY(-2f);
-			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["Silence"]);
-
-			GameObject.Find("Start").transform.SetPosition3D(0, 3.5f, 38f);
-			hud.transform.SetPositionX(hud.transform.GetPositionX() + 100);
-			GameObject wall = GameObject.Find("Start/Wall");
-			SpriteRenderer wallSprite = GameObject.Find("Start/Wall/Black").GetComponent<SpriteRenderer>();
-			SpriteRenderer titleSprite = GameObject.Find("Start/Title").GetComponent<SpriteRenderer>();
-			Color c = new Color(0, 0, 0, .5f);
-			GameObject[] camLocks = {
-				GameObject.Find("Terrain/Area1/CameraLock"),
-				GameObject.Find("Terrain/Area2/CameraLock")
-			};
-
-			yield return new WaitForSeconds(1f);
-
-			// APPEAR CLOSER / SCREAM
-			// lock movemnet
-			if (player.transform.GetPositionX() > transform.GetPositionX())
-				HeroController.instance.FaceLeft();
-			else
-				HeroController.instance.FaceRight();
-			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR ENTER", false);
-
-			// black screen
-			wall.transform.localPosition = new Vector3(0, 0f, 0);
-
-			// set stuff before reveal
-			anim.Play("NeutralSquint");
-			attacks.playSound("ScreamLong");
-			GameObject.Find("ShadeLord/Tendrils").GetComponent<PolygonCollider2D>().enabled = false;
-
-			// reveal
-			yield return new WaitForSeconds(1 / 6f);
-			c = new Color(0, 0, 0, 1 / 7f);
-			while (wallSprite.color.a > 0)
-			{
-				wallSprite.color -= c;
-				yield return new WaitForSeconds(1 / 30f);
-			}
-			yield return new WaitForSeconds(3f);
-
-			// TITLE CARD
-			// wall rise
-			wall.transform.localPosition = new Vector3(0, -33.1f, 0);
-			wallSprite.color = new Color(0, 0, 0, 1);
-			while (wall.transform.localPosition.y < 0f)
-			{
-				wall.transform.localPosition = new Vector3(0, wall.transform.localPosition.y + 7f, 0);
-				yield return new WaitForSeconds(1 / 30f);
-			}
-			wall.transform.localPosition = new Vector3(0, 0f, 0);
 
 			// hide lord
 			GameObject.Find("ShadeLord/Tendrils").SetActive(false);
 			transform.SetPositionY(-2f);
-
-			// text appear, then leave
-			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
-			while (titleSprite.color.a < 1)
-			{
-				titleSprite.color += c;
-				yield return new WaitForSeconds(1 / 30f);
-			}
-
-
-			c = new Color(0, 0, 0, 1 / 13f);
-			while (titleSprite.color.a > 0)
-			{
-				titleSprite.color -= c;
-				yield return new WaitForSeconds(1 / 30f);
-			}
-			// black box disappear
-			c = new Color(0, 0, 0, 1 / 7f);
-			while (wallSprite.color.a > 0)
-			{
-				wallSprite.color -= c;
-				yield return new WaitForSeconds(1 / 30f);
-			}
-
-			// hud appear
-			hud.transform.SetScaleX(.9f);
-			hud.transform.SetScaleY(.9f);
-			hud.transform.SetPositionX(hud.transform.GetPositionX() - 100);
-
-			for (int i = 1; i <= 5; i++)
-			{
-				float scale = .9f + (.1f / 6) * i;
-				hud.transform.SetScaleX(scale);
-				hud.transform.SetScaleY(scale);
-				yield return new WaitForSeconds(1 / 60f);
-			}
-			hud.transform.SetScaleX(1);
-			hud.transform.SetScaleY(1);
 
 			// GO
 			title.SetActive(false);
@@ -451,7 +362,7 @@ class ShadeLordCtrl : MonoBehaviour
 			yield return new WaitForSeconds(.1f);
 			obj3.SetActive(true);
 
-			emission.rateOverTime = 5f;
+			emission.rateOverTime = 10f;
 			GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().Play();
 
 			// START ANIMATION
@@ -466,7 +377,7 @@ class ShadeLordCtrl : MonoBehaviour
 				GameObject.Find("Terrain/Background/Start/Bg_Start_1").GetComponent<SpriteRenderer>(),
 				GameObject.Find("Terrain/Background/Start/Bg_Start_0").GetComponent<SpriteRenderer>()
 			};
-			emission.rateOverTime = 10f;
+			emission.rateOverTime = 100f;
 			for (int i = 0; i< 4; i++)
 				fadeToBlack(bg[i], 1 / 60f, 0);
 			for (int i = 4; i < 8; i++)
@@ -488,7 +399,7 @@ class ShadeLordCtrl : MonoBehaviour
 				s.color = new Color(.5f,.5f,.5f);
 
 			// set stuff before reveal
-			emission.rateOverTime = 50f;
+			emission.rateOverTime = 200f;
 			transform.SetPosition2D(100f, 75.23f);
 			anim.Play("NeutralSquint");
 			attacks.playSound("ScreamLong");
@@ -522,7 +433,7 @@ class ShadeLordCtrl : MonoBehaviour
 			transform.SetPositionY(-2f);
 
 			// text appear, then leave
-			emission.rateOverTime = 3f;
+			emission.rateOverTime = 10f;
 			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
 			while (titleSprite.color.a<1)
 			{
