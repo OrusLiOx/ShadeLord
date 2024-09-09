@@ -13,7 +13,17 @@ using UnityEngine;
 public class Beam : MonoBehaviour
 {
 	private string anim1,anim2;
-
+	public AudioClip charge;
+	public AudioClip blast;
+	private AudioSource audio;
+	public void Start()
+	{
+		if (gameObject.name.Contains("Blast"))
+		{
+			audio = GetComponent<AudioSource>();
+			audio.outputAudioMixerGroup = HeroController.instance.gameObject.GetComponent<AudioSource>().outputAudioMixerGroup;
+		}
+	}
 	private void OnEnable()
 	{
 		if (gameObject.name.Contains("Blast"))
@@ -36,10 +46,16 @@ public class Beam : MonoBehaviour
 
 	IEnumerator go()
 	{
+		if (gameObject.name.Contains("Blast"))
+			audio.PlayOneShot(charge);
 		gameObject.GetComponent<Animator>().Play(anim1);
+
 		yield return new WaitForSeconds(1f);
-		if (!gameObject.name.Contains("Blast"))
+		if (gameObject.name.Contains("Blast"))
+		{
 			GetComponent<BoxCollider2D>().enabled = true;
+			audio.PlayOneShot(blast);
+		}
 		gameObject.GetComponent<Animator>().Play(anim2);
 	}
 }

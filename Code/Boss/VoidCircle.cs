@@ -60,24 +60,24 @@ public class VoidCircle : MonoBehaviour
 			GetComponent<AudioSource>().Play();
 			outline.enabled = false;
 			col.enabled = true;
-			for (float i = 0; i < incr; i+=1)
+			while (burstSprite.color.a > 0)
 			{
-				float c = .5f-(.5f / incr * i);
-				burstSprite.color = new Color(0, 0, 0, c*2);
 				yield return new WaitForSeconds(1 / 60f);
+				burstSprite.color = new Color(0, 0, 0, burstSprite.color.a - (2 / 60f));
 			}
 			col.enabled = false;
 			// burst fade
-			incr = 60*.2f;
-			sprite.color = new Color(1, 1, 1, 0);
-			outline.color = new Color(1, 1, 1, 0);
-			for (float i = 0; i < incr; i+=1)
+			sprite.color = new Color(1, 1, 1, 1);
+			outline.color = new Color(1, 1, 1, 1);
+			while(sprite.color.a > 0)
 			{
-				float a = 1 - i / incr;
+				float a = sprite.color.a - (2 / 60f);
 				sprite.color = new Color(1, 1, 1, a);
 				outline.color = new Color(1, 1, 1, a);
 				yield return new WaitForSeconds(1 / 60f);
 			}
+
+			yield return new WaitForSeconds(5f);
 			Destroy(gameObject);
 		}
 	}

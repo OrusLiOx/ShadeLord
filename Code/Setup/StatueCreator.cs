@@ -17,12 +17,10 @@ namespace ShadeLord.Setup
 		private void Awake()
 		{
 			UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneChanged;
-			Modding.Logger.Log("Awake");
 		}
 
 		private void SceneChanged(Scene prevScene, Scene nextScene)
 		{
-			Modding.Logger.Log("Load Scene");
 			if (nextScene.name == "GG_Workshop")
 			{
 				CreateStatue();

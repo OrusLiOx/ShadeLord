@@ -75,12 +75,15 @@ public class Attacks : MonoBehaviour
 		{
 			emitters[i] = Instantiate(atts["DashTelegraph"]);
 		}
+		atts["DashTelegraph"].SetActive(false);
 
 		// Get audio clips
 		foreach (AudioSource s in GameObject.Find("ShadeLord/SFX").GetComponents<AudioSource>())
 		{
 			sounds.Add(s.clip.name, s.clip);
 		}
+		atts["Beam"].GetComponent<Beam>().blast = sounds["BeamBlast"];
+		atts["Beam"].GetComponent<Beam>().charge = sounds["BeamCharge"];
 	}
 
 	// Attacks
@@ -210,7 +213,6 @@ public class Attacks : MonoBehaviour
 			col.offset = new Vector2(6, -.07f);
 			col.size = new Vector2(19, 2.36f);
 
-			Modding.Logger.Log("Dash");
 			// go
 			for (int i = 0; i < 3; i++)
 			{
@@ -251,7 +253,7 @@ public class Attacks : MonoBehaviour
 				//shape.rotation = new Vector3(0, 180, 0);
 
 				em.rateOverTime = 100f;
-				yield return new WaitForSeconds(1.5f);
+				yield return new WaitForSeconds(1f);
 				em.rateOverTime = 0f;
 
 				// dash
@@ -288,7 +290,7 @@ public class Attacks : MonoBehaviour
 
 				y = yDef+4.5f - target.transform.GetPositionY();
 				
-				transform.position = newPos + (new Vector2(x, y).normalized * 16.6f);
+				transform.SetPosition2D(newPos + (new Vector2(x, y).normalized * 16.6f));
 			}
 
 			// end
@@ -392,7 +394,12 @@ public class Attacks : MonoBehaviour
 			anim.Play("RoarWait");
 			// generate spikes
 			float offset = xCenter - xEdge + UnityEngine.Random.Range(0, 2.4f);
+			yield return new WaitForSeconds(.5f);
+			playSound("Scream");
+			anim.Play("Roar");
 
+			yield return new WaitForSeconds(.5f);
+			/*
 			playSound("BeamCharge");
 			while (offset < xCenter + xEdge)
 			{
@@ -404,15 +411,11 @@ public class Attacks : MonoBehaviour
 			yield return new WaitForSeconds(.7f);
 			// spikes go up
 			//playSound("Scream");
-			playSound("SpikeUpLower");
-			anim.Play("Roar");
-			yield return new WaitForSeconds(1f + 3/12f);
-
-			if(!infiniteSpike)
-				leave();
+			
+			yield return new WaitForSeconds(1f + 3/12f);//*/
 
 			// fire 3 sets of spikes with random offset
-			int i = 2;
+			int i = 3;
 			while (i > 0 || infiniteSpike)
 			{
 				// generate spikes
@@ -434,7 +437,10 @@ public class Attacks : MonoBehaviour
 			}
 
 			// end
+			leave();
+			yield return new WaitUntil(() => !wait);
 			yield return new WaitForSeconds(2f);
+			
 			attacking = false;
 		}
 	}
@@ -728,7 +734,6 @@ public class Attacks : MonoBehaviour
 			// fire vertical beams
 			for (int i = 0; i < 4; i++)
 			{
-				Modding.Logger.Log(i);
 
 				// fire
 				GameObject b = spawnVerticalBeam(target.transform.GetPositionX());
@@ -738,14 +743,14 @@ public class Attacks : MonoBehaviour
 				playSound("BeamBlast");
 			}
 			//*/
-			yield return new WaitForSeconds(3f);
+			yield return new WaitForSeconds(2f);
 			foreach (GameObject obj in beams)
 				Destroy(obj);
 
 			// end
 			atts["BeamOrigin"].SetActive(false);
 			eyes(true);
-			yield return new WaitUntil(() => !wait);
+			yield return new WaitForSeconds(1.5f);
 			leave();
 			yield return new WaitUntil(() => !wait);
 			attacking = false;
@@ -1092,7 +1097,6 @@ public class Attacks : MonoBehaviour
 	{
 		float x = (transform.position.x) - (to.transform.position.x);
 		float y = (transform.position.y) - (to.transform.position.y+.5f);
-		Modding.Logger.Log((float)(Math.Atan((y / x)) * 180.0 / Math.PI));
 		return (float)(Math.Atan((y / x)) * 180.0 / Math.PI);
 	}
 	private float getAngle(GameObject from, GameObject to)

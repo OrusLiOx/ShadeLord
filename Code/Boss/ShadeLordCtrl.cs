@@ -18,6 +18,8 @@ class ShadeLordCtrl : MonoBehaviour
 	// generic unity stuff
 	private Animator anim;
 	private BoxCollider2D boxCol;
+	private ParticleSystem particles;
+	private ParticleSystem.ShapeModule particleEm;
 	private Coroutine co;
 
 	// hollow knight stuff
@@ -50,6 +52,8 @@ class ShadeLordCtrl : MonoBehaviour
 		// generic unity stuff
 		anim = gameObject.GetComponent<Animator>();
 		boxCol = gameObject.GetComponent<BoxCollider2D>();//*/
+		particles = GameObject.Find("HitParticles").GetComponent<ParticleSystem>();
+		particleEm = particles.shape;
 
 		// hollow knight stuff
 		player = HeroController.instance.gameObject;//*/
@@ -64,18 +68,18 @@ class ShadeLordCtrl : MonoBehaviour
 		attacks.target = player;
 		attacks.Hide();
 
-		/*
+		
 		atts = new List<Action>()
 		{
 			attacks.TendrilBurst,
 			attacks.Dash,
-			attacks.SweepBeam,
+			attacks.AimBeam,
 			attacks.CrossSlash,
 			attacks.FaceSpikes,
 			attacks.Spikes
 		};//*/
 
-		//*
+		/*
 		atts = new List<Action>()
 		{
 			attacks.Dash
@@ -98,8 +102,8 @@ class ShadeLordCtrl : MonoBehaviour
 		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
 
-		//Spawn();
-		FastSpawn();
+		Spawn();
+		//FastSpawn();
 	}
 	private void AssignValues()
 	{
@@ -188,7 +192,12 @@ class ShadeLordCtrl : MonoBehaviour
 			}
 		}
 	}
-
+	
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.P))
+			Modding.Logger.Log(transform.position);
+	}//*/
 	// damage stuff
 	private void OnDeath()
 	{
@@ -200,12 +209,30 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		Modding.Logger.Log(self.hp + " " + hitinstance.DamageDealt+ " " + hitinstance.Direction);
 		// deal hit then check phase
+		particleEm.rotation = new Vector3(0, -hitinstance.Direction+90 , 0);
+		particles.transform.position = transform.position;
+		particles.transform.SetPositionY(particles.transform.position.y + -2.5f) ;
+		particles.Play();
+		StartCoroutine(flicker());
+
 		orig(self, hitinstance);
-		SpawnHitEffect(hitinstance.Direction);
+		//SpawnHitEffect(hitinstance.Direction);
 		if (health.hp < hpMarkers[phase])
 		{
 			nextPhase();
 		}//*/
+
+		IEnumerator flicker()
+		{
+			gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+			for (int k = 0; k < 10; k++)
+			{
+				float c = .1f * k;
+				gameObject.GetComponent<SpriteRenderer>().color = new Color(c, c, c);
+				yield return new WaitForSeconds(1 / 60f);
+			}
+			gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+		}
 	}
 	private void SpawnHitEffect(float dir)
 	{
@@ -240,6 +267,7 @@ class ShadeLordCtrl : MonoBehaviour
 		IEnumerator flicker()
 		{
 			gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+			yield return new WaitForSeconds(.2f);
 			for (int k = 0; k < 10; k++)
 			{
 				float c = .1f * k;
@@ -383,7 +411,9 @@ class ShadeLordCtrl : MonoBehaviour
 			for (int i = 4; i < 8; i++)
 				fadeToBlack(bg[i], 1 / (60f+i*5), (i-4)*25);
 
-			yield return new WaitForSeconds(7f);
+			yield return new WaitForSeconds(3.5f);
+			emission.rateOverTime = 200f;
+			yield return new WaitForSeconds(3.5f);
 
 			// APPEAR CLOSER / SCREAM
 			// lock movemnet
@@ -399,7 +429,6 @@ class ShadeLordCtrl : MonoBehaviour
 				s.color = new Color(.5f,.5f,.5f);
 
 			// set stuff before reveal
-			emission.rateOverTime = 200f;
 			transform.SetPosition2D(100f, 75.23f);
 			anim.Play("NeutralSquint");
 			attacks.playSound("ScreamLong");
@@ -511,34 +540,10 @@ class ShadeLordCtrl : MonoBehaviour
 			
 			// explode into void particles
 			attacks.playSound("Scream");
-
-			helper.fadeTo(gameObject.GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .3f);
-			helper.fadeTo(GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>(), new Color(1,1,1,0), .3f);
-
-			GetComponent<BoxCollider2D>().enabled = false;
-
-			// spawn a bunch of particles 
-			for (float k = 0; k < 100; k++)
-			{
-				GameObject particle = Instantiate(hitEffect);
-				// set position
-				particle.transform.SetPositionX(transform.position.x + UnityEngine.Random.Range(-3f, 3f));
-				particle.transform.SetPositionY(transform.position.y + UnityEngine.Random.Range(-2.37f,-11f));
-
-				// set scale
-				float s = UnityEngine.Random.Range(.1f, .2f);
-				particle.transform.SetScaleX(s);
-				particle.transform.SetScaleY(s);
-
-				// launch 
-				float range = 5f;
-				particle.GetComponent<Rigidbody2D>().velocity = new Vector2(UnityEngine.Random.Range(-1 * range, range), UnityEngine.Random.Range(-1 * range, range));
-
-				// destroy
-				StartCoroutine(die(particle));
-			}
-			ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
+			Vanish();
 			// wait a bit
+
+			ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
 			emission.rateOverTime = 10f;
 			yield return new WaitForSeconds(.5f);
 
@@ -559,7 +564,7 @@ class ShadeLordCtrl : MonoBehaviour
 				attacks.VoidCircles,
 				attacks.TendrilBurst,
 				attacks.Dash,
-				attacks.SweepBeam,
+				attacks.AimBeam,
 				attacks.CrossSlash,
 				attacks.FaceSpikes
 			};
@@ -581,31 +586,9 @@ class ShadeLordCtrl : MonoBehaviour
 			// wait till current attack done
 			yield return new WaitWhile(attacks.isAttacking);
 			StopCoroutine(co);
-			// explode into particles
-			helper.fadeTo(gameObject.GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .3f);
-			helper.fadeTo(GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .3f);
 
 			GetComponent<BoxCollider2D>().enabled = false;
 
-			for (float k = 0; k < 100; k++)
-			{
-				GameObject particle = Instantiate(hitEffect);
-				// set position
-				particle.transform.SetPositionX(transform.position.x + UnityEngine.Random.Range(-3f, 3f));
-				particle.transform.SetPositionY(transform.position.y + UnityEngine.Random.Range(-2.37f, -11f));
-
-				// set scale
-				float s = UnityEngine.Random.Range(.1f, .2f);
-				particle.transform.SetScaleX(s);
-				particle.transform.SetScaleY(s);
-
-				// launch 
-				float range = 3f;
-				particle.GetComponent<Rigidbody2D>().velocity = new Vector2(UnityEngine.Random.Range(-1 * range, range), UnityEngine.Random.Range(5f, 3f));
-
-				// destroy
-				StartCoroutine(die(particle));
-			}
 			// terrain break 1
 			//GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
 			GameObject[] go = { GameObject.Find("Terrain/Area2/Mid") };
@@ -678,6 +661,18 @@ class ShadeLordCtrl : MonoBehaviour
 		ShadeLord.Setup.ShadeLord.DreamDelayed();
 		Destroy(gameObject);
 		//StartCoroutine(Death());
+	}
+	private void Vanish()
+	{
+		helper.fadeTo(gameObject.GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .1f);
+		helper.fadeTo(GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .1f);
+
+		GetComponent<BoxCollider2D>().enabled = false;
+
+		GameObject vanish = GameObject.Find("VanishParticles");
+		vanish.GetComponent<ParticleSystem>().Play();
+		vanish.transform.position = transform.position;
+		vanish.transform.SetPositionY(particles.transform.position.y + -5.080002f);
 	}
 
 	private void breakTerrain(GameObject go)
@@ -754,12 +749,13 @@ class ShadeLordCtrl : MonoBehaviour
 		Action curr;
 		int i = rand.Next(0, atts.Count);
 		curr = atts[i];
+		Modding.Logger.Log("attack: " + i);
 		curr.Invoke();
 		// Wait till last attack is done
 		yield return new WaitWhile(() => attacks.isAttacking());//*/
-
+		Modding.Logger.Log("Attack done");
 		// delay between attacks
-		if(phase != 4)
+		if (phase != 4)
 			yield return new WaitForSeconds(1f);
 		// Repeat
 

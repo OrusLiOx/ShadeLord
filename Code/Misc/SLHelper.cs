@@ -59,7 +59,7 @@ class SLHelper : MonoBehaviour
 		StartCoroutine(fadeTo());
 		IEnumerator fadeTo()
 		{
-			float frames = time * 60;
+			float frames = time * 30f;
 			float
 				r = (target.r - sprite.color.r) / frames,
 				g = (target.g - sprite.color.g) / frames,
@@ -96,7 +96,7 @@ class SLHelper : MonoBehaviour
 				sprite.color += add;
 				sprite.color -= sub;
 
-				yield return new WaitForSeconds(1 / 60f);
+				yield return new WaitForSeconds(1 / 30f);
 			}
 			sprite.color = target;
 		}
