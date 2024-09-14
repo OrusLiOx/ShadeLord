@@ -82,7 +82,7 @@ class ShadeLordCtrl : MonoBehaviour
 		/*
 		atts = new List<Action>()
 		{
-			attacks.Dash
+			attacks.AimBeam
 		};//*/
 
 		helper = gameObject.AddComponent<SLHelper>();
@@ -102,8 +102,8 @@ class ShadeLordCtrl : MonoBehaviour
 		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
 
-		Spawn();
-		//FastSpawn();
+		//Spawn();
+		FastSpawn();
 	}
 	private void AssignValues()
 	{
@@ -153,17 +153,6 @@ class ShadeLordCtrl : MonoBehaviour
 
 			switch (t.name)
 			{
-				case "Spike":
-					t.gameObject.AddComponent<Spike>();
-					foreach(Transform spike in t.transform)
-						spike.gameObject.AddComponent<Spike>();
-					break;
-				case "BurstSpike":
-					t.gameObject.AddComponent<FaceSpike>();
-					break;
-				case "VoidBurst":
-					t.gameObject.AddComponent<VoidBurst>();
-					break;
 				case "BeamOrigin":
 					foreach (Transform child in t.transform)
 					{
@@ -171,7 +160,6 @@ class ShadeLordCtrl : MonoBehaviour
 						{
 							foreach (Transform beam in child.transform)
 							{
-								beam.gameObject.AddComponent<Beam>();
 								dh = beam.gameObject.AddComponent<DamageHero>();
 								dh.damageDealt = 2;
 							}
@@ -181,13 +169,9 @@ class ShadeLordCtrl : MonoBehaviour
 				case "CrossSlash":
 					foreach (Transform slash in t.transform)
 					{
-						dh =slash.gameObject.AddComponent<DamageHero>();
+						dh = slash.gameObject.AddComponent<DamageHero>();
 						dh.damageDealt = 2;
 					}
-					break;
-				case "VoidCircle":
-					t.gameObject.AddComponent<VoidCircle>();
-					t.gameObject.AddComponent<Spin>();
 					break;
 			}
 		}
@@ -324,19 +308,56 @@ class ShadeLordCtrl : MonoBehaviour
 	private void FastSpawn()
 	{
 		GameObject[] allObjects = FindObjectsOfType<GameObject>();
-		GameObject hud = GameObject.Find("Hud Canvas");
 		IEnumerator Spawn()
 		{
+			ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
+			GameObject obj1 = GameObject.Find("Terrain/Area2/RespawnL");
+			GameObject obj2 = GameObject.Find("Terrain/Area2/RespawnR");
+			obj1.SetActive(false);
+			obj2.SetActive(false);
 			transform.SetPositionY(-2f);
+			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["Silence"]);
+			GameObject.Find("Start").transform.SetPosition3D(0, 3.5f, 38f);
+			GameObject wall = GameObject.Find("Start/Wall");
+			SpriteRenderer wallSprite = GameObject.Find("Start/Wall/Black").GetComponent<SpriteRenderer>();
+			SpriteRenderer titleSprite = GameObject.Find("Start/Title").GetComponent<SpriteRenderer>();
+			Color c = new Color(0, 0, 0, .5f);
+			GameObject[] camLocks = {
+				GameObject.Find("Terrain/Area2/CameraLock")
+			};
+			foreach (GameObject go in camLocks)
+				go.SetActive(false);
 
-			// hide lord
+			GameObject obj3 = GameObject.Find("Terrain/CameraLock");
+			obj3.transform.SetPositionZ(0);
+			obj3.SetActive(false);
+			yield return new WaitForSeconds(.1f);
+			obj3.SetActive(true);
+
+			emission.rateOverTime = 10f;
+			GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().Play();
+
+			// set stuff before reveal
+			GameObject.Find("ShadeLord/Tendrils").GetComponent<PolygonCollider2D>().enabled = false;
+
+			// reveal
+
 			GameObject.Find("ShadeLord/Tendrils").SetActive(false);
 			transform.SetPositionY(-2f);
 
+			// text appear, then leave
+			emission.rateOverTime = 10f;
+			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
+
+			// hud appear
+
 			// GO
+			obj1.SetActive(true);
+			obj2.SetActive(true);
 			title.SetActive(false);
-			GameObject.Find("Terrain/CameraLock").SetActive(false);
-			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR EXIT", false);
+			obj3.SetActive(false);
+			foreach (GameObject go in camLocks)
+				go.SetActive(true);
 			yield return new WaitForSeconds(1f);
 			co = StartCoroutine(AttackChoice());
 		}
@@ -347,8 +368,6 @@ class ShadeLordCtrl : MonoBehaviour
 		{
 			if (obj.name == "white_palace_particles" || obj.name == "default_particles")
 				obj.SetActive(false);
-			else if (obj.name == "Hud Canvas")
-				hud = obj;
 			else if (obj.name.Contains("ShortTendril"))
 				voidTendrils.Add(obj);
 			else if (obj.name.Contains("StartTendril"))
@@ -378,7 +397,6 @@ class ShadeLordCtrl : MonoBehaviour
 			SpriteRenderer titleSprite = GameObject.Find("Start/Title").GetComponent<SpriteRenderer>();
 			Color c = new Color(0,0,0,.5f);
 			GameObject[] camLocks = {
-				GameObject.Find("Terrain/Area1/CameraLock"),
 				GameObject.Find("Terrain/Area2/CameraLock")
 			};
 			foreach (GameObject go in camLocks)
@@ -541,23 +559,22 @@ class ShadeLordCtrl : MonoBehaviour
 			// explode into void particles
 			attacks.playSound("Scream");
 			Vanish();
-			// wait a bit
 
+			// wait a bit
 			ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
-			emission.rateOverTime = 10f;
+			emission.rateOverTime = 3f;
 			yield return new WaitForSeconds(.5f);
 
 			// void particles raise from floor and terrain breaks
 			breakTerrain(GameObject.Find("Terrain/Area1"));
-			
 			// Wait a bit then start attacking again
 			yield return new WaitForSeconds(2.5f);
-			emission.rateOverTime = 3f;
+			emission.rateOverTime = 15f;
 			yield return new WaitForSeconds(4f);
 			
-			transform.SetPositionY(0f);
-			GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+			//transform.SetPositionY(0f);
+			//GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+			//GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
 			
 			atts = new List<Action>()
 			{
@@ -569,6 +586,11 @@ class ShadeLordCtrl : MonoBehaviour
 				attacks.FaceSpikes
 			};
 
+			/*
+			atts = new List<Action>()
+			{
+				attacks.AimBeam
+			};//*/
 			co = StartCoroutine(AttackChoice());
 		}
 		StartCoroutine(ToPlatform());
@@ -589,27 +611,30 @@ class ShadeLordCtrl : MonoBehaviour
 
 			GetComponent<BoxCollider2D>().enabled = false;
 
-			// terrain break 1
-			//GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
-			GameObject[] go = { GameObject.Find("Terrain/Area2/Mid") };
-			breakTerrain(GameObject.Find("Terrain/Area2/Mid"));
 			GameObject hazard = GameObject.Find("Terrain/VoidHazardTemp");
-			
+			hazard.GetComponent<Rigidbody2D>().gravityScale = .8f;
+
 			yield return new WaitForSeconds(5f);
-			hazard.GetComponent<Rigidbody2D>().gravityScale = .2f;
-			
-			// start spamming
-			attacks.VoidCircles();
+
+			// terrain break 1
+			GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
+			//GameObject[] go = { GameObject.Find("Terrain/Area2/Mid") };
+			breakTerrain(GameObject.Find("Terrain/Area2/Mid"));
 
 			// terrain break 2
 			yield return new WaitForSeconds(5f);
 			hazard.SetActive(false);
+			breakTerrain(GameObject.Find("Terrain/Area2/Left"));
+			breakTerrain(GameObject.Find("Terrain/Area2/Right"));//*/
+			/*
 			breakTerrain(GameObject.Find("Terrain/Area2/EdgeLeft"));
 			breakTerrain(GameObject.Find("Terrain/Area2/EdgeRight"));
 			breakTerrain(GameObject.Find("Terrain/Area2/Left (1)"));
-			breakTerrain(GameObject.Find("Terrain/Area2/Right (1)"));
+			breakTerrain(GameObject.Find("Terrain/Area2/Right (1)"));//*/
+			yield return new WaitWhile(() => player.transform.GetPositionY() > 60f);
+			attacks.VoidCircles();
 
-			atts = new List<Action>() { attacks.SweepBeam };
+			atts = new List<Action>() { attacks.AimBeam };
 
 			// Wait till reach end section
 			yield return new WaitWhile(()=> player.transform.GetPositionX()<210);
@@ -664,15 +689,16 @@ class ShadeLordCtrl : MonoBehaviour
 	}
 	private void Vanish()
 	{
-		helper.fadeTo(gameObject.GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .1f);
-		helper.fadeTo(GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .1f);
-
+		//helper.fadeTo(gameObject.GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .1f);
+		//helper.fadeTo(GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .1f);
+		//gameObject.GetComponent<SpriteRenderer>().color = new Color(1,1,1,0);
 		GetComponent<BoxCollider2D>().enabled = false;
 
 		GameObject vanish = GameObject.Find("VanishParticles");
 		vanish.GetComponent<ParticleSystem>().Play();
 		vanish.transform.position = transform.position;
 		vanish.transform.SetPositionY(particles.transform.position.y + -5.080002f);
+		transform.SetPosition2D(0, 0);
 	}
 
 	private void breakTerrain(GameObject go)

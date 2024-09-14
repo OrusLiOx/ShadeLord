@@ -59,6 +59,48 @@ public class Attacks : MonoBehaviour
 		atts = new Dictionary<string, GameObject>();
 		sounds = new Dictionary<string, AudioClip>();
 
+		// put scripts on attacks
+		foreach (Transform t in gameObject.transform)
+		{
+			switch (t.name)
+			{
+				case "Spike":
+					t.gameObject.AddComponent<Spike>();
+					foreach (Transform spike in t.transform)
+						spike.gameObject.AddComponent<Spike>();
+					break;
+				case "BurstSpike":
+					t.gameObject.AddComponent<FaceSpike>();
+					break;
+				case "VoidBurst":
+					t.gameObject.AddComponent<VoidBurst>();
+					break;
+				case "BeamOrigin":
+					foreach (Transform child in t.transform)
+					{
+						if (child.name == "Offset")
+						{
+							foreach (Transform beam in child.transform)
+							{
+								beam.gameObject.AddComponent<Beam>();
+							}
+						}
+					}
+					break;
+				case "VoidCircle":
+					t.gameObject.AddComponent<VoidCircle>();
+					t.gameObject.AddComponent<Spin>();
+					break;
+			}
+		}
+
+		// Get audio clips
+		foreach (AudioSource s in GameObject.Find("ShadeLord/SFX").GetComponents<AudioSource>())
+		{
+			sounds.Add(s.clip.name, s.clip);
+		}
+		GameObject.Find("ShadeLord/BeamOrigin/Offset/Blast").GetComponent<Beam>().SetSounds(sounds["BeamCharge"], sounds["BeamBlast"]);
+
 		// Get attacks
 		atts.Add("Beam", GameObject.Find("ShadeLord/BeamOrigin/Offset"));
 		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin", "VoidBurst", "VoidCircle", "TendrilWindup" };
@@ -76,14 +118,7 @@ public class Attacks : MonoBehaviour
 			emitters[i] = Instantiate(atts["DashTelegraph"]);
 		}
 		atts["DashTelegraph"].SetActive(false);
-
-		// Get audio clips
-		foreach (AudioSource s in GameObject.Find("ShadeLord/SFX").GetComponents<AudioSource>())
-		{
-			sounds.Add(s.clip.name, s.clip);
-		}
-		atts["Beam"].GetComponent<Beam>().blast = sounds["BeamBlast"];
-		atts["Beam"].GetComponent<Beam>().charge = sounds["BeamCharge"];
+		atts["Beam"].SetActive(false);
 	}
 
 	// Attacks
@@ -92,88 +127,10 @@ public class Attacks : MonoBehaviour
 	{
 		attacking = true;
 		forward = false;
-		StartCoroutine(DashV2());
+		StartCoroutine(Dash());
 
-		// dash across stage three times starting at the bottom and acending each dash
-		IEnumerator Dash()
-		{
-			//	pick direction
-			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;
-			if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
-			{
-				goright = target.transform.position.x > xCenter;
-			}
-			if (goright)
-			{
-				transform.localScale = new Vector3(1, 1, 1);
-				transform.SetPositionX(xCenter - xEdge);
-			}
-			else
-			{
-
-				transform.localScale = new Vector3(-1, 1, 1);
-				transform.SetPositionX(xCenter + xEdge);
-			}
-			arrive();
-			yield return new WaitWhile(() => wait);
-
-			// windup
-			anim.Play("DashWindup");
-			halo.transform.localPosition = new Vector2(.15f, 4.98f);
-			transform.SetPositionY( 68.04f);
-			col.offset = new Vector2(0, 5.87f);
-			yield return new WaitForSeconds(1 / 12f);
-			halo.transform.localPosition = new Vector2(6.1f, 3.53f);
-			col.offset = new Vector2(5.98f, 4.21f);
-			col.size = new Vector2(3.13f, 3.86f);
-			yield return new WaitForSeconds(1 / 12f);
-			halo.transform.localPosition = new Vector2(9.5f, 0.08f);
-			col.offset = new Vector2(9.3f, 0);
-			yield return new WaitForSeconds(12 / 12f);
-
-			// go
-			anim.Play("DashLoop");
-			for (int i = 0; i < 3; i++)
-			{
-				playSound("DashStart");
-				aud.clip = sounds["DashLoop"];
-				aud.loop = true;
-
-				halo.transform.localPosition = new Vector2(11.23f, 0.04f);
-				col.offset = new Vector2(6, -.07f);
-				col.size = new Vector2(19, 2.36f);
-				atts["Dash"].SetActive(true);
-				if (goright)
-					rig.velocity = new Vector2(50f, 0f);
-				else
-					rig.velocity = new Vector2(-50f, 0f);
-
-				yield return new WaitUntil(() => Mathf.Abs(transform.position.x - xCenter) > (xEdge + 20f));
-
-				goright = !goright;
-				if (goright)
-				{
-					transform.localScale = new Vector3(1, 1, 1);
-					transform.SetPositionX(xCenter - xEdge - 10f);
-				}
-				else
-				{
-
-					transform.localScale = new Vector3(-1, 1, 1);
-					transform.SetPositionX(xCenter + xEdge + 10f);
-				}
-				transform.SetPositionY(transform.GetPositionY() + 5f);
-			}
-
-			// end
-			halo.transform.localPosition = new Vector2(0f, -2.62f);
-			atts["Dash"].SetActive(false);
-			Hide();
-			attacking = false;
-		}
-		
 		// dash towards player location 3 times
-		IEnumerator DashV2()
+		IEnumerator Dash()
 		{
 			float dir = 0, x, y = 0;
 			
@@ -235,7 +192,7 @@ public class Attacks : MonoBehaviour
 				//emitters[i].transform.position = transform.position;
 				
 				emitters[i].transform.position = new Vector2(
-					Mathf.Clamp(transform.GetPositionX(), xCenter-xEdge, xCenter + xEdge), 
+					Mathf.Clamp(transform.GetPositionX(), xCenter-xEdge-5, xCenter + xEdge+5), 
 					Mathf.Clamp(transform.GetPositionY(), yDef-10f, yDef+4.5f));//*/
 				emitters[i].SetActive(true);
 				ParticleSystem.EmissionModule em = emitters[i].GetComponent<ParticleSystem>().emission;
@@ -262,7 +219,7 @@ public class Attacks : MonoBehaviour
 				rig.velocity = new Vector2(x, y).normalized * -50f;
 
 
-				yield return new WaitForSeconds(1.5f);
+				yield return new WaitForSeconds(1.7f);
 
 
 				// dash finish
@@ -275,20 +232,19 @@ public class Attacks : MonoBehaviour
 				if (goright)
 				{
 					//transform.SetPositionX(xCenter - xEdge - 15);
-					newPos.x = xCenter - xEdge;
-					x = (xCenter - xEdge) - target.transform.GetPositionX();
+					newPos.x = xCenter - xEdge-5;
 					//x = -2 * xEdge;
 				}
 				else
 				{
 					//transform.SetPositionX(xCenter + xEdge + 15);
 
-					newPos.x = xCenter + xEdge;
-					x = (xCenter + xEdge) - target.transform.GetPositionX();
+					newPos.x = xCenter + xEdge+5;
 					//x = 2 * xEdge;
 				}
 
-				y = yDef+4.5f - target.transform.GetPositionY();
+				x = newPos.x - target.transform.GetPositionX();
+				y = newPos.y - target.transform.GetPositionY();
 				
 				transform.SetPosition2D(newPos + (new Vector2(x, y).normalized * 16.6f));
 			}
@@ -720,15 +676,16 @@ public class Attacks : MonoBehaviour
 			}
 
 			// charge
-			playSound("BeamCharge");
-			atts["BeamOrigin"].SetActive(false);
+			//playSound("BeamCharge");
 			atts["BeamOrigin"].SetActive(true);
 			beam.SetRotationZ(deg);
+			beams.Add(Instantiate(atts["Beam"], atts["BeamOrigin"].transform));
+			beams[0].SetActive(true);
 
 			yield return new WaitForSeconds(1f);
 
 			// fire
-			playSound("BeamBlast");
+			//playSound("BeamBlast");
 
 
 			// fire vertical beams
@@ -740,17 +697,18 @@ public class Attacks : MonoBehaviour
 				beams.Add(b);
 				b.transform.SetPositionZ(b.transform.GetPositionZ() + i * .001f);
 				yield return new WaitForSeconds(1f);
-				playSound("BeamBlast");
+				//playSound("BeamBlast");
 			}
 			//*/
 			yield return new WaitForSeconds(2f);
 			foreach (GameObject obj in beams)
 				Destroy(obj);
 
-			// end
 			atts["BeamOrigin"].SetActive(false);
+			// end
+			//atts["BeamOrigin"].SetActive(false);
 			eyes(true);
-			yield return new WaitForSeconds(1.5f);
+			yield return new WaitForSeconds(1f);
 			leave();
 			yield return new WaitUntil(() => !wait);
 			attacking = false;
@@ -761,7 +719,7 @@ public class Attacks : MonoBehaviour
 		GameObject beam = Instantiate(atts["Beam"], parent.transform);
 
 		beam.transform.SetRotationZ(90f);
-		beam.transform.SetPositionY(yDef - 10f);
+		beam.transform.SetPositionY(yDef - 20f);
 
 		beam.transform.SetPositionX(x);
 
@@ -937,10 +895,14 @@ public class Attacks : MonoBehaviour
 		foreach (Transform c in parent.GetComponentsInChildren<Transform>())
 		{
 			if (!c.gameObject.name.Equals(parent.name))
+			{
 				Destroy(c.gameObject);
+			}
 		}
 		foreach (GameObject g in atts.Values)
+		{
 			g.SetActive(false);
+		}
 		attacking = false;
 		//Hide();
 	}
@@ -963,8 +925,8 @@ public class Attacks : MonoBehaviour
 				break;
 			case 3:
 				infiniteSpike = false;
-				platPhase = true;
-				xEdge = 43.5f;
+				//platPhase = true;
+				//xEdge = 43.5f;
 				break;
 			case 4:
 				xEdge = 17.71f; xCenter = 217.61f; yDef = 14f;

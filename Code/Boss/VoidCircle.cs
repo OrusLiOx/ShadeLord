@@ -64,14 +64,16 @@ public class VoidCircle : MonoBehaviour
 			{
 				yield return new WaitForSeconds(1 / 60f);
 				burstSprite.color = new Color(0, 0, 0, burstSprite.color.a - (2 / 60f));
+
+				float a = sprite.color.a - (3 / 60f);
+				sprite.color = new Color(1, 1, 1, a);
+				outline.color = new Color(1, 1, 1, a);
 			}
 			col.enabled = false;
 			// burst fade
-			sprite.color = new Color(1, 1, 1, 1);
-			outline.color = new Color(1, 1, 1, 1);
 			while(sprite.color.a > 0)
 			{
-				float a = sprite.color.a - (2 / 60f);
+				float a = sprite.color.a - (3 / 60f);
 				sprite.color = new Color(1, 1, 1, a);
 				outline.color = new Color(1, 1, 1, a);
 				yield return new WaitForSeconds(1 / 60f);

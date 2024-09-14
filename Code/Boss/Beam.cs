@@ -24,12 +24,21 @@ public class Beam : MonoBehaviour
 			audio.outputAudioMixerGroup = HeroController.instance.gameObject.GetComponent<AudioSource>().outputAudioMixerGroup;
 		}
 	}
+	public void SetSounds(AudioClip c, AudioClip b)
+	{
+		charge = c;
+		blast = b;
+		Modding.Logger.Log(c + " | " + b );
+	}
 	private void OnEnable()
 	{
 		if (gameObject.name.Contains("Blast"))
 		{
 			anim1 = "Nothing";
 			anim2 = "BeamBlast";
+
+			audio = GetComponent<AudioSource>();
+			audio.outputAudioMixerGroup = HeroController.instance.gameObject.GetComponent<AudioSource>().outputAudioMixerGroup;
 		}
 		else
 		{
@@ -43,18 +52,22 @@ public class Beam : MonoBehaviour
 			GetComponent<BoxCollider2D>().enabled = false;
 		StartCoroutine(go());
 	}
-
 	IEnumerator go()
 	{
 		if (gameObject.name.Contains("Blast"))
+		{
 			audio.PlayOneShot(charge);
+		}
 		gameObject.GetComponent<Animator>().Play(anim1);
 
 		yield return new WaitForSeconds(1f);
 		if (gameObject.name.Contains("Blast"))
 		{
-			GetComponent<BoxCollider2D>().enabled = true;
 			audio.PlayOneShot(blast);
+		}
+		else
+		{
+			GetComponent<BoxCollider2D>().enabled = true;
 		}
 		gameObject.GetComponent<Animator>().Play(anim2);
 	}
