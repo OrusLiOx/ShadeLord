@@ -99,15 +99,7 @@ namespace ShadeLord.Setup
 						tileRend.material.shader = Shader.Find("Sprites/Default");
 					}
 				}
-			}/*
-			Modding.Logger.Log("-------- " + nextScene.name + " --------");
-			foreach (GameObject obj in FindObjectsOfType<GameObject>())
-			{
-				if (obj.GetComponent<DamageHero>() != null)
-				{
-					Modding.Logger.Log(obj.name + " | " + obj.layer + " | " + obj.transform.GetPositionZ() + " | " + obj.GetComponent<DamageHero>().hazardType);
-				}
-			}//*/
+			}
 		}
 		private void SceneManagerOnStart(On.SceneManager.orig_Start orig, SceneManager self)
 		{

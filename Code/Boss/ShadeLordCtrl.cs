@@ -79,10 +79,11 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.Spikes
 		};//*/
 
-		/*
+		//*
 		atts = new List<Action>()
 		{
-			attacks.AimBeam
+			attacks.Dash,
+			attacks.VoidCircles
 		};//*/
 
 		helper = gameObject.AddComponent<SLHelper>();
@@ -102,7 +103,7 @@ class ShadeLordCtrl : MonoBehaviour
 		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
 
-		//Spawn();
+		Spawn();
 		FastSpawn();
 	}
 	private void AssignValues()
@@ -269,7 +270,6 @@ class ShadeLordCtrl : MonoBehaviour
 		switch (phase)
 		{
 			case 1:
-				atts.Add(attacks.VoidCircles);
 				StopCoroutine(co);
 				co = StartCoroutine(phase2());
 				break;
@@ -295,6 +295,12 @@ class ShadeLordCtrl : MonoBehaviour
 
 		IEnumerator phase2()
 		{
+			if (health.hp < hpMarkers[2])
+			{
+				Modding.Logger.Log("cancel void circle transition");
+				yield break;
+			}
+			Modding.Logger.Log("void circle next");
 			atts.Add(attacks.VoidCircles);
 
 			yield return new WaitWhile(() => attacks.isAttacking());//*/
@@ -635,9 +641,9 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.VoidCircles();
 
 			atts = new List<Action>() { attacks.AimBeam };
-
+			float xTrigger = GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f;
 			// Wait till reach end section
-			yield return new WaitWhile(()=> player.transform.GetPositionX()<210);
+			yield return new WaitWhile(()=> player.transform.GetPositionX()<xTrigger);
 
 			GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
 			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
@@ -668,24 +674,23 @@ class ShadeLordCtrl : MonoBehaviour
 				Destroy(obj);
 			}
 			// die
-			anim.Play("Death");
+			//anim.Play("Death");
 			boxCol.enabled = false;
 			yield return null;
-			yield return new WaitForSeconds(1.2f);
+			yield return new WaitForSeconds(3f);
 
 			StatueCreator.WonFight = true;
 			var bsc = SceneLoader.SceneController.GetComponent<BossSceneController>();
 			GameObject transition = UObject.Instantiate(bsc.transitionPrefab);
 			PlayMakerFSM transitionsFSM = transition.LocateMyFSM("Transitions");
 			transitionsFSM.SetState("Out Statue");
-			yield return new WaitForSeconds(1);
 			bsc.DoDreamReturn();
 
 			Destroy(gameObject);
 		}
 		ShadeLord.Setup.ShadeLord.DreamDelayed();
 		Destroy(gameObject);
-		//StartCoroutine(Death());
+		StartCoroutine(Death());
 	}
 	private void Vanish()
 	{

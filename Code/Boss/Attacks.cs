@@ -929,7 +929,7 @@ public class Attacks : MonoBehaviour
 				//xEdge = 43.5f;
 				break;
 			case 4:
-				xEdge = 17.71f; xCenter = 217.61f; yDef = 14f;
+				xEdge = 17.71f; xCenter = GameObject.Find("Terrain/Area3").transform.GetPositionX(); yDef = 14f;
 				lastPhase = true;
 				platPhase = false;
 				fireOnce = true;

@@ -81,6 +81,7 @@ namespace ShadeLord.Setup
 			ModHooks.GetPlayerVariableHook += GetVariableHook;
 			ModHooks.LanguageGetHook += LangGet;
 			ModHooks.NewGameHook += AddComponent;
+			On.GameManager.StartNewGame += StartNewGame;
 			ModHooks.SetPlayerVariableHook += SetVariableHook;
 
 			On.BlurPlane.Awake += OnBlurPlaneAwake;
@@ -113,10 +114,17 @@ namespace ShadeLord.Setup
 
 		// set stuff up
 		private void AfterSaveGameLoad(SaveGameData data) => AddComponent();
+		private void StartNewGame(On.GameManager.orig_StartNewGame orig, GameManager self, bool permaDeath, bool bossRush)
+		{
+			orig(self, permaDeath, bossRush);
+			AddComponent();
+		}
+
 		private void AddComponent()
 		{
 			GameManager.instance.gameObject.AddComponent<StatueCreator>();
 			GameManager.instance.gameObject.AddComponent<SceneLoader>();
+
 		}
 
 		private void LoadAssets()
