@@ -527,7 +527,7 @@ public class Attacks : MonoBehaviour
 		IEnumerator VoidCircles()
 		{
 			// setup
-			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().enabled = false;
+			halo.GetComponent<SpriteRenderer>().enabled = false;
 			transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
 			if (lastPhase)
 			{
@@ -583,7 +583,7 @@ public class Attacks : MonoBehaviour
 			leave();
 			yield return new WaitForSeconds(.5f);
 			yield return new WaitUntil(() => !wait);
-			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().enabled = true;
+			halo.GetComponent<SpriteRenderer>().enabled = true;
 			yield return new WaitForSeconds(1f);
 			attacking = false;
 		}

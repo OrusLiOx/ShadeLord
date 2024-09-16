@@ -18,22 +18,22 @@ class ShadeLordCtrl : MonoBehaviour
 	// generic unity stuff
 	private Animator anim;
 	private BoxCollider2D boxCol;
-	private ParticleSystem particles;
-	private ParticleSystem.ShapeModule particleEm;
+	public ParticleSystem particles;
+	public ParticleSystem.ShapeModule particleEm;
 	private Coroutine co;
 
 	// hollow knight stuff
 	private GameObject player;
 	private HeroController hc;
-	private HealthManager health;
+	public HealthManager health;
 	private GameObject hitEffect;
 	private ExtraDamageable extDmg;
 
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	private int[] hpMarkers = { 50,50,50,50,300};
-	//private int[] hpMarkers = { 400, 450, 300, 750, 2200 };
+	public int[] hpMarkers = { 50,50,50,50,300};
+	//public int[] hpMarkers = { 400, 450, 300, 750, 2200 };
 	private System.Random rand;
 	
 	private Attacks attacks;
@@ -44,7 +44,7 @@ class ShadeLordCtrl : MonoBehaviour
 	private Queue<GameObject> tendrils;
 
 	private bool triggeredRocks;
-	private int phase;
+	public int phase;
 
 	// setting up stuff
 	void Awake()
@@ -100,10 +100,9 @@ class ShadeLordCtrl : MonoBehaviour
 		GameObject.Find("Halo").AddComponent<Spin>();
 		AssignValues();
 		health.OnDeath += OnDeath;
-		On.HealthManager.TakeDamage += OnTakeDamage;
 		attacks.Phase(phase);
 
-		Spawn();
+		//Spawn();
 		FastSpawn();
 	}
 	private void AssignValues()
@@ -190,35 +189,7 @@ class ShadeLordCtrl : MonoBehaviour
 		StopAllCoroutines();
 		Death();
 	}
-	private void OnTakeDamage(On.HealthManager.orig_TakeDamage orig, HealthManager self, HitInstance hitinstance)
-	{
-		Modding.Logger.Log(self.hp + " " + hitinstance.DamageDealt+ " " + hitinstance.Direction);
-		// deal hit then check phase
-		particleEm.rotation = new Vector3(0, -hitinstance.Direction+90 , 0);
-		particles.transform.position = transform.position;
-		particles.transform.SetPositionY(particles.transform.position.y + -2.5f) ;
-		particles.Play();
-		StartCoroutine(flicker());
-
-		orig(self, hitinstance);
-		//SpawnHitEffect(hitinstance.Direction);
-		if (health.hp < hpMarkers[phase])
-		{
-			nextPhase();
-		}//*/
-
-		IEnumerator flicker()
-		{
-			gameObject.GetComponent<SpriteRenderer>().color = Color.black;
-			for (int k = 0; k < 10; k++)
-			{
-				float c = .1f * k;
-				gameObject.GetComponent<SpriteRenderer>().color = new Color(c, c, c);
-				yield return new WaitForSeconds(1 / 60f);
-			}
-			gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-		}
-	}
+	// on take damage moved to ShadeLord.cs
 	private void SpawnHitEffect(float dir)
 	{
 		// spawn void particles (16 frames)
@@ -264,7 +235,7 @@ class ShadeLordCtrl : MonoBehaviour
 	}//*/
 
 	// Phase changes
-	private void nextPhase()
+	public void nextPhase()
 	{
 		phase++;
 		switch (phase)

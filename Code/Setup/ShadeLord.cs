@@ -82,6 +82,7 @@ namespace ShadeLord.Setup
 			ModHooks.LanguageGetHook += LangGet;
 			ModHooks.NewGameHook += AddComponent;
 			On.GameManager.StartNewGame += StartNewGame;
+			On.HealthManager.TakeDamage += OnTakeDamage;
 			ModHooks.SetPlayerVariableHook += SetVariableHook;
 
 			On.BlurPlane.Awake += OnBlurPlaneAwake;
@@ -173,6 +174,45 @@ namespace ShadeLord.Setup
 
 			UObject.Destroy(finder);
 		}
+
+		public void OnTakeDamage(On.HealthManager.orig_TakeDamage orig, HealthManager self, HitInstance hitinstance)
+		{
+			ShadeLordCtrl ctrl;
+			Modding.Logger.Log(self.gameObject.name);
+			if (!self.gameObject.TryGetComponent<ShadeLordCtrl>(out ctrl))
+			{
+				Modding.Logger.Log("normal hit: " + self.hp + " " + hitinstance.DamageDealt + " " + hitinstance.Direction);
+				orig(self, hitinstance);
+				return;
+			}
+			Modding.Logger.Log("ShadeLord hit: " +self.hp + " " + hitinstance.DamageDealt + " " + hitinstance.Direction);
+			// deal hit then check phase
+			ctrl.particleEm.rotation = new Vector3(0, -hitinstance.Direction + 90, 0);
+			ctrl.particles.transform.position = ctrl.transform.position;
+			ctrl.particles.transform.SetPositionY(ctrl.particles.transform.position.y + -2.5f);
+			ctrl.particles.Play();
+			ctrl.StartCoroutine(flicker());
+
+			orig(self, hitinstance);
+			//SpawnHitEffect(hitinstance.Direction);
+			if (ctrl.health.hp < ctrl.hpMarkers[ctrl.phase])
+			{
+				ctrl.nextPhase();
+			}//*/
+
+			IEnumerator flicker()
+			{
+				ctrl.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+				for (int k = 0; k < 10; k++)
+				{
+					float c = .1f * k;
+					ctrl.gameObject.GetComponent<SpriteRenderer>().color = new Color(c, c, c);
+					yield return new WaitForSeconds(1 / 60f);
+				}
+				ctrl.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+			}
+		}
+
 
 		// scene stuff
 		private void OnBlurPlaneAwake(On.BlurPlane.orig_Awake orig, BlurPlane self)

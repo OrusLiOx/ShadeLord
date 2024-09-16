@@ -28,7 +28,6 @@ public class Beam : MonoBehaviour
 	{
 		charge = c;
 		blast = b;
-		Modding.Logger.Log(c + " | " + b );
 	}
 	private void OnEnable()
 	{
