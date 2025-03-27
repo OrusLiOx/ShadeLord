@@ -216,7 +216,7 @@ public class Attacks : MonoBehaviour
 				// dash
 				playSound("DashStart");
 				atts["Dash"].SetActive(true);
-				rig.velocity = new Vector2(x, y).normalized * -50f;
+				rig.velocity = new Vector2(x, y).normalized * -70f;
 
 
 				yield return new WaitForSeconds(1.7f);
@@ -695,7 +695,7 @@ public class Attacks : MonoBehaviour
 				// fire
 				GameObject b = spawnVerticalBeam(target.transform.GetPositionX());
 				beams.Add(b);
-				b.transform.SetPositionZ(b.transform.GetPositionZ() + i * .001f);
+				//b.transform.SetPositionZ(b.transform.GetPositionZ() + i * .001f);
 				yield return new WaitForSeconds(1f);
 				//playSound("BeamBlast");
 			}

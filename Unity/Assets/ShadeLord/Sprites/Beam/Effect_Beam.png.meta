@@ -19,10 +19,10 @@ TextureImporter:
     second: Effect_Beam_4
   - first:
       213: 1944728107344496273
-    second: Windup_0
+    second: Effect_Beam_5
   - first:
       213: 981204448146125772
-    second: Start_Windup_0
+    second: Effect_Beam_6
   - first:
       213: -1911034634648745628
     second: Effect_Beam_7
@@ -128,9 +128,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 921
+        y: 794
         width: 763
-        height: 150
+        height: 226
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -149,9 +149,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 770
+        y: 522
         width: 763
-        height: 150
+        height: 224
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -170,9 +170,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 619
+        y: 389
         width: 763
-        height: 150
+        height: 40
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -191,9 +191,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 468
+        y: 304
         width: 763
-        height: 150
+        height: 42
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -211,10 +211,10 @@ TextureImporter:
       name: Effect_Beam_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 317
-        width: 763
-        height: 150
+        x: 94
+        y: 10
+        width: 239
+        height: 273
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -229,13 +229,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Windup_0
+      name: Effect_Beam_5
       rect:
         serializedVersion: 2
-        x: 0
-        y: 302
-        width: 763
-        height: 14
+        x: 430
+        y: 8
+        width: 224
+        height: 275
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -245,90 +245,6 @@ TextureImporter:
       bones: []
       spriteID: 1968cf6f8ef0dfa10800000000000000
       internalID: 1944728107344496273
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Start_Windup_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 287
-        width: 763
-        height: 14
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cc378c73f30fd9d00800000000000000
-      internalID: 981204448146125772
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Effect_Beam_7
-      rect:
-        serializedVersion: 2
-        x: 109
-        y: 8
-        width: 224
-        height: 275
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4690b48ff14aa75e0800000000000000
-      internalID: -1911034634648745628
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Effect_Beam_8
-      rect:
-        serializedVersion: 2
-        x: 430
-        y: 10
-        width: 239
-        height: 273
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e72ac70f3909e7680800000000000000
-      internalID: -8755401660492373378
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: nothing
-      rect:
-        serializedVersion: 2
-        x: 8
-        y: 76
-        width: 48
-        height: 66
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ccc5fa8d0256bfc30800000000000000
-      internalID: 4394217053178780876
       vertices: []
       indices: 
       edges: []

@@ -32,8 +32,8 @@ class ShadeLordCtrl : MonoBehaviour
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	public int[] hpMarkers = { 50,50,50,50,300};
-	//public int[] hpMarkers = { 400, 450, 300, 750, 2200 };
+	//public int[] hpMarkers = { 50,50,50,50,300};
+	public int[] hpMarkers = { 400, 450, 300, 750, 2200 };
 	private System.Random rand;
 	
 	private Attacks attacks;
@@ -75,16 +75,14 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.Dash,
 			attacks.AimBeam,
 			attacks.CrossSlash,
-			attacks.FaceSpikes,
 			attacks.Spikes
 		};//*/
 
 		//*
 		atts = new List<Action>()
 		{
-			attacks.Dash,
-			attacks.VoidCircles
-		};//*/
+			attacks.AimBeam
+        };//*/
 
 		helper = gameObject.AddComponent<SLHelper>();
 
@@ -176,7 +174,7 @@ class ShadeLordCtrl : MonoBehaviour
 			}
 		}
 	}
-	
+	 
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.P))
@@ -238,6 +236,7 @@ class ShadeLordCtrl : MonoBehaviour
 	public void nextPhase()
 	{
 		phase++;
+		Modding.Logger.Log(phase);
 		switch (phase)
 		{
 			case 1:
@@ -532,7 +531,7 @@ class ShadeLordCtrl : MonoBehaviour
 			// stop all and disapear into void particles
 			StopCoroutine(co);
 			attacks.Stop();
-			
+		
 			// explode into void particles
 			attacks.playSound("Scream");
 			Vanish();
@@ -559,8 +558,7 @@ class ShadeLordCtrl : MonoBehaviour
 				attacks.TendrilBurst,
 				attacks.Dash,
 				attacks.AimBeam,
-				attacks.CrossSlash,
-				attacks.FaceSpikes
+				attacks.CrossSlash
 			};
 
 			/*

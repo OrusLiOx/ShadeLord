@@ -40,12 +40,9 @@ public class Beam : MonoBehaviour
 			audio.outputAudioMixerGroup = HeroController.instance.gameObject.GetComponent<AudioSource>().outputAudioMixerGroup;
 		}
 		else
-		{
-			anim2 = "Beam";
-			if (gameObject.name.Contains("("))
-				anim1 = "Windup";
-			else
-				anim1 = "WindupStart";
+        {
+            anim1 = "Windup";
+            anim2 = "Beam";
 		}
 		if (!gameObject.name.Contains("Blast"))
 			GetComponent<BoxCollider2D>().enabled = false;
