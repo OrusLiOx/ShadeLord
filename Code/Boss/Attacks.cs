@@ -347,15 +347,15 @@ public class Attacks : MonoBehaviour
 			yield return new WaitUntil(() => !wait);
 
 			// first set
-			anim.Play("RoarWait");
+			anim.Play("SpikeWindup");
 			// generate spikes
 			float offset = xCenter - xEdge + UnityEngine.Random.Range(0, 2.4f);
-			yield return new WaitForSeconds(.5f);
-			playSound("Scream");
-			anim.Play("Roar");
+			yield return new WaitForSeconds(.7f);
+			//playSound("Scream");
+			anim.Play("SpikeLoop");
 
-			yield return new WaitForSeconds(.5f);
-			/*
+            //yield return new WaitForSeconds(.5f);
+            /*
 			playSound("BeamCharge");
 			while (offset < xCenter + xEdge)
 			{
@@ -370,12 +370,12 @@ public class Attacks : MonoBehaviour
 			
 			yield return new WaitForSeconds(1f + 3/12f);//*/
 
-			// fire 3 sets of spikes with random offset
-			int i = 3;
+            // fire 3 sets of spikes with random offset
+            int i = 3;
 			while (i > 0 || infiniteSpike)
 			{
 				// generate spikes
-				offset = xCenter - xEdge + UnityEngine.Random.Range(0, 2.4f);
+				offset = xCenter - xEdge + i % 2;//UnityEngine.Random.Range(0, 2.4f);
 
 				playSound("BeamCharge");
 				while (offset < xCenter + xEdge)
@@ -385,17 +385,19 @@ public class Attacks : MonoBehaviour
 					s.transform.SetPosition2D(offset, 66.42f);
 					offset += 2f;
 				}
-				yield return new WaitForSeconds(.7f);
+				yield return new WaitForSeconds(.4f);
 				// spikes go up
 				playSound("SpikeUpLower");
-				yield return new WaitForSeconds(1f + 3 / 12f);
+				yield return new WaitForSeconds(.5f + 10 / 24f);
 				i--;
 			}
 
-			// end
-			leave();
+            anim.Play("SpikeRetract");
+            yield return new WaitForSeconds(.333f);
+
+            // end
+            leave();
 			yield return new WaitUntil(() => !wait);
-			yield return new WaitForSeconds(2f);
 			
 			attacking = false;
 		}

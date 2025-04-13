@@ -81,7 +81,7 @@ class ShadeLordCtrl : MonoBehaviour
 		//*
 		atts = new List<Action>()
 		{
-			attacks.AimBeam
+			attacks.Spikes
         };//*/
 
 		helper = gameObject.AddComponent<SLHelper>();

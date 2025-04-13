@@ -26,16 +26,16 @@ public class Spike : MonoBehaviour
 	IEnumerator go()
 	{
 		anim.Play("TendrilSpawn");
-		yield return new WaitForSeconds(.7f);
+		yield return new WaitForSeconds(.4f);
 
 		anim.Play("TendrilUp");
-		yield return new WaitForSeconds(3/12f);
+		yield return new WaitForSeconds(5/24f);
 		col.enabled = true;
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(.5f);
 
 		col.enabled = false;
 		anim.Play("TendrilDown");
-		yield return new WaitForSeconds(5/12f);
+		yield return new WaitForSeconds(5/24f);
 
 		Destroy(gameObject);
 	}
