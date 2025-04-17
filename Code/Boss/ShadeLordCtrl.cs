@@ -15,6 +15,7 @@ using ShadeLord.Setup;
 
 class ShadeLordCtrl : MonoBehaviour
 {
+	private int actionState = -1;
 	// generic unity stuff
 	private Animator anim;
 	private BoxCollider2D boxCol;
@@ -78,7 +79,7 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.Spikes
 		};//*/
 
-		//*
+		/*
 		atts = new List<Action>()
 		{
 			attacks.Spikes
@@ -179,7 +180,28 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.P))
 			Modding.Logger.Log(transform.position);
-	}//*/
+		else if (Input.GetKeyDown(KeyCode.Keypad0))
+			actionState = -1;
+        else if (Input.GetKeyDown(KeyCode.Keypad1))
+            actionState = 0;
+        else if (Input.GetKeyDown(KeyCode.Keypad2))
+            actionState = 1;
+        else if (Input.GetKeyDown(KeyCode.Keypad3))
+            actionState = 2;
+        else if (Input.GetKeyDown(KeyCode.Keypad4))
+            actionState = 3;
+        else if (Input.GetKeyDown(KeyCode.Keypad5))
+            actionState = 4;
+        else if (Input.GetKeyDown(KeyCode.Keypad6))
+            actionState = 5;
+        else if (Input.GetKeyDown(KeyCode.Keypad7))
+            actionState = 6;
+        else if (Input.GetKeyDown(KeyCode.Keypad8))
+            actionState = 7;
+        else if (Input.GetKeyDown(KeyCode.Keypad8))
+            actionState = 8;
+
+    }//*/
 	// damage stuff
 	private void OnDeath()
 	{
@@ -747,16 +769,21 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		// Pick attack
 		Action curr;
-		int i = rand.Next(0, atts.Count);
-		curr = atts[i];
+		int i;
+		if (actionState == -1)
+			i = rand.Next(0, atts.Count);
+		else
+			i = actionState % atts.Count;
+
+        curr = atts[i];
 		Modding.Logger.Log("attack: " + i);
 		curr.Invoke();
 		// Wait till last attack is done
 		yield return new WaitWhile(() => attacks.isAttacking());//*/
 		Modding.Logger.Log("Attack done");
 		// delay between attacks
-		if (phase != 4)
-			yield return new WaitForSeconds(1f);
+		//if (phase != 4)
+			//yield return new WaitForSeconds(.3f);
 		// Repeat
 
 		co = StartCoroutine(AttackChoice());//*/

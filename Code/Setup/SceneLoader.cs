@@ -14,7 +14,7 @@ namespace ShadeLord.Setup
 	internal class SceneLoader : MonoBehaviour
 	{
 		internal static BossSceneController SceneController;
-		float x = 100; // center of stage
+		float x = 23.5f; // center of stage
 
 		// Connect OnEnterHero and OnSceneChanage to proper events
 		private void Awake()

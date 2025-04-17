@@ -35,7 +35,7 @@ public class Attacks : MonoBehaviour
 	private void Awake()
 	{
 		// Helper variables
-		xEdge = 18; xCenter = 100; yDef = 75.23f;
+		xEdge = 18; xCenter = 23.5f; yDef = 75.23f;
 		sweepPos = 0;
 		attacking = false;
 		wait = false;
@@ -343,11 +343,13 @@ public class Attacks : MonoBehaviour
 				transform.SetPositionX(xCenter);
 			else
 				transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
+			Modding.Logger.Log(xCenter - xEdge + 4);
 			arrive();
 			yield return new WaitUntil(() => !wait);
 
-			// first set
-			anim.Play("SpikeWindup");
+            // first set
+            playSound("BeamCharge");
+            anim.Play("SpikeWindup");
 			// generate spikes
 			float offset = xCenter - xEdge + UnityEngine.Random.Range(0, 2.4f);
 			yield return new WaitForSeconds(.7f);
@@ -372,12 +374,13 @@ public class Attacks : MonoBehaviour
 
             // fire 3 sets of spikes with random offset
             int i = 3;
-			while (i > 0 || infiniteSpike)
+			float randOffset = UnityEngine.Random.Range(0, 1f);
+            while (i > 0 || infiniteSpike)
 			{
 				// generate spikes
-				offset = xCenter - xEdge + i % 2;//UnityEngine.Random.Range(0, 2.4f);
+				offset = xCenter - xEdge + i % 2 + randOffset;//UnityEngine.Random.Range(0, 2.4f);
 
-				playSound("BeamCharge");
+				
 				while (offset < xCenter + xEdge)
 				{
 					GameObject s = Instantiate(atts["Spike"], parent.transform);
@@ -385,10 +388,10 @@ public class Attacks : MonoBehaviour
 					s.transform.SetPosition2D(offset, 66.42f);
 					offset += 2f;
 				}
-				yield return new WaitForSeconds(.4f);
+				yield return new WaitForSeconds(Spike.spawnTime);
 				// spikes go up
 				playSound("SpikeUpLower");
-				yield return new WaitForSeconds(.5f + 10 / 24f);
+				yield return new WaitForSeconds(Spike.upTime + Spike.activeTime + Spike.downTime + .1f);
 				i--;
 			}
 
@@ -918,7 +921,7 @@ public class Attacks : MonoBehaviour
 		switch (phase)
 		{
 			case 0:
-				xEdge = 18; xCenter = 100; yDef = 75.23f;
+				xEdge = 18; xCenter = 23.5f; yDef = 75.23f;
 				infiniteSpike = false;
 				lastPhase = false;
 				break;
@@ -991,8 +994,7 @@ public class Attacks : MonoBehaviour
 				{
 					anim.Play("SideLeave");
 				}
-				yield return new WaitForSeconds(2 / 12f);
-				rig.velocity = new Vector2(0f, -30f);
+				rig.velocity = new Vector2(0f, -40f);
 				yield return new WaitUntil(() => transform.position.y < yDef - 20);
 				rig.velocity = new Vector2(0f, 0f);
 				Hide();
@@ -1023,7 +1025,7 @@ public class Attacks : MonoBehaviour
 		{
 			anim.Play("SideUp");
 		}
-		rig.velocity = new Vector2(0f, 30f);
+		rig.velocity = new Vector2(0f, 40f);
 		yield return new WaitUntil(() => transform.position.y > max - 5);
 		if (forward)
 		{
