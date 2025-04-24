@@ -470,10 +470,10 @@ public class Attacks : MonoBehaviour
 			GameObject tendrils = atts["TendrilBurst"];
 			tendrils.transform.SetScaleX(.1f);
 			tendrils.transform.SetScaleY(.1f);
+            anim.Play("NeutralSquint");
 
-
-			//anim.Play("NeutralClose");
-			atts["TendrilWindup"].SetActive(true);
+            //anim.Play("NeutralClose");
+            atts["TendrilWindup"].SetActive(true);
 			Transform windup = atts["TendrilWindup"].transform.GetChild(1);
 			for (float f = .5f; f < 1.5f; f += .2f)
 			{
@@ -482,12 +482,12 @@ public class Attacks : MonoBehaviour
 				yield return new WaitForSeconds(1 / 12f);
 			}
 			windup.SetScaleX(1.5f);
-			yield return new WaitForSeconds(1f);
+			yield return new WaitForSeconds(.5f);
 
 			// attack
 			float increment = .9f/(12*.3f);
 			tendrils.SetActive(true);
-			anim.Play("NeutralSquint");
+			anim.Play("NeutralOpen");
 			//playSound("Scream");
 			playSound("TendrilsEmerge");
 			playSound("TendrilWhip");
@@ -499,7 +499,7 @@ public class Attacks : MonoBehaviour
 			}
 
 			tendrils.GetComponent<PolygonCollider2D>().enabled = true;
-			yield return new WaitForSeconds(2f);
+			yield return new WaitForSeconds(1f);
 			tendrils.GetComponent<PolygonCollider2D>().enabled = false;
 
 			anim.Play("NeutralIdle");
@@ -647,8 +647,8 @@ public class Attacks : MonoBehaviour
 			List<GameObject> beams = new List<GameObject>();
 			// go to side further away from player
 			bool goright = target.transform.position.x > xCenter;
-
-			Transform beam = atts["BeamOrigin"].transform;
+            goright = true;
+            Transform beam = atts["BeamOrigin"].transform;
 			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
 			head.enabled = false;
 
@@ -662,7 +662,8 @@ public class Attacks : MonoBehaviour
 				transform.localScale = new Vector3(-1, 1, 1);
 				transform.SetPositionX(xCenter + xEdge - 2.5f);
 			}
-			arrive();
+
+            arrive();
 			yield return new WaitUntil(() => !wait);
 			yield return new WaitForSeconds(.3f);
 
@@ -702,8 +703,8 @@ public class Attacks : MonoBehaviour
 				beams.Add(b);
 				//b.transform.SetPositionZ(b.transform.GetPositionZ() + i * .001f);
 				yield return new WaitForSeconds(1f);
-				//playSound("BeamBlast");
-			}
+                //playSound("BeamBlast");
+            }
 			//*/
 			yield return new WaitForSeconds(2f);
 			foreach (GameObject obj in beams)
@@ -729,7 +730,14 @@ public class Attacks : MonoBehaviour
 		beam.transform.SetPositionX(x);
 
 		beam.SetActive(true);
+		StartCoroutine(spawnVerticalBeam());
 		return beam;
+
+
+		IEnumerator spawnVerticalBeam()
+		{
+			yield return new WaitForSeconds(1.5f);
+		}
 	}
 
 	// UNUSED
@@ -978,6 +986,7 @@ public class Attacks : MonoBehaviour
 		IEnumerator leave()
 		{
 			wait = true;
+            /*
 			if (fireOnce)
 			{
 				Hide();
@@ -999,8 +1008,25 @@ public class Attacks : MonoBehaviour
 				rig.velocity = new Vector2(0f, 0f);
 				Hide();
 				transform.localScale = new Vector3(1, 1, 1);
-			}
-			wait = false;
+			}//*/
+
+            SpriteRenderer haloSprite = halo.GetComponent<SpriteRenderer>();
+            if (forward)
+            {
+                anim.Play("NeutralDisappear");
+            }
+            else
+            {
+                anim.Play("SideDisappear");
+            }
+            int iters = 10;
+            for (int i = iters-1; i >= 0; i--)
+            {
+                haloSprite.color = new Color(1, 1, 1, 1 * i / (float)iters);
+                yield return new WaitForSeconds(1 / 60f);
+            }
+            yield return new WaitForSeconds(1 / 12f);
+            wait = false;
 		}
 	}
 	private void arrive()
@@ -1014,9 +1040,11 @@ public class Attacks : MonoBehaviour
 	private IEnumerator arriveRoutine(float max)
 	{
 		wait = true;
+		Modding.Logger.Log("arrive");
+        resetHitBox();
+        /*
 		transform.SetPositionY(max-25f);
 		halo.SetActive(true);
-		resetHitBox();
 		if (forward)
 		{
 			anim.Play("NeutralUp");
@@ -1037,9 +1065,30 @@ public class Attacks : MonoBehaviour
 		}
 		yield return new WaitUntil(() => transform.position.y > max);
 		rig.velocity = new Vector2(0f, 0f);
-		transform.SetPositionY( max);
+		transform.SetPositionY(max);//*/
+        SpriteRenderer haloSprite = halo.GetComponent<SpriteRenderer>();
+        halo.SetActive(true);
+        haloSprite.color = new Color(1, 1, 1, 0);
+        transform.SetPositionY(max);
 
-		wait = false;
+        if (forward)
+        {
+            anim.Play("NeutralAppear");
+        }
+        else
+        {
+            anim.Play("SideAppear");
+        }//*/
+
+        int iters = 10;
+        for (int i = 1; i <= iters; i++)
+		{
+            haloSprite.color = new Color(1, 1, 1, i/ (float)iters);
+            yield return new WaitForSeconds(1 / 60f);
+		}
+		yield return new WaitForSeconds(1/12f);
+
+        wait = false;
 	}
 
 	// helpers

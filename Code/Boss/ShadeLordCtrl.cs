@@ -782,8 +782,8 @@ class ShadeLordCtrl : MonoBehaviour
 		yield return new WaitWhile(() => attacks.isAttacking());//*/
 		Modding.Logger.Log("Attack done");
 		// delay between attacks
-		//if (phase != 4)
-			//yield return new WaitForSeconds(.3f);
+		if (phase != 4)
+			yield return new WaitForSeconds(.3f);
 		// Repeat
 
 		co = StartCoroutine(AttackChoice());//*/
