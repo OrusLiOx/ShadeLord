@@ -697,10 +697,9 @@ public class Attacks : MonoBehaviour
 			// fire vertical beams
 			for (int i = 0; i < 4; i++)
 			{
-
 				// fire
 				GameObject b = spawnVerticalBeam(target.transform.GetPositionX());
-				beams.Add(b);
+				//beams.Add(b);
 				//b.transform.SetPositionZ(b.transform.GetPositionZ() + i * .001f);
 				yield return new WaitForSeconds(1f);
                 //playSound("BeamBlast");
@@ -730,14 +729,39 @@ public class Attacks : MonoBehaviour
 		beam.transform.SetPositionX(x);
 
 		beam.SetActive(true);
-		StartCoroutine(spawnVerticalBeam());
+		StartCoroutine(spawnVerticalBeam(beam));
 		return beam;
 
 
-		IEnumerator spawnVerticalBeam()
+		IEnumerator spawnVerticalBeam(GameObject beam)
 		{
-			yield return new WaitForSeconds(1.5f);
-		}
+			float activeTime = 1.5f;
+			if (activeTime >= 2)
+			{
+                yield return new WaitForSeconds(activeTime);
+                Destroy(beam);
+			}
+			else
+			{
+				yield return new WaitForSeconds(activeTime);
+				foreach (Transform child in beam.transform)
+				{
+					if (child.name == "Offset")
+					{
+						foreach (Transform segment in child.transform)
+						{
+							Modding.Logger.Log(segment.name);
+							if (segment.name != "Blast")
+							{
+								Destroy(segment);
+							}
+						}
+					}
+				}
+				yield return new WaitForSeconds(2- activeTime);
+				Destroy(beam);
+			}
+        }
 	}
 
 	// UNUSED

@@ -56,7 +56,7 @@ public class Beam : MonoBehaviour
 		}
 		gameObject.GetComponent<Animator>().Play(anim1);
 
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(.5f);
 		if (gameObject.name.Contains("Blast"))
 		{
 			audio.PlayOneShot(blast);
