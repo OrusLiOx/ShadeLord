@@ -76,16 +76,7 @@ public class Attacks : MonoBehaviour
 					t.gameObject.AddComponent<VoidBurst>();
 					break;
 				case "BeamOrigin":
-					foreach (Transform child in t.transform)
-					{
-						if (child.name == "Offset")
-						{
-							foreach (Transform beam in child.transform)
-							{
-								beam.gameObject.AddComponent<Beam>();
-							}
-						}
-					}
+					t.Find("Offset").gameObject.AddComponent<Beam>();
 					break;
 				case "VoidCircle":
 					t.gameObject.AddComponent<VoidCircle>();
@@ -99,10 +90,10 @@ public class Attacks : MonoBehaviour
 		{
 			sounds.Add(s.clip.name, s.clip);
 		}
-		GameObject.Find("ShadeLord/BeamOrigin/Offset/Blast").GetComponent<Beam>().SetSounds(sounds["BeamCharge"], sounds["BeamBlast"]);
+		GameObject.Find("ShadeLord/BeamOrigin/Offset").GetComponent<Beam>().SetSounds(sounds["BeamCharge"], sounds["BeamBlast"]);
 
-		// Get attacks
-		atts.Add("Beam", GameObject.Find("ShadeLord/BeamOrigin/Offset"));
+        // Get attacks
+        atts.Add("Beam", GameObject.Find("ShadeLord/BeamOrigin/Offset"));
 		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin", "VoidBurst", "VoidCircle", "TendrilWindup" };
 		foreach (string n in names)
 		{
@@ -119,7 +110,7 @@ public class Attacks : MonoBehaviour
 		}
 		atts["DashTelegraph"].SetActive(false);
 		atts["Beam"].SetActive(false);
-	}
+    }
 
 	// Attacks
 	// sharp shadow from one side of the stage to the other
@@ -687,8 +678,10 @@ public class Attacks : MonoBehaviour
 			beam.SetRotationZ(deg);
 			beams.Add(Instantiate(atts["Beam"], atts["BeamOrigin"].transform));
 			beams[0].SetActive(true);
+			beams[0].gameObject.GetComponent<Beam>().go(7f, true);
 
-			yield return new WaitForSeconds(1f);
+
+            yield return new WaitForSeconds(1f);
 
 			// fire
 			//playSound("BeamBlast");
@@ -698,11 +691,8 @@ public class Attacks : MonoBehaviour
 			for (int i = 0; i < 4; i++)
 			{
 				// fire
-				GameObject b = spawnVerticalBeam(target.transform.GetPositionX());
-				//beams.Add(b);
-				//b.transform.SetPositionZ(b.transform.GetPositionZ() + i * .001f);
+				spawnVerticalBeam(target.transform.GetPositionX());
 				yield return new WaitForSeconds(1f);
-                //playSound("BeamBlast");
             }
 			//*/
 			yield return new WaitForSeconds(2f);
@@ -711,57 +701,24 @@ public class Attacks : MonoBehaviour
 
 			atts["BeamOrigin"].SetActive(false);
 			// end
-			//atts["BeamOrigin"].SetActive(false);
 			eyes(true);
-			yield return new WaitForSeconds(1f);
-			leave();
+            yield return new WaitUntil(() => !wait);
+            leave();
 			yield return new WaitUntil(() => !wait);
 			attacking = false;
 		}
 	}
-	private GameObject spawnVerticalBeam(float x)
-	{
-		GameObject beam = Instantiate(atts["Beam"], parent.transform);
+	private void spawnVerticalBeam(float x)
+    {
+        GameObject beam = Instantiate(atts["Beam"], parent.transform);
 
 		beam.transform.SetRotationZ(90f);
-		beam.transform.SetPositionY(yDef - 20f);
+		beam.transform.SetPositionY(yDef - 18f);
 
 		beam.transform.SetPositionX(x);
 
 		beam.SetActive(true);
-		StartCoroutine(spawnVerticalBeam(beam));
-		return beam;
-
-
-		IEnumerator spawnVerticalBeam(GameObject beam)
-		{
-			float activeTime = 1.5f;
-			if (activeTime >= 2)
-			{
-                yield return new WaitForSeconds(activeTime);
-                Destroy(beam);
-			}
-			else
-			{
-				yield return new WaitForSeconds(activeTime);
-				foreach (Transform child in beam.transform)
-				{
-					if (child.name == "Offset")
-					{
-						foreach (Transform segment in child.transform)
-						{
-							Modding.Logger.Log(segment.name);
-							if (segment.name != "Blast")
-							{
-								Destroy(segment);
-							}
-						}
-					}
-				}
-				yield return new WaitForSeconds(2- activeTime);
-				Destroy(beam);
-			}
-        }
+        beam.gameObject.GetComponent<Beam>().go(1.5f, false);
 	}
 
 	// UNUSED

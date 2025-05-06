@@ -7,23 +7,16 @@ Attach this script to all beam objects
 
 /*/
 
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class Beam : MonoBehaviour
 {
-	private string anim1,anim2;
 	public AudioClip charge;
 	public AudioClip blast;
 	private AudioSource audio;
-	public void Start()
-	{
-		if (gameObject.name.Contains("Blast"))
-		{
-			audio = GetComponent<AudioSource>();
-			audio.outputAudioMixerGroup = HeroController.instance.gameObject.GetComponent<AudioSource>().outputAudioMixerGroup;
-		}
-	}
+
 	public void SetSounds(AudioClip c, AudioClip b)
 	{
 		charge = c;
@@ -31,40 +24,80 @@ public class Beam : MonoBehaviour
 	}
 	private void OnEnable()
 	{
-		if (gameObject.name.Contains("Blast"))
+		foreach (Transform beam in transform)
 		{
-			anim1 = "Nothing";
-			anim2 = "BeamBlast";
-
-			audio = GetComponent<AudioSource>();
-			audio.outputAudioMixerGroup = HeroController.instance.gameObject.GetComponent<AudioSource>().outputAudioMixerGroup;
+			if (!gameObject.name.Contains("Blast"))
+			{
+				GetComponent<BoxCollider2D>().enabled = false;
+			}
 		}
-		else
-        {
-            anim1 = "Windup";
-            anim2 = "Beam";
-		}
-		if (!gameObject.name.Contains("Blast"))
-			GetComponent<BoxCollider2D>().enabled = false;
-		StartCoroutine(go());
 	}
-	IEnumerator go()
-	{
-		if (gameObject.name.Contains("Blast"))
+	public void go(float duration, bool blastEffect)
+    {
+		foreach (Transform beam in transform)
 		{
-			audio.PlayOneShot(charge);
-		}
-		gameObject.GetComponent<Animator>().Play(anim1);
+			if (beam.name.Contains("Blast"))
+			{
+				if (blastEffect)
+				{
+					StartCoroutine(go(beam.gameObject, "Start", "Nothing", "BeamBlast", "Nothing", true));
+				}
+				else
+				{
+					beam.gameObject.GetComponent<Animator>().Play("Nothing");
 
-		yield return new WaitForSeconds(.5f);
-		if (gameObject.name.Contains("Blast"))
-		{
-			audio.PlayOneShot(blast);
+                }
+			}
+			else
+			{
+				StartCoroutine(go(beam.gameObject, "Nothing", "Windup","Beam","BeamEnd", false));
+			}
 		}
-		else
+        IEnumerator go(GameObject obj, String start, String windup, String active, String end, bool playsAudio)
 		{
-			GetComponent<BoxCollider2D>().enabled = true;
+            // windup
+            obj.GetComponent<Animator>().Play(start);
+			Animator animator = obj.GetComponent<Animator>();
+
+			if (playsAudio)
+			{
+                audio = obj.GetComponent<AudioSource>();
+                audio.outputAudioMixerGroup = HeroController.instance.gameObject.GetComponent<AudioSource>().outputAudioMixerGroup;
+            }
+
+			yield return new WaitForSeconds(1 / 12f);
+			if (playsAudio)
+			{
+				audio.PlayOneShot(charge);
+			}
+            animator.Play(windup);
+
+			yield return new WaitForSeconds(.5f);
+
+			// activate
+			if (playsAudio)
+			{
+                audio.PlayOneShot(blast);
+			}
+			else
+            {
+                obj.GetComponent<BoxCollider2D>().enabled = true;
+			}
+
+            animator.Play(active);
+
+			// end
+			yield return new WaitForSeconds(duration);
+
+			if (!playsAudio)
+            {
+                obj.GetComponent<BoxCollider2D>().enabled = false;
+			}
+            animator.Play(end);
+
+			yield return new WaitForSeconds(2/12f);
+
+			Destroy(obj);
 		}
-		gameObject.GetComponent<Animator>().Play(anim2);
-	}
+    }
 }

@@ -76,7 +76,8 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.Dash,
 			attacks.AimBeam,
 			attacks.CrossSlash,
-			attacks.Spikes
+			attacks.Spikes,
+			attacks.VoidCircles
 		};//*/
 
 		/*
