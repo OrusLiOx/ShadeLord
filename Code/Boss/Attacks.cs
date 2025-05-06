@@ -94,7 +94,8 @@ public class Attacks : MonoBehaviour
 
         // Get attacks
         atts.Add("Beam", GameObject.Find("ShadeLord/BeamOrigin/Offset"));
-		List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin", "VoidBurst", "VoidCircle", "TendrilWindup" };
+        atts["Beam"].SetActive(false);
+        List<string> names = new List<string> { "Dash", "CrossSlash", "Sweep", "BurstSpike", "Spike", "BeamOrigin", "VoidBurst", "VoidCircle", "TendrilWindup" };
 		foreach (string n in names)
 		{
 			atts.Add(n, GameObject.Find("ShadeLord/" + n));
@@ -109,7 +110,6 @@ public class Attacks : MonoBehaviour
 			emitters[i] = Instantiate(atts["DashTelegraph"]);
 		}
 		atts["DashTelegraph"].SetActive(false);
-		atts["Beam"].SetActive(false);
     }
 
 	// Attacks
@@ -639,7 +639,7 @@ public class Attacks : MonoBehaviour
 			// go to side further away from player
 			bool goright = target.transform.position.x > xCenter;
             goright = true;
-            Transform beam = atts["BeamOrigin"].transform;
+            GameObject beam = atts["BeamOrigin"];
 			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
 			head.enabled = false;
 
@@ -663,7 +663,7 @@ public class Attacks : MonoBehaviour
 
 			// FIRE MAIN BEAM
 			// targeting
-			float deg = getAngle(beam, target);
+			float deg = getAngle(beam.transform, target);
 
 			deg = (Math.Min(Math.Max(deg, -35), 17));
 			if (!goright)
@@ -675,10 +675,10 @@ public class Attacks : MonoBehaviour
 			// charge
 			//playSound("BeamCharge");
 			atts["BeamOrigin"].SetActive(true);
-			beam.SetRotationZ(deg);
-			beams.Add(Instantiate(atts["Beam"], atts["BeamOrigin"].transform));
-			beams[0].SetActive(true);
-			beams[0].gameObject.GetComponent<Beam>().go(7f, true);
+			beam.transform.SetRotationZ(deg);
+			beam = Instantiate(atts["Beam"], atts["BeamOrigin"].transform);
+			beam.SetActive(true);
+			beam.GetComponent<Beam>().go(5.5f, true);
 
 
             yield return new WaitForSeconds(1f);
@@ -695,9 +695,7 @@ public class Attacks : MonoBehaviour
 				yield return new WaitForSeconds(1f);
             }
 			//*/
-			yield return new WaitForSeconds(2f);
-			foreach (GameObject obj in beams)
-				Destroy(obj);
+			yield return new WaitForSeconds(1.5f);
 
 			atts["BeamOrigin"].SetActive(false);
 			// end

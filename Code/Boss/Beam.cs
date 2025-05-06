@@ -44,8 +44,7 @@ public class Beam : MonoBehaviour
 				}
 				else
 				{
-					beam.gameObject.GetComponent<Animator>().Play("Nothing");
-
+                    StartCoroutine(go(beam.gameObject, "Nothing", "Nothing", "Nothing", "Nothing", true));
                 }
 			}
 			else
