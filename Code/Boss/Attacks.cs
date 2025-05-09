@@ -676,31 +676,26 @@ public class Attacks : MonoBehaviour
 			//playSound("BeamCharge");
 			atts["BeamOrigin"].SetActive(true);
 			beam.transform.SetRotationZ(deg);
-			beam = Instantiate(atts["Beam"], atts["BeamOrigin"].transform);
+			
+			beam = Instantiate(atts["Beam"], parent.transform, true);
 			beam.SetActive(true);
-			beam.GetComponent<Beam>().go(5.5f, true);
-
+			beam.GetComponent<Beam>().go(4f, true);
 
             yield return new WaitForSeconds(1f);
 
-			// fire
-			//playSound("BeamBlast");
-
-
 			// fire vertical beams
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < 3; i++)
 			{
 				// fire
 				spawnVerticalBeam(target.transform.GetPositionX());
 				yield return new WaitForSeconds(1f);
             }
-			//*/
-			yield return new WaitForSeconds(1.5f);
-
-			atts["BeamOrigin"].SetActive(false);
+            yield return new WaitForSeconds(5/12f);
+            atts["BeamOrigin"].SetActive(false);
 			// end
 			eyes(true);
-            yield return new WaitUntil(() => !wait);
+            yield return new WaitForSeconds(7/12f);
+            //yield return new WaitUntil(() => !wait);
             leave();
 			yield return new WaitUntil(() => !wait);
 			attacking = false;

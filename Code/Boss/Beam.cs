@@ -22,19 +22,19 @@ public class Beam : MonoBehaviour
 		charge = c;
 		blast = b;
 	}
-	private void OnEnable()
+	private void Start()
 	{
 		foreach (Transform beam in transform)
 		{
 			if (!gameObject.name.Contains("Blast"))
 			{
-				GetComponent<BoxCollider2D>().enabled = false;
+				beam.gameObject.GetComponent<BoxCollider2D>().enabled = false;
 			}
 		}
 	}
 	public void go(float duration, bool blastEffect)
     {
-		foreach (Transform beam in transform)
+        foreach (Transform beam in transform)
 		{
 			if (beam.name.Contains("Blast"))
 			{
@@ -49,8 +49,9 @@ public class Beam : MonoBehaviour
 			}
 			else
 			{
-				StartCoroutine(go(beam.gameObject, "Nothing", "Windup","Beam","BeamEnd", false));
-			}
+                beam.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                StartCoroutine(go(beam.gameObject, "Nothing", "Windup","Beam","BeamEnd", false));
+            }
 		}
         IEnumerator go(GameObject obj, String start, String windup, String active, String end, bool playsAudio)
 		{
@@ -95,7 +96,6 @@ public class Beam : MonoBehaviour
             animator.Play(end);
 
 			yield return new WaitForSeconds(2/12f);
-
 			Destroy(obj);
 		}
     }
