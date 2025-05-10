@@ -663,7 +663,7 @@ public class Attacks : MonoBehaviour
 
 			// FIRE MAIN BEAM
 			// targeting
-			float deg = getAngle(beam.transform, target);
+			float deg = getAngle(atts["Beam"].transform, target);
 
 			deg = (Math.Min(Math.Max(deg, -35), 17));
 			if (!goright)
@@ -960,30 +960,7 @@ public class Attacks : MonoBehaviour
 		IEnumerator leave()
 		{
 			wait = true;
-            /*
-			if (fireOnce)
-			{
-				Hide();
-				transform.localScale = new Vector3(1, 1, 1);
-				fireOnce = false;
-			}
-			else
-			{
-				if (forward)
-				{
-					anim.Play("NeutralLeave");
-				}
-				else
-				{
-					anim.Play("SideLeave");
-				}
-				rig.velocity = new Vector2(0f, -40f);
-				yield return new WaitUntil(() => transform.position.y < yDef - 20);
-				rig.velocity = new Vector2(0f, 0f);
-				Hide();
-				transform.localScale = new Vector3(1, 1, 1);
-			}//*/
-
+			GetComponent<BoxCollider2D>().enabled = false;
             SpriteRenderer haloSprite = halo.GetComponent<SpriteRenderer>();
             if (forward)
             {
@@ -1061,7 +1038,7 @@ public class Attacks : MonoBehaviour
             yield return new WaitForSeconds(1 / 60f);
 		}
 		yield return new WaitForSeconds(1/12f);
-
+        GetComponent<BoxCollider2D>().enabled = true;
         wait = false;
 	}
 

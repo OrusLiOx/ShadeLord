@@ -128,7 +128,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 794
+        y: 1056
         width: 763
         height: 226
       alignment: 4
@@ -149,9 +149,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 522
+        y: 794
         width: 763
-        height: 224
+        height: 226
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -170,9 +170,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 451
-        width: 754
-        height: 45
+        y: 544
+        width: 763
+        height: 226
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -191,9 +191,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 389
-        width: 763
-        height: 37
+        y: 451
+        width: 754
+        height: 45
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -212,9 +212,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 304
+        y: 389
         width: 763
-        height: 42
+        height: 37
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -232,10 +232,10 @@ TextureImporter:
       name: Effect_Beam_5
       rect:
         serializedVersion: 2
-        x: 94
-        y: 10
-        width: 239
-        height: 273
+        x: 0
+        y: 304
+        width: 763
+        height: 42
       alignment: 4
       pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -253,6 +253,27 @@ TextureImporter:
       name: Effect_Beam_6
       rect:
         serializedVersion: 2
+        x: 94
+        y: 10
+        width: 239
+        height: 273
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc378c73f30fd9d00800000000000000
+      internalID: 981204448146125772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Effect_Beam_7
+      rect:
+        serializedVersion: 2
         x: 430
         y: 8
         width: 224
@@ -264,8 +285,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cc378c73f30fd9d00800000000000000
-      internalID: 981204448146125772
+      spriteID: 4690b48ff14aa75e0800000000000000
+      internalID: -1911034634648745628
       vertices: []
       indices: 
       edges: []
