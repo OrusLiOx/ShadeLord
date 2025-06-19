@@ -8,6 +8,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using USceneManager = UnityEngine.SceneManagement.SceneManager;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace ShadeLord.Setup
 {
@@ -46,9 +47,10 @@ namespace ShadeLord.Setup
 		{
 			if (nextScene.name == "GG_Shade_Lord")
 			{
-				// add properties to certain elements
-				// respawns, camera locks, hazards, etc
-				GameObject[] allObjects = FindObjectsOfType<GameObject>();
+                // add properties to certain elements
+                // respawns, camera locks, hazards, etc
+                GameObject[] allObjects = FindObjectsOfType<GameObject>();
+
 				foreach (GameObject obj in allObjects)
 				{
 					if (obj.name.Contains("Respawn"))
@@ -62,9 +64,24 @@ namespace ShadeLord.Setup
 					{
 						obj.GetComponent<SpriteRenderer>().material.shader = Shader.Find("Sprites/Default");
 					}
-					
 				}
-				PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
+
+                // create abyss from radiance fight
+                GameObject abyssObj = new GameObject();
+                Instantiate(ShadeLord.GameObjects["Abyss Particles"], Vector3.zero, Quaternion.identity, abyssObj.transform).SetActive(true);
+				Instantiate(ShadeLord.GameObjects["Abyss Mist"], Vector3.zero, Quaternion.identity, abyssObj.transform).SetActive(true);
+
+                abyssObj.AddComponent<BoxCollider2D>().size = new Vector2(55f, 1f);
+                abyssObj.GetComponent<BoxCollider2D>().offset = new Vector2(0f, -.5f);
+                abyssObj.AddComponent<DamageHero>().hazardType = 2;
+                abyssObj.layer = 17;
+				float abyssYPos = 63f;
+				float abyssXPos = 25f;
+                abyssObj.transform.position = new Vector3(abyssXPos, abyssYPos, 0f);
+				for (int i = 0; i<6; i++)
+	                Instantiate(abyssObj, new Vector3(abyssXPos+i*55f, abyssYPos, 0f), Quaternion.identity);
+
+                PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
 
 				// scene stuff
 				var bsc = Instantiate(ShadeLord.GameObjects["Boss Scene Controller"]);
@@ -100,7 +117,7 @@ namespace ShadeLord.Setup
 					}
 				}
 			}
-		}
+        }
 		private void SceneManagerOnStart(On.SceneManager.orig_Start orig, SceneManager self)
 		{
 			self.mapZone = GlobalEnums.MapZone.ABYSS_DEEP;

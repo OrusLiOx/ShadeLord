@@ -127,14 +127,9 @@ public class Attacks : MonoBehaviour
 			
 			atts["DashTelegraph"].SetActive(true);
 
-			// pick direction
-			bool goright = UnityEngine.Random.Range(0, 1f) > .5f;/*
-			if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
-			{
-				goright = target.transform.position.x > xCenter;
-			}
-			goright = target.transform.position.x > xCenter;//*/
-			if (goright)
+			// start on side closer to player
+			bool goright = target.transform.position.x < xCenter;
+            if (goright)
 			{
 				transform.localScale = new Vector3(1, 1, 1);
 				transform.SetPositionX(xCenter - xEdge - 30);
@@ -210,7 +205,7 @@ public class Attacks : MonoBehaviour
 				rig.velocity = new Vector2(x, y).normalized * -70f;
 
 
-				yield return new WaitForSeconds(1.7f);
+				yield return new WaitForSeconds(1f);
 
 
 				// dash finish
@@ -542,7 +537,6 @@ public class Attacks : MonoBehaviour
 			}
 			arrive();
 			yield return new WaitWhile(() => wait);
-			yield return new WaitForSeconds(.5f);
 			playSound("BeamCharge");
 			anim.Play("RoarWait");
 			// spawn circle on self
@@ -552,7 +546,7 @@ public class Attacks : MonoBehaviour
 			obj.SetActive(true);
 			obj.GetComponent<VoidCircle>().Appear();
 
-			yield return new WaitForSeconds(1.5f);
+			yield return new WaitForSeconds(1f);
 
 			anim.Play("Roar");
 			playSound("Scream");
@@ -562,25 +556,20 @@ public class Attacks : MonoBehaviour
 
 			// pick random points to spawn
 			float curX = xCenter - xEdge-2.5f + UnityEngine.Random.Range(5f,9f);
-			float wait2 = 1.5f;
 			while (curX< xCenter + xEdge)
 			{
-				StartCoroutine(MakeCircle(curX, UnityEngine.Random.Range(66f, 76f), 1.5f));
-				yield return new WaitForSeconds(.15f);
-				wait2 -= .15f;
+				StartCoroutine(MakeCircle(curX, UnityEngine.Random.Range(66f, 76f), .7f));
+				yield return new WaitForSeconds(.07f);
 				curX += UnityEngine.Random.Range(5f, 9f);
 			}
-			if(wait2>0)
-				yield return new WaitForSeconds(wait2);
+			yield return new WaitForSeconds(.5f);
 			anim.Play("NeutralIdle");
 			yield return new WaitForSeconds(.5f);
 
 			// end
 			leave();
-			yield return new WaitForSeconds(.5f);
 			yield return new WaitUntil(() => !wait);
 			halo.GetComponent<SpriteRenderer>().enabled = true;
-			yield return new WaitForSeconds(1f);
 			attacking = false;
 		}
 		IEnumerator SpamCircles()
@@ -638,7 +627,6 @@ public class Attacks : MonoBehaviour
 			List<GameObject> beams = new List<GameObject>();
 			// go to side further away from player
 			bool goright = target.transform.position.x > xCenter;
-            goright = true;
             GameObject beam = atts["BeamOrigin"];
 			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
 			head.enabled = false;
@@ -903,7 +891,10 @@ public class Attacks : MonoBehaviour
 		switch (phase)
 		{
 			case 0:
-				xEdge = 18; xCenter = 23.5f; yDef = 75.23f;
+				xEdge = 18;
+				xCenter = 23.5f;
+				yDef = 75.23f;
+
 				infiniteSpike = false;
 				lastPhase = false;
 				break;
@@ -916,7 +907,10 @@ public class Attacks : MonoBehaviour
 				//xEdge = 43.5f;
 				break;
 			case 4:
-				xEdge = 17.71f; xCenter = GameObject.Find("Terrain/Area3").transform.GetPositionX(); yDef = 14f;
+				xEdge = 17.71f; 
+				xCenter = GameObject.Find("Terrain/Area3").transform.GetPositionX();
+				//yDef = 14f;
+
 				lastPhase = true;
 				platPhase = false;
 				fireOnce = true;

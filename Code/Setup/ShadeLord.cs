@@ -34,8 +34,10 @@ namespace ShadeLord.Setup
 			["Boss Scene Controller"] = ("GG_Radiance", "Boss Scene Controller"),
 			["Hazard"] = ("GG_Radiance", "Cloud Hazard"),
 			["Godseeker"] = ("GG_Collector", "GG_Arena_Prefab/Godseeker Crowd"),
-			["Collector"] = ("GG_Collector", "Battle Scene/Jar Collector")
-		};
+			["Collector"] = ("GG_Collector", "Battle Scene/Jar Collector"),
+            ["Abyss Mist"] = ("GG_Radiance", "Boss Control/Abyss Pit/Pt Mist"),
+            ["Abyss Particles"] = ("GG_Radiance", "Boss Control/Abyss Pit/Pt Surface")
+        };
 
 		private Material _blurMat;
 

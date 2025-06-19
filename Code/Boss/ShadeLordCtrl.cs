@@ -33,8 +33,8 @@ class ShadeLordCtrl : MonoBehaviour
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	//public int[] hpMarkers = { 50,50,50,50,300};
-	public int[] hpMarkers = { 400, 450, 300, 750, 2200 };
+	public int[] hpMarkers = { 50,50,50,50,300};
+	//public int[] hpMarkers = { 400, 450, 300, 750, 2200 };
 	private System.Random rand;
 	
 	private Attacks attacks;
@@ -616,19 +616,10 @@ class ShadeLordCtrl : MonoBehaviour
 
 			// terrain break 1
 			GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
-			//GameObject[] go = { GameObject.Find("Terrain/Area2/Mid") };
-			breakTerrain(GameObject.Find("Terrain/Area2/Mid"));
+            GameObject.Find("Terrain/Area2/WallR").SetActive(false);
 
 			// terrain break 2
 			yield return new WaitForSeconds(5f);
-			hazard.SetActive(false);
-			breakTerrain(GameObject.Find("Terrain/Area2/Left"));
-			breakTerrain(GameObject.Find("Terrain/Area2/Right"));//*/
-			/*
-			breakTerrain(GameObject.Find("Terrain/Area2/EdgeLeft"));
-			breakTerrain(GameObject.Find("Terrain/Area2/EdgeRight"));
-			breakTerrain(GameObject.Find("Terrain/Area2/Left (1)"));
-			breakTerrain(GameObject.Find("Terrain/Area2/Right (1)"));//*/
 			yield return new WaitWhile(() => player.transform.GetPositionY() > 60f);
 			attacks.VoidCircles();
 
@@ -645,9 +636,6 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.Stop();
 			yield return new WaitForSeconds(3f);
 			co = StartCoroutine(AttackChoice());
-
-			//GameObject[] GOs = { GameObject.Find("Terrain/Descend/Section2/Plat1"), GameObject.Find("Terrain/Descend/Section2/Plat2")};
-			//breakTerrain(GameObject.Find("Terrain/Descend/Section2"));
 		}
 		StartCoroutine(ToEnd());
 	}
@@ -768,8 +756,8 @@ class ShadeLordCtrl : MonoBehaviour
 	// actions
 	private IEnumerator AttackChoice()
 	{
-		// Pick attack
-		Action curr;
+        // Pick attack
+        Action curr;
 		int i;
 		if (actionState == -1)
 			i = rand.Next(0, atts.Count);
