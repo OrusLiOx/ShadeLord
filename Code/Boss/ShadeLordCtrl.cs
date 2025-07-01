@@ -95,6 +95,7 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		hitEffect  = GameObject.Find("VoidParticle");
 		GameObject.Find("Start/Wall").transform.localPosition = new Vector3(0, -36.4f, 0);
+		GameObject.Find("Terrain/ToArea3").transform.SetPositionY(0f);
 		health = gameObject.AddComponent<HealthManager>();
 		extDmg = gameObject.AddComponent<ExtraDamageable>();
 		GameObject.Find("Halo").AddComponent<Spin>();
@@ -310,10 +311,6 @@ class ShadeLordCtrl : MonoBehaviour
 		IEnumerator Spawn()
 		{
 			ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
-			GameObject obj1 = GameObject.Find("Terrain/Area2/RespawnL");
-			GameObject obj2 = GameObject.Find("Terrain/Area2/RespawnR");
-			obj1.SetActive(false);
-			obj2.SetActive(false);
 			transform.SetPositionY(-2f);
 			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["Silence"]);
 			GameObject.Find("Start").transform.SetPosition3D(0, 3.5f, 38f);
@@ -326,12 +323,6 @@ class ShadeLordCtrl : MonoBehaviour
 			};
 			foreach (GameObject go in camLocks)
 				go.SetActive(false);
-
-			GameObject obj3 = GameObject.Find("Terrain/CameraLock");
-			obj3.transform.SetPositionZ(0);
-			obj3.SetActive(false);
-			yield return new WaitForSeconds(.1f);
-			obj3.SetActive(true);
 
 			emission.rateOverTime = 10f;
 			GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().Play();
@@ -351,10 +342,8 @@ class ShadeLordCtrl : MonoBehaviour
 			// hud appear
 
 			// GO
-			obj1.SetActive(true);
-			obj2.SetActive(true);
-			title.SetActive(false);
-			obj3.SetActive(false);
+            GameObject.Find("Terrain/CameraLock").SetActive(false);
+            title.SetActive(false);
 			foreach (GameObject go in camLocks)
 				go.SetActive(true);
 			yield return new WaitForSeconds(1f);
@@ -383,10 +372,6 @@ class ShadeLordCtrl : MonoBehaviour
 		IEnumerator Spawn()
 		{
 			ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
-			GameObject obj1 = GameObject.Find("Terrain/Area2/RespawnL");
-			GameObject obj2 = GameObject.Find("Terrain/Area2/RespawnR");
-			obj1.SetActive(false);
-			obj2.SetActive(false);
 			transform.SetPositionY(-2f);
 			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["Silence"]);
 			GameObject.Find("Start").transform.SetPosition3D(0, 3.5f, 38f);
@@ -400,12 +385,6 @@ class ShadeLordCtrl : MonoBehaviour
 			};
 			foreach (GameObject go in camLocks)
 				go.SetActive(false);
-
-			GameObject obj3 = GameObject.Find("Terrain/CameraLock");
-			obj3.transform.SetPositionZ(0);
-			obj3.SetActive(false);
-			yield return new WaitForSeconds(.1f);
-			obj3.SetActive(true);
 
 			emission.rateOverTime = 10f;
 			GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().Play();
@@ -519,10 +498,8 @@ class ShadeLordCtrl : MonoBehaviour
 			hud.transform.SetScaleY(1);
 
 			// GO
-			obj1.SetActive(true);
-			obj2.SetActive(true);
+			GameObject.Find("Terrain/CameraLock").SetActive(false);
 			title.SetActive(false);
-			obj3.SetActive(false);
 			foreach (GameObject go in camLocks)
 				go.SetActive(true);
 			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR EXIT", false);
@@ -600,41 +577,36 @@ class ShadeLordCtrl : MonoBehaviour
 			atts = new List<Action>() { };
 			GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
 			GameObject leftWall = GameObject.Find("Terrain/Area3/WallL");
-			cameraLock.SetActive(false);
+            cameraLock.SetActive(false);
 			leftWall.SetActive(false);
+            Modding.Logger.Log("to end");
+            // wait till current attack done
+            yield return new WaitWhile(attacks.isAttacking);
+            StopCoroutine(co);
 
-			// wait till current attack done
-			yield return new WaitWhile(attacks.isAttacking);
-			StopCoroutine(co);
+            GetComponent<BoxCollider2D>().enabled = false;
+            GameObject.Find("Terrain/ToArea3").transform.SetPositionY(56.04f);
 
-			GetComponent<BoxCollider2D>().enabled = false;
+            yield return new WaitForSeconds(1f);
 
-			GameObject hazard = GameObject.Find("Terrain/VoidHazardTemp");
-			hazard.GetComponent<Rigidbody2D>().gravityScale = .8f;
-
-			yield return new WaitForSeconds(5f);
-
-			// terrain break 1
-			GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
+            // terrain break 1
+            GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
             GameObject.Find("Terrain/Area2/WallR").SetActive(false);
 
-			// terrain break 2
-			yield return new WaitForSeconds(5f);
-			yield return new WaitWhile(() => player.transform.GetPositionY() > 60f);
-			attacks.VoidCircles();
+            // terrain break 2
+            yield return new WaitForSeconds(3f);
+			//attacks.VoidCircles();
 
 			atts = new List<Action>() { attacks.AimBeam };
 			float xTrigger = GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f;
 			// Wait till reach end section
 			yield return new WaitWhile(()=> player.transform.GetPositionX()<xTrigger);
+            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+            GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
 
-			GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-			GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-
-			cameraLock.SetActive(true);
-			leftWall.SetActive(true);
-			attacks.Stop();
-			yield return new WaitForSeconds(3f);
+            cameraLock.SetActive(true);
+            leftWall.SetActive(true);
+            attacks.Stop();
 			co = StartCoroutine(AttackChoice());
 		}
 		StartCoroutine(ToEnd());

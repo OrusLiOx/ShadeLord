@@ -588,7 +588,8 @@ public class Attacks : MonoBehaviour
 			}
 
 			yield return new WaitForSeconds(1f);
-			StartCoroutine(SpamCircles());
+			attacking = false;
+			//StartCoroutine(SpamCircles());
 		}
 		IEnumerator MakeCircle(float x, float y, float wait)
 		{
