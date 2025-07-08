@@ -12,7 +12,8 @@ using UnityEngine;
 
 class SLHelper : MonoBehaviour
 {
-// randomize animation times
+	Coroutine moveWallRoutine;
+	// randomize animation times
 	public void randomizeAnimStart(List<GameObject> objs, string anim, int frames)
 	{
 		IEnumerator waitThenPlay(GameObject obj, float wait)
@@ -26,9 +27,7 @@ class SLHelper : MonoBehaviour
 		}
 	}
 
-	
-	
-// rock particles
+	// rock particles
 	public void launchRocks()
 	{
 		foreach (Rigidbody2D rb in GameObject.Find("Terrain/RocksLeft").GetComponentsInChildren<Rigidbody2D>())
@@ -52,7 +51,6 @@ class SLHelper : MonoBehaviour
 		yield return new WaitForSeconds(10f);
 		Destroy(rig.gameObject);
 	}
-
 
 	public void fadeTo(SpriteRenderer sprite, Color target, float time)
 	{
@@ -101,4 +99,66 @@ class SLHelper : MonoBehaviour
 			sprite.color = target;
 		}
 	}
+
+	public Coroutine moveX(Transform t, float dest, float time)
+	{
+		IEnumerator move()
+		{
+			float move = (dest - t.position.x)/ (time*60);
+			for (int i = 0; i < time * 60; i++)
+			{
+				t.SetPositionX(t.position.x + move);
+				yield return new WaitForSeconds(1 / 60f);
+			}
+        }
+		return StartCoroutine(move());
+	}
+    public Coroutine moveY(Transform t, float dest, float time)
+    {
+        IEnumerator move()
+        {
+            float move = (dest - t.position.y) / (time * 30);
+            for (int i = 0; i < time * 30; i++)
+            {
+                t.SetPositionY(t.position.y + move);
+                yield return new WaitForSeconds(1 / 30f);
+            }
+        }
+        return StartCoroutine(move());
+    }
+
+    // abyss effect stuff
+    public void abyssArrive()
+	{
+		float time = 3;
+		moveX(GameObject.Find("AbyssWallLeft").transform, 3, time);
+		moveX(GameObject.Find("AbyssWallRight").transform, 44, time);
+		moveY(GameObject.Find("AbyssFloor").transform, 64, time);
+	}
+
+	public void abyssToEnd()
+	{
+        IEnumerator leftWallToEnd()
+		{
+			GameObject player = HeroController.instance.gameObject;
+			GameObject abyssWall = GameObject.Find("AbyssWallLeft");
+            
+            for (int i = 1; i <= 14; i++)
+			{
+				GameObject plat = GameObject.Find("Terrain/ToArea3/Plat (" + i + ")");
+                Vector3 platPos = plat.transform.position;
+
+                yield return new WaitWhile(() => 
+					(player.transform.position.x < platPos.x - plat.GetComponent<BoxCollider2D>().size.x/2f) ||
+                    (player.transform.position.y < platPos.y) );
+
+                if (moveWallRoutine != null)
+					StopCoroutine(moveWallRoutine);
+                moveWallRoutine = moveX(abyssWall.transform, platPos.x - 5f, 1);
+                PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(platPos.x, platPos.y+1f));
+            }
+		}
+		StartCoroutine(leftWallToEnd());
+		moveX(GameObject.Find("AbyssWallRight").transform, 219f, 3f);
+    }
 }

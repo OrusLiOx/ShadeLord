@@ -95,7 +95,6 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		hitEffect  = GameObject.Find("VoidParticle");
 		GameObject.Find("Start/Wall").transform.localPosition = new Vector3(0, -36.4f, 0);
-		GameObject.Find("Terrain/ToArea3").transform.SetPositionY(0f);
 		health = gameObject.AddComponent<HealthManager>();
 		extDmg = gameObject.AddComponent<ExtraDamageable>();
 		GameObject.Find("Halo").AddComponent<Spin>();
@@ -338,10 +337,9 @@ class ShadeLordCtrl : MonoBehaviour
 			// text appear, then leave
 			emission.rateOverTime = 10f;
 			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
+            // hud appear
 
-			// hud appear
-
-			// GO
+            // GO
             GameObject.Find("Terrain/CameraLock").SetActive(false);
             title.SetActive(false);
 			foreach (GameObject go in camLocks)
@@ -537,15 +535,14 @@ class ShadeLordCtrl : MonoBehaviour
 			Vanish();
 
 			// wait a bit
-			ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
-			emission.rateOverTime = 3f;
 			yield return new WaitForSeconds(.5f);
 
-			// void particles raise from floor and terrain breaks
-			breakTerrain(GameObject.Find("Terrain/Area1"));
+			// terrain breaks
+			helper.abyssArrive();
+            yield return new WaitForSeconds(1f);
+            breakTerrain(GameObject.Find("Terrain/Area1"));
 			// Wait a bit then start attacking again
 			yield return new WaitForSeconds(2.5f);
-			emission.rateOverTime = 15f;
 			yield return new WaitForSeconds(4f);
 			
 			//transform.SetPositionY(0f);
@@ -574,11 +571,10 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		IEnumerator ToEnd()
 		{
-			atts = new List<Action>() { };
+            helper.abyssToEnd();
+            atts = new List<Action>() { };
 			GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
-			GameObject leftWall = GameObject.Find("Terrain/Area3/WallL");
             cameraLock.SetActive(false);
-			leftWall.SetActive(false);
             Modding.Logger.Log("to end");
             // wait till current attack done
             yield return new WaitWhile(attacks.isAttacking);
@@ -605,7 +601,6 @@ class ShadeLordCtrl : MonoBehaviour
             GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
 
             cameraLock.SetActive(true);
-            leftWall.SetActive(true);
             attacks.Stop();
 			co = StartCoroutine(AttackChoice());
 		}
@@ -672,7 +667,7 @@ class ShadeLordCtrl : MonoBehaviour
 				StartCoroutine(fade(s));
 			}
 
-			yield return new WaitForSeconds(5f);
+			yield return new WaitForSeconds(3f);
 			go.SetActive(false);
 
 			// rock particles

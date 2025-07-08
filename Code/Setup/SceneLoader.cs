@@ -45,7 +45,7 @@ namespace ShadeLord.Setup
 		// Set up scene and attach nessecary scripts
 		private void OnSceneChange(Scene prevScene, Scene nextScene)
 		{
-			if (nextScene.name == "GG_Shade_Lord")
+            if (nextScene.name == "GG_Shade_Lord")
 			{
                 // add properties to certain elements
                 // respawns, camera locks, hazards, etc
@@ -70,16 +70,36 @@ namespace ShadeLord.Setup
                 GameObject abyssObj = new GameObject();
                 Instantiate(ShadeLord.GameObjects["Abyss Particles"], Vector3.zero, Quaternion.identity, abyssObj.transform).SetActive(true);
 				Instantiate(ShadeLord.GameObjects["Abyss Mist"], Vector3.zero, Quaternion.identity, abyssObj.transform).SetActive(true);
-
+                Instantiate(ShadeLord.GameObjects["Abyss Msk"], new Vector3(0,-8,0), Quaternion.identity, abyssObj.transform).SetActive(true);
+                abyssObj.name = "AbyssFloor";
                 abyssObj.AddComponent<BoxCollider2D>().size = new Vector2(55f, 1f);
                 abyssObj.GetComponent<BoxCollider2D>().offset = new Vector2(0f, -.5f);
                 abyssObj.AddComponent<DamageHero>().hazardType = 2;
                 abyssObj.layer = 17;
-				float abyssYPos = 63f;
-				float abyssXPos = 25f;
-                abyssObj.transform.position = new Vector3(abyssXPos, abyssYPos, 0f);
-				for (int i = 0; i<6; i++)
-	                Instantiate(abyssObj, new Vector3(abyssXPos+i*55f, abyssYPos, 0f), Quaternion.identity);
+                float abyssYPos = 64f;
+                float abyssXPos = 25f;
+				float hideOffset = 3f;
+                abyssObj.transform.position = new Vector3(abyssXPos, abyssYPos - hideOffset - 2f, 0f);
+
+                // right wall (45,60)
+                GameObject abyss = Instantiate(abyssObj, new Vector3(45 + hideOffset, 60), Quaternion.Euler(0,0,90));
+                abyss.name = "AbyssWallRight";
+                // left wall (2,90)
+                abyss = Instantiate(abyssObj, new Vector3(2 - hideOffset, 90), Quaternion.Euler(0,0,-90));
+                abyss.name = "AbyssWallLeft";
+                //Instantiate(ShadeLord.GameObjects["Abyss Solid"], new Vector3(-54f,70,0), Quaternion.identity, abyss.transform).SetActive(true);
+
+                /*
+                abyss = GameObject.Find("BackgroundParticles");
+                abyss.transform.SetPosition2D(new Vector2(abyssXPos, abyssYPos-2));
+                abyss.transform.SetParent(abyssObj.transform, true);//*/
+
+				/*
+                for (int i = 1; i < 6; i++)
+				{
+					Instantiate(abyssObj, new Vector3(abyssXPos + i * 55f, abyssYPos, 0f), Quaternion.identity);
+					Instantiate(abyss, new Vector3(abyssXPos + i * 55f, abyssYPos, 0f), Quaternion.identity);
+				}//*/
 
                 PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
 

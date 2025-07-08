@@ -36,7 +36,9 @@ namespace ShadeLord.Setup
 			["Godseeker"] = ("GG_Collector", "GG_Arena_Prefab/Godseeker Crowd"),
 			["Collector"] = ("GG_Collector", "Battle Scene/Jar Collector"),
             ["Abyss Mist"] = ("GG_Radiance", "Boss Control/Abyss Pit/Pt Mist"),
-            ["Abyss Particles"] = ("GG_Radiance", "Boss Control/Abyss Pit/Pt Surface")
+            ["Abyss Particles"] = ("GG_Radiance", "Boss Control/Abyss Pit/Pt Surface"),
+            ["Abyss Solid"] = ("GG_Radiance", "Boss Control/Abyss Pit/black_solid"),
+            ["Abyss Msk"] = ("GG_Radiance", "Boss Control/Abyss Pit/msk_generic_soft")
         };
 
 		private Material _blurMat;
