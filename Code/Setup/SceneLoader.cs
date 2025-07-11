@@ -87,19 +87,6 @@ namespace ShadeLord.Setup
                 // left wall (2,90)
                 abyss = Instantiate(abyssObj, new Vector3(2 - hideOffset, 90), Quaternion.Euler(0,0,-90));
                 abyss.name = "AbyssWallLeft";
-                //Instantiate(ShadeLord.GameObjects["Abyss Solid"], new Vector3(-54f,70,0), Quaternion.identity, abyss.transform).SetActive(true);
-
-                /*
-                abyss = GameObject.Find("BackgroundParticles");
-                abyss.transform.SetPosition2D(new Vector2(abyssXPos, abyssYPos-2));
-                abyss.transform.SetParent(abyssObj.transform, true);//*/
-
-				/*
-                for (int i = 1; i < 6; i++)
-				{
-					Instantiate(abyssObj, new Vector3(abyssXPos + i * 55f, abyssYPos, 0f), Quaternion.identity);
-					Instantiate(abyss, new Vector3(abyssXPos + i * 55f, abyssYPos, 0f), Quaternion.identity);
-				}//*/
 
                 PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
 

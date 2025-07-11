@@ -141,9 +141,10 @@ class SLHelper : MonoBehaviour
 
 	public void abyssToEnd()
 	{
+
+        GameObject player = HeroController.instance.gameObject;
         IEnumerator leftWallToEnd()
 		{
-			GameObject player = HeroController.instance.gameObject;
 			GameObject abyssWall = GameObject.Find("AbyssWallLeft");
             
             for (int i = 1; i <= 14; i++)
@@ -162,7 +163,25 @@ class SLHelper : MonoBehaviour
 					break;
             }
 		}
-		StartCoroutine(leftWallToEnd());
+		IEnumerator AbyssFloorLoad()
+		{
+            GameObject abyssFloor1 = GameObject.Find("AbyssFloor");
+			GameObject abyssFloor2;
+
+			for (int i = 1; i <= 4; i++)
+			{
+                abyssFloor2 = Instantiate(abyssFloor1);
+				abyssFloor2.transform.SetPositionX(25f + 55 * i);
+                yield return new WaitWhile(() => (player.transform.position.x < 25f + 55f*i));
+				Destroy(abyssFloor1);
+				abyssFloor1 = abyssFloor2;
+            }
+        }
+        GameObject particles = GameObject.Find("BackgroundParticles");
+        particles.transform.SetParent(GameObject.Find("AbyssFloor").transform, true);
+
+        StartCoroutine(leftWallToEnd());
+		StartCoroutine(AbyssFloorLoad());
 		moveX(GameObject.Find("AbyssWallRight").transform, GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX()+14f, 3f);
     }
 }
