@@ -317,11 +317,6 @@ class ShadeLordCtrl : MonoBehaviour
 			SpriteRenderer wallSprite = GameObject.Find("Start/Wall/Black").GetComponent<SpriteRenderer>();
 			SpriteRenderer titleSprite = GameObject.Find("Start/Title").GetComponent<SpriteRenderer>();
 			Color c = new Color(0, 0, 0, .5f);
-			GameObject[] camLocks = {
-				GameObject.Find("Terrain/Area2/CameraLock")
-			};
-			foreach (GameObject go in camLocks)
-				go.SetActive(false);
 
 			emission.rateOverTime = 10f;
 			GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().Play();
@@ -342,8 +337,6 @@ class ShadeLordCtrl : MonoBehaviour
             // GO
             GameObject.Find("Terrain/CameraLock").SetActive(false);
             title.SetActive(false);
-			foreach (GameObject go in camLocks)
-				go.SetActive(true);
 			yield return new WaitForSeconds(1f);
 			co = StartCoroutine(AttackChoice());
 		}
@@ -378,11 +371,6 @@ class ShadeLordCtrl : MonoBehaviour
 			SpriteRenderer wallSprite = GameObject.Find("Start/Wall/Black").GetComponent<SpriteRenderer>();
 			SpriteRenderer titleSprite = GameObject.Find("Start/Title").GetComponent<SpriteRenderer>();
 			Color c = new Color(0,0,0,.5f);
-			GameObject[] camLocks = {
-				GameObject.Find("Terrain/Area2/CameraLock")
-			};
-			foreach (GameObject go in camLocks)
-				go.SetActive(false);
 
 			emission.rateOverTime = 10f;
 			GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().Play();
@@ -498,8 +486,7 @@ class ShadeLordCtrl : MonoBehaviour
 			// GO
 			GameObject.Find("Terrain/CameraLock").SetActive(false);
 			title.SetActive(false);
-			foreach (GameObject go in camLocks)
-				go.SetActive(true);
+
 			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR EXIT", false);
 			yield return new WaitForSeconds(1f);
 			co = StartCoroutine(AttackChoice());
@@ -571,13 +558,11 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		IEnumerator ToEnd()
 		{
-            helper.abyssToEnd();
             atts = new List<Action>() { };
-			GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
-            cameraLock.SetActive(false);
-            Modding.Logger.Log("to end");
             // wait till current attack done
             yield return new WaitWhile(attacks.isAttacking);
+            GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
+            cameraLock.SetActive(false);
             StopCoroutine(co);
 
             GetComponent<BoxCollider2D>().enabled = false;
@@ -587,20 +572,22 @@ class ShadeLordCtrl : MonoBehaviour
 
             // terrain break 1
             GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
-            GameObject.Find("Terrain/Area2/WallR").SetActive(false);
+            helper.abyssToEnd();
 
             // terrain break 2
             yield return new WaitForSeconds(3f);
-			//attacks.VoidCircles();
+            //attacks.VoidCircles();
 
-			atts = new List<Action>() { attacks.AimBeam };
+            atts = new List<Action>() { attacks.AimBeam };
 			float xTrigger = GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f;
 			// Wait till reach end section
-			yield return new WaitWhile(()=> player.transform.GetPositionX()<xTrigger);
+			yield return new WaitWhile(() => player.transform.GetPositionX()<xTrigger);
+            cameraLock.SetActive(true);
+
+            helper.moveX(GameObject.Find("AbyssWallLeft").transform, GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX() - 14f, 1);
             GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
             GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
 
-            cameraLock.SetActive(true);
             attacks.Stop();
 			co = StartCoroutine(AttackChoice());
 		}

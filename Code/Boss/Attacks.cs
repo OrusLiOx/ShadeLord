@@ -146,13 +146,12 @@ public class Attacks : MonoBehaviour
 			}
 			arrive();
 			yield return new WaitWhile(() => wait);
-			halo.SetActive(false);
+            halo.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
 
-			// setup
-			anim.Play("DashLoop");
+            // setup
+            anim.Play("DashLoop");
 			transform.SetPositionY(68.04f);
 			y = 0;
-			halo.transform.localPosition = new Vector2(11.23f, 0.04f);
 			col.offset = new Vector2(6, -.07f);
 			col.size = new Vector2(19, 2.36f);
 
@@ -236,8 +235,8 @@ public class Attacks : MonoBehaviour
 			}
 
 			// end
-			halo.transform.localPosition = new Vector2(0f, -2.62f);
-			transform.SetRotationZ(0);
+			halo.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+            transform.SetRotationZ(0);
 
 			transform.SetScaleX(1);
 			Hide();
@@ -889,34 +888,39 @@ public class Attacks : MonoBehaviour
 	}
 	public void Phase(int phase)
 	{
-		switch (phase)
+		IEnumerator Phase()
 		{
-			case 0:
-				xEdge = 18;
-				xCenter = 23.5f;
-				yDef = 75.23f;
+			switch (phase)
+			{
+				case 0:
+					xEdge = 18;
+					xCenter = 23.5f;
+					yDef = 75.23f;
 
-				infiniteSpike = false;
-				lastPhase = false;
-				break;
-			case 2:
-				infiniteSpike = true;
-				break;
-			case 3:
-				infiniteSpike = false;
-				//platPhase = true;
-				//xEdge = 43.5f;
-				break;
-			case 4:
-				xEdge = 17.71f; 
-				xCenter = GameObject.Find("Terrain/Area3").transform.GetPositionX();
-				//yDef = 14f;
+					infiniteSpike = false;
+					lastPhase = false;
+					break;
+				case 2:
+					infiniteSpike = true;
+					break;
+				case 3:
+					infiniteSpike = false;
+					//platPhase = true;
+					//xEdge = 43.5f;
+					break;
+				case 4:
+					yield return new WaitWhile(() => attacking);
+					xEdge = 10f;
+					xCenter = GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX();
+					//yDef = 14f;
 
-				lastPhase = true;
-				platPhase = false;
-				fireOnce = true;
-				break;
+					lastPhase = true;
+					platPhase = false;
+					fireOnce = true;
+					break;
+			}
 		}
+		StartCoroutine(Phase());
 	}
 
 	public bool isAttacking()

@@ -110,6 +110,8 @@ class SLHelper : MonoBehaviour
 				t.SetPositionX(t.position.x + move);
 				yield return new WaitForSeconds(1 / 60f);
 			}
+
+            t.SetPositionX(dest);
         }
 		return StartCoroutine(move());
 	}
@@ -123,6 +125,7 @@ class SLHelper : MonoBehaviour
                 t.SetPositionY(t.position.y + move);
                 yield return new WaitForSeconds(1 / 30f);
             }
+            t.SetPositionY(dest);
         }
         return StartCoroutine(move());
     }
@@ -148,17 +151,18 @@ class SLHelper : MonoBehaviour
 				GameObject plat = GameObject.Find("Terrain/ToArea3/Plat (" + i + ")");
                 Vector3 platPos = plat.transform.position;
 
-                yield return new WaitWhile(() => 
-					(player.transform.position.x < platPos.x - plat.GetComponent<BoxCollider2D>().size.x/2f) ||
-                    (player.transform.position.y < platPos.y) );
+                yield return new WaitWhile(() => (player.transform.position.x < platPos.x - plat.GetComponent<BoxCollider2D>().size.x/2f));
 
                 if (moveWallRoutine != null)
 					StopCoroutine(moveWallRoutine);
                 moveWallRoutine = moveX(abyssWall.transform, platPos.x - 5f, 1);
                 PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(platPos.x, platPos.y+1f));
+
+				if (player.transform.position.x >= GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f)
+					break;
             }
 		}
 		StartCoroutine(leftWallToEnd());
-		moveX(GameObject.Find("AbyssWallRight").transform, 219f, 3f);
+		moveX(GameObject.Find("AbyssWallRight").transform, GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX()+14f, 3f);
     }
 }
