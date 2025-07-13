@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using static BossStatueCompletionStates;
 
 public class Attacks : MonoBehaviour
 {
@@ -323,47 +324,32 @@ public class Attacks : MonoBehaviour
 
 		IEnumerator Spikes()
 		{
-			// go to random location
-			if (infiniteSpike)
-				transform.SetPositionX(xCenter);
-			else
-				transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
-			Modding.Logger.Log(xCenter - xEdge + 4);
-			arrive();
-			yield return new WaitUntil(() => !wait);
+            transform.SetPositionX(xCenter);
+
+            // go to random location
+            if (infiniteSpike)
+			{
+				arrive();
+				yield return new WaitUntil(() => !wait);
+			}
 
             // first set
             playSound("BeamCharge");
-            anim.Play("SpikeWindup");
+            if (infiniteSpike)
+                anim.Play("SpikeWindup");
 			// generate spikes
-			float offset = xCenter - xEdge + UnityEngine.Random.Range(0, 2.4f);
 			yield return new WaitForSeconds(.7f);
-			//playSound("Scream");
-			anim.Play("SpikeLoop");
-
-            //yield return new WaitForSeconds(.5f);
-            /*
-			playSound("BeamCharge");
-			while (offset < xCenter + xEdge)
-			{
-				GameObject s = Instantiate(atts["Spike"], parent.transform);
-				s.SetActive(true);
-				s.transform.SetPosition2D(offset, 66.42f);
-				offset += 2f;
-			}
-			yield return new WaitForSeconds(.7f);
-			// spikes go up
-			//playSound("Scream");
-			
-			yield return new WaitForSeconds(1f + 3/12f);//*/
+            //playSound("Scream");
+            if (infiniteSpike)
+                anim.Play("SpikeLoop");
 
             // fire 3 sets of spikes with random offset
             int i = 3;
-			float randOffset = UnityEngine.Random.Range(0, 1f);
+			float randOffset = xCenter - xEdge + UnityEngine.Random.Range(0, 1f);
             while (i > 0 || infiniteSpike)
 			{
 				// generate spikes
-				offset = xCenter - xEdge + i % 2 + randOffset;//UnityEngine.Random.Range(0, 2.4f);
+				float offset = i % 2 + randOffset;//UnityEngine.Random.Range(0, 2.4f);
 
 				
 				while (offset < xCenter + xEdge)
@@ -380,12 +366,15 @@ public class Attacks : MonoBehaviour
 				i--;
 			}
 
-            anim.Play("SpikeRetract");
-            yield return new WaitForSeconds(.333f);
+			if (infiniteSpike)
+			{
+				anim.Play("SpikeRetract");
+				yield return new WaitForSeconds(.333f);
 
-            // end
-            leave();
-			yield return new WaitUntil(() => !wait);
+				// end
+				leave();
+				yield return new WaitUntil(() => !wait);
+			}
 			
 			attacking = false;
 		}
@@ -882,15 +871,17 @@ public class Attacks : MonoBehaviour
 		//Hide();
 	}
 	public void Hide()
-	{
+    {
 		anim.Play("Nothing");
-		col.enabled = false;
+        halo.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+        col.enabled = false;
 	}
 	public void Phase(int phase)
 	{
 		IEnumerator Phase()
 		{
-			switch (phase)
+            yield return new WaitWhile(() => attacking);
+            switch (phase)
 			{
 				case 0:
 					xEdge = 18;
@@ -909,7 +900,6 @@ public class Attacks : MonoBehaviour
 					//xEdge = 43.5f;
 					break;
 				case 4:
-					yield return new WaitWhile(() => attacking);
 					xEdge = 10f;
 					xCenter = GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX();
 					//yDef = 14f;
@@ -972,7 +962,7 @@ public class Attacks : MonoBehaviour
             int iters = 10;
             for (int i = iters-1; i >= 0; i--)
             {
-                haloSprite.color = new Color(1, 1, 1, 1 * i / (float)iters);
+                haloSprite.color = new Color(1, 1, 1, i / (float)iters);
                 yield return new WaitForSeconds(1 / 60f);
             }
             yield return new WaitForSeconds(1 / 12f);
@@ -992,30 +982,7 @@ public class Attacks : MonoBehaviour
 		wait = true;
 		Modding.Logger.Log("arrive");
         resetHitBox();
-        /*
-		transform.SetPositionY(max-25f);
-		halo.SetActive(true);
-		if (forward)
-		{
-			anim.Play("NeutralUp");
-		}
-		else
-		{
-			anim.Play("SideUp");
-		}
-		rig.velocity = new Vector2(0f, 40f);
-		yield return new WaitUntil(() => transform.position.y > max - 5);
-		if (forward)
-		{
-			anim.Play("NeutralArrive");
-		}
-		else
-		{
-			anim.Play("SideArrive");
-		}
-		yield return new WaitUntil(() => transform.position.y > max);
-		rig.velocity = new Vector2(0f, 0f);
-		transform.SetPositionY(max);//*/
+
         SpriteRenderer haloSprite = halo.GetComponent<SpriteRenderer>();
         halo.SetActive(true);
         haloSprite.color = new Color(1, 1, 1, 0);

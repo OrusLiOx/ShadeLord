@@ -68,7 +68,6 @@ class ShadeLordCtrl : MonoBehaviour
 		attacks = gameObject.AddComponent<Attacks>();
 		attacks.target = player;
 		attacks.Hide();
-
 		
 		atts = new List<Action>()
 		{
@@ -179,8 +178,8 @@ class ShadeLordCtrl : MonoBehaviour
 	 
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.P))
-			Modding.Logger.Log(transform.position);
+		if (Input.GetKeyDown(KeyCode.KeypadEnter))
+			Modding.Logger.Log("Shade Lord Position: " + transform.position);
 		else if (Input.GetKeyDown(KeyCode.Keypad0))
 			actionState = -1;
         else if (Input.GetKeyDown(KeyCode.Keypad1))
