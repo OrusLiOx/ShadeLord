@@ -96,7 +96,11 @@ public class Beam : MonoBehaviour
             animator.Play(end);
 
 			yield return new WaitForSeconds(2/12f);
-			Destroy(obj);
+			GetComponent<SpriteRenderer>().enabled = false;
+
+			yield return new WaitWhile(() => audio.isPlaying);
+
+            Destroy(obj);
 		}
     }
 }

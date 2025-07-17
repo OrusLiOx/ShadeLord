@@ -179,27 +179,31 @@ class ShadeLordCtrl : MonoBehaviour
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.KeypadEnter))
+		{
 			Modding.Logger.Log("Shade Lord Position: " + transform.position);
+			Modding.Logger.Log("Hero Position: " + player.transform.position);
+			Modding.Logger.Log("Hero State: " + HeroController.instance.hero_state);
+		}
 		else if (Input.GetKeyDown(KeyCode.Keypad0))
 			actionState = -1;
-        else if (Input.GetKeyDown(KeyCode.Keypad1))
-            actionState = 0;
-        else if (Input.GetKeyDown(KeyCode.Keypad2))
-            actionState = 1;
-        else if (Input.GetKeyDown(KeyCode.Keypad3))
-            actionState = 2;
-        else if (Input.GetKeyDown(KeyCode.Keypad4))
-            actionState = 3;
-        else if (Input.GetKeyDown(KeyCode.Keypad5))
-            actionState = 4;
-        else if (Input.GetKeyDown(KeyCode.Keypad6))
-            actionState = 5;
-        else if (Input.GetKeyDown(KeyCode.Keypad7))
-            actionState = 6;
-        else if (Input.GetKeyDown(KeyCode.Keypad8))
-            actionState = 7;
-        else if (Input.GetKeyDown(KeyCode.Keypad8))
-            actionState = 8;
+		else if (Input.GetKeyDown(KeyCode.Keypad1))
+			actionState = 0;
+		else if (Input.GetKeyDown(KeyCode.Keypad2))
+			actionState = 1;
+		else if (Input.GetKeyDown(KeyCode.Keypad3))
+			actionState = 2;
+		else if (Input.GetKeyDown(KeyCode.Keypad4))
+			actionState = 3;
+		else if (Input.GetKeyDown(KeyCode.Keypad5))
+			actionState = 4;
+		else if (Input.GetKeyDown(KeyCode.Keypad6))
+			actionState = 5;
+		else if (Input.GetKeyDown(KeyCode.Keypad7))
+			actionState = 6;
+		else if (Input.GetKeyDown(KeyCode.Keypad8))
+			actionState = 7;
+		else if (Input.GetKeyDown(KeyCode.Keypad8))
+			actionState = 8;
 
     }//*/
 	// damage stuff
@@ -557,7 +561,7 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		IEnumerator ToEnd()
 		{
-            atts = new List<Action>() { };
+            atts = new List<Action>() {};
             // wait till current attack done
             yield return new WaitWhile(attacks.isAttacking);
             GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
@@ -578,17 +582,19 @@ class ShadeLordCtrl : MonoBehaviour
             //attacks.VoidCircles();
 
             atts = new List<Action>() { attacks.AimBeam };
-			float xTrigger = GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f;
+            co = StartCoroutine(AttackChoice());
+            float xTrigger = GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f;
 			// Wait till reach end section
 			yield return new WaitWhile(() => player.transform.GetPositionX()<xTrigger);
             cameraLock.SetActive(true);
+            GameObject.Find("Terrain/ToArea3/CameraLock").SetActive(false);
 
-            helper.moveX(GameObject.Find("AbyssWallLeft").transform, GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX() - 14f, 1);
+            helper.moveX(GameObject.Find("AbyssWallLeft").transform, GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX() - 15f, 1);
             GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
             GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
 
+            atts = new List<Action>() { attacks.VoidCircles };
             attacks.Stop();
-			co = StartCoroutine(AttackChoice());
 		}
 		StartCoroutine(ToEnd());
 	}

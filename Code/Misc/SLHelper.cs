@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using GlobalEnums;
 
 
 class SLHelper : MonoBehaviour
@@ -142,7 +143,7 @@ class SLHelper : MonoBehaviour
 	public void abyssToEnd()
 	{
 
-        GameObject player = HeroController.instance.gameObject;
+        HeroController player = HeroController.instance;
         IEnumerator leftWallToEnd()
 		{
 			GameObject abyssWall = GameObject.Find("AbyssWallLeft");
@@ -152,14 +153,17 @@ class SLHelper : MonoBehaviour
 				GameObject plat = GameObject.Find("Terrain/ToArea3/Plat (" + i + ")");
                 Vector3 platPos = plat.transform.position;
 
-                yield return new WaitWhile(() => (player.transform.position.x < platPos.x - plat.GetComponent<BoxCollider2D>().size.x/2f));
+				yield return new WaitWhile(() => (
+				player.gameObject.transform.position.x < platPos.x - plat.GetComponent<BoxCollider2D>().size.x / 2f) ||
+				(player.hero_state != ActorStates.idle && player.hero_state != ActorStates.running)
+				);
 
                 if (moveWallRoutine != null)
 					StopCoroutine(moveWallRoutine);
                 moveWallRoutine = moveX(abyssWall.transform, platPos.x - 5f, 1);
                 PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(platPos.x, platPos.y+1f));
 
-				if (player.transform.position.x >= GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f)
+				if (player.gameObject.transform.position.x >= GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f)
 					break;
             }
 		}
@@ -182,6 +186,6 @@ class SLHelper : MonoBehaviour
 
         StartCoroutine(leftWallToEnd());
 		StartCoroutine(AbyssFloorLoad());
-		moveX(GameObject.Find("AbyssWallRight").transform, GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX()+14f, 3f);
+		moveX(GameObject.Find("AbyssWallRight").transform, GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX()+15f, 3f);
     }
 }
