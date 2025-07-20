@@ -14,7 +14,7 @@ using System.Linq;
 public class Attacks : MonoBehaviour
 {
 	public GameObject target;
-	private GameObject halo;
+	private SpriteRenderer haloSprite, glowSprite;
 
 	// Helper variables
 	private float xEdge, xCenter, yDef;
@@ -45,7 +45,8 @@ public class Attacks : MonoBehaviour
 		lastPhase = false;
 		platPhase = false;
 		parent = GameObject.Find("HoldAttacks");
-		halo = GameObject.Find("ShadeLord/Halo");
+		haloSprite = GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>();
+		glowSprite = GameObject.Find("ShadeLord/Halo/Glow").GetComponent<SpriteRenderer>();
 
 		// Unity Components
 		col = GetComponent<BoxCollider2D>();
@@ -147,7 +148,7 @@ public class Attacks : MonoBehaviour
 			}
 			arrive();
 			yield return new WaitWhile(() => wait);
-            halo.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+            haloSprite.color = new Color(1, 1, 1, 0);
 
             // setup
             anim.Play("DashLoop");
@@ -236,7 +237,7 @@ public class Attacks : MonoBehaviour
 			}
 
 			// end
-			halo.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+			haloSprite.color = new Color(1, 1, 1, 1);
             transform.SetRotationZ(0);
 
 			transform.SetScaleX(1);
@@ -512,7 +513,7 @@ public class Attacks : MonoBehaviour
 		IEnumerator VoidCircles()
 		{
 			// setup
-			halo.GetComponent<SpriteRenderer>().enabled = false;
+			haloSprite.enabled = false;
 			transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
 
 			arrive();
@@ -549,7 +550,7 @@ public class Attacks : MonoBehaviour
 			// end
 			leave();
 			yield return new WaitUntil(() => !wait);
-			halo.GetComponent<SpriteRenderer>().enabled = true;
+			haloSprite.enabled = true;
 			attacking = false;
 		}
 		IEnumerator SpamCircles()
@@ -557,8 +558,7 @@ public class Attacks : MonoBehaviour
             float curX = xCenter - xEdge - 2.5f + UnityEngine.Random.Range(5f, 9f);
             while (curX < xCenter + xEdge)
             {
-                StartCoroutine(MakeCircle(curX, UnityEngine.Random.Range(66f, 76f), .7f));
-                yield return new WaitForSeconds(.07f);
+                StartCoroutine(MakeCircle(curX, UnityEngine.Random.Range(66f, 76f), .7f, false));
                 curX += UnityEngine.Random.Range(5f, 9f);
             }
 
@@ -599,7 +599,7 @@ public class Attacks : MonoBehaviour
 
             StartCoroutine(SpamTeleport(randOptions));
         }
-        IEnumerator MakeCircle(float x, float y, float wait)
+        IEnumerator MakeCircle(float x, float y, float wait, bool hasSound = true)
 		{
 			GameObject obj = Instantiate(atts["VoidCircle"], parent.transform);
 			obj.transform.SetPosition2D(x, y);
@@ -609,7 +609,12 @@ public class Attacks : MonoBehaviour
 
 			yield return new WaitForSeconds(wait);
 
-			obj.GetComponent<VoidCircle>().Fire();
+			obj.GetComponent<VoidCircle>().Fire(hasSound);
+			if (!hasSound)
+			{
+				yield return new WaitForSeconds(2);
+                playSound("BeamBlast");
+            }
 			//playSound("BeamBlast");
 		}
 	}
@@ -685,11 +690,11 @@ public class Attacks : MonoBehaviour
 			if (lastPhase)
             {
 				Vector3 origPos = atts["Beam"].transform.localPosition;
-				Vector3 posFar = new Vector3(100f, origPos.y, origPos.z);
-				Vector3 posMid = new Vector3(50f, origPos.y, origPos.z);
+				float threshhold = 72f;
+				Vector3 pos = new Vector3(160f, origPos.y, origPos.z); ;
 				bool checkPos = true;
 
-				atts["Beam"].transform.localPosition = posFar;
+				atts["Beam"].transform.localPosition = pos;
                 while (true)
 				{
                     FireTargetedBeam(goright, 2/10f);
@@ -697,14 +702,17 @@ public class Attacks : MonoBehaviour
 
 					if (checkPos)
 					{
-						if (target.transform.GetPositionX() > 115f)
+						if (target.transform.GetPositionX() > threshhold)
 						{
-							atts["Beam"].transform.localPosition = origPos;
-							checkPos = false;
-						}
-						else if (target.transform.GetPositionX() > 72f)
-						{
-							atts["Beam"].transform.localPosition = posMid;
+							pos.x -= 50;
+                            threshhold += 50;
+                            if (threshhold+25 > transform.GetPositionX())
+							{
+								checkPos = false;
+                                atts["Beam"].transform.localPosition = origPos;
+                            }
+							else
+                                atts["Beam"].transform.localPosition = pos;
 						}
 					}
                 }
@@ -913,7 +921,8 @@ public class Attacks : MonoBehaviour
 	public void Stop()
 	{
 		StopAllCoroutines();
-		foreach (Transform c in parent.GetComponentsInChildren<Transform>())
+        rig.velocity = new Vector2(0f, 0f);
+        foreach (Transform c in parent.GetComponentsInChildren<Transform>())
 		{
 			if (!c.gameObject.name.Equals(parent.name))
 			{
@@ -930,7 +939,7 @@ public class Attacks : MonoBehaviour
 	public void Hide()
     {
 		anim.Play("Nothing");
-        halo.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+        haloSprite.color = new Color(1, 1, 1, 0);
         col.enabled = false;
 	}
 	public void Phase(int phase)
@@ -1006,7 +1015,7 @@ public class Attacks : MonoBehaviour
 		{
 			wait = true;
 			GetComponent<BoxCollider2D>().enabled = false;
-            SpriteRenderer haloSprite = halo.GetComponent<SpriteRenderer>();
+            float defaultGlow = glowSprite.color.a;
             if (forward)
             {
                 anim.Play("NeutralDisappear");
@@ -1019,6 +1028,7 @@ public class Attacks : MonoBehaviour
             for (int i = iters-1; i >= 0; i--)
             {
                 haloSprite.color = new Color(1, 1, 1, i / (float)iters);
+                glowSprite.color = new Color(1, 1, 1, i / (float)iters * defaultGlow);
                 yield return new WaitForSeconds(1 / 60f);
             }
             yield return new WaitForSeconds(1 / 12f);
@@ -1039,8 +1049,7 @@ public class Attacks : MonoBehaviour
 		Modding.Logger.Log("arrive");
         resetHitBox();
 
-        SpriteRenderer haloSprite = halo.GetComponent<SpriteRenderer>();
-        halo.SetActive(true);
+		float defaultGlow = glowSprite.color.a;
         haloSprite.color = new Color(1, 1, 1, 0);
         transform.SetPositionY(max);
 
@@ -1057,6 +1066,7 @@ public class Attacks : MonoBehaviour
         for (int i = 1; i <= iters; i++)
 		{
             haloSprite.color = new Color(1, 1, 1, i/ (float)iters);
+            glowSprite.color = new Color(1, 1, 1, i / (float)iters * defaultGlow);
             yield return new WaitForSeconds(1 / 60f);
 		}
 		yield return new WaitForSeconds(1/12f);

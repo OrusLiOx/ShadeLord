@@ -43,7 +43,7 @@ public class VoidCircle : MonoBehaviour
 		}
 	}
 
-	public void Fire()
+	public void Fire(bool playSound = true)
 	{
 		StartCoroutine(Fire());
 		IEnumerator Fire()
@@ -57,7 +57,8 @@ public class VoidCircle : MonoBehaviour
 				burstSprite.color = new Color(c, c, c, i/incr);
 				yield return new WaitForSeconds(1/60f);
 			}
-			GetComponent<AudioSource>().Play();
+			if (playSound)
+				GetComponent<AudioSource>().Play();
 			outline.enabled = false;
 			col.enabled = true;
 			while (burstSprite.color.a > 0)
