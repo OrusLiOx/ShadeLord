@@ -1046,10 +1046,8 @@ public class Attacks : MonoBehaviour
 	private IEnumerator arriveRoutine(float max)
 	{
 		wait = true;
-		Modding.Logger.Log("arrive");
         resetHitBox();
 
-		float defaultGlow = glowSprite.color.a;
         haloSprite.color = new Color(1, 1, 1, 0);
         transform.SetPositionY(max);
 
@@ -1066,7 +1064,7 @@ public class Attacks : MonoBehaviour
         for (int i = 1; i <= iters; i++)
 		{
             haloSprite.color = new Color(1, 1, 1, i/ (float)iters);
-            glowSprite.color = new Color(1, 1, 1, i / (float)iters * defaultGlow);
+            glowSprite.color = new Color(1, 1, 1, i / (float)iters * (38f/255f));
             yield return new WaitForSeconds(1 / 60f);
 		}
 		yield return new WaitForSeconds(1/12f);

@@ -44,6 +44,8 @@ class ShadeLordCtrl : MonoBehaviour
 	private Queue<GameObject> spawned;
 	private Queue<GameObject> tendrils;
 
+	private GameObject transCamLock = GameObject.Find("Terrain/ToArea3/CameraLock");
+
 	private bool triggeredRocks;
 	public int phase;
 
@@ -89,7 +91,9 @@ class ShadeLordCtrl : MonoBehaviour
 
 		// trackers
 		tendrils = new Queue<GameObject>();
-	} 
+		transCamLock.SetActive(false);
+
+    } 
 	void Start()
 	{
 		hitEffect  = GameObject.Find("VoidParticle");
@@ -575,6 +579,7 @@ class ShadeLordCtrl : MonoBehaviour
 
             // terrain break 1
             GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
+			transCamLock.SetActive(true);
             helper.abyssToEnd();
 
             // terrain break 2
@@ -587,7 +592,7 @@ class ShadeLordCtrl : MonoBehaviour
 			// Wait till reach end section
 			yield return new WaitWhile(() => player.transform.GetPositionX()<xTrigger);
             cameraLock.SetActive(true);
-            GameObject.Find("Terrain/ToArea3/CameraLock").SetActive(false);
+            transCamLock.SetActive(false);
 
             helper.moveX(GameObject.Find("AbyssWallLeft").transform, GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX() - 15f, 1);
             GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
@@ -724,11 +729,9 @@ class ShadeLordCtrl : MonoBehaviour
 			i = actionState % atts.Count;
 
         curr = atts[i];
-		Modding.Logger.Log("attack: " + i);
 		curr.Invoke();
 		// Wait till last attack is done
 		yield return new WaitWhile(() => attacks.isAttacking());//*/
-		Modding.Logger.Log("Attack done");
 		// delay between attacks
 		if (phase != 4)
 			yield return new WaitForSeconds(.3f);

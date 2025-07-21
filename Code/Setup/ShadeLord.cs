@@ -32,16 +32,22 @@ namespace ShadeLord.Setup
 		private Dictionary<string, (string, string)> preload = new Dictionary<string, (string, string)>()
 		{
 			["Boss Scene Controller"] = ("GG_Radiance", "Boss Scene Controller"),
-			["Hazard"] = ("GG_Radiance", "Cloud Hazard"),
 			["Godseeker"] = ("GG_Collector", "GG_Arena_Prefab/Godseeker Crowd"),
 			["Collector"] = ("GG_Collector", "Battle Scene/Jar Collector"),
             ["Abyss Mist"] = ("GG_Radiance", "Boss Control/Abyss Pit/Pt Mist"),
             ["Abyss Particles"] = ("GG_Radiance", "Boss Control/Abyss Pit/Pt Surface"),
-            ["Abyss Solid"] = ("GG_Radiance", "Boss Control/Abyss Pit/black_solid"),
-            ["Abyss Msk"] = ("GG_Radiance", "Boss Control/Abyss Pit/msk_generic_soft")
+            ["Abyss Msk"] = ("GG_Radiance", "Boss Control/Abyss Pit/msk_generic_soft"),
+            ["Abyss Scenery"] = ("Abyss_06_Core", "_Scenery")
         };
 
-		private Material _blurMat;
+        private Dictionary<string, ((string, string), (int, bool))> iterativePreload = new Dictionary<string, ((string, string), (int, bool))>()
+        {
+            ["Abyss Corpse"] = (("Abyss_06_Core", "_Scenery/skull_corpses_layered_0003_1_set"), (17, false)),
+            ["Egg"] = (("Abyss_06_Core", "_Scenery/abyss_white_egg"), (1, true)),
+            ["Egg 4"] = (("Abyss_06_Core", "_Scenery/abyss_white_egg4"), (3, true))
+        };
+
+        private Material _blurMat;
 
 		// info
 		public ShadeLord() : base("ShadeLord") { }
@@ -52,7 +58,20 @@ namespace ShadeLord.Setup
 
 		public override List<(string, string)> GetPreloadNames()
 		{
-			return preload.Values.ToList();
+			List<(string, string)> list = preload.Values.ToList();
+            foreach (var (name, ((scene, path), (quantity, hasOrig))) in iterativePreload)
+			{
+				if (hasOrig)
+				{
+                    list.Add((scene, path));
+                }
+                for (int i = 1; i <= quantity; i++)
+                {
+                    list.Add((scene, path + " (" + i + ")"));
+                }
+            }
+            
+            return list;
 		}
 
 		// statue information
@@ -71,16 +90,27 @@ namespace ShadeLord.Setup
 
 		public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
 		{
-			Instance = this;
+            Instance = this;
 
 			Unload();
-
-			_blurMat = Resources.FindObjectsOfTypeAll<Material>().First(mat => mat.shader.name.Contains("UI/Blur/UIBlur"));
+            _blurMat = Resources.FindObjectsOfTypeAll<Material>().First(mat => mat.shader.name.Contains("UI/Blur/UIBlur"));
 			foreach (var (name, (scene, path)) in preload)
 			{
 				GameObjects.Add(name, preloadedObjects[scene][path]);
-			}//*/
-			LoadAssets();
+			}
+            foreach (var (name, ((scene, path), (quantity, hasOrig))) in iterativePreload)
+            {
+				if (hasOrig)
+				{
+                    GameObjects.Add(name, preloadedObjects[scene][path]);
+                }
+                for (int i = 1; i <= quantity; i++)
+                {
+                    GameObjects.Add(name + " " + i, preloadedObjects[scene][path + " (" + i + ")"]);
+                }
+            }
+
+            LoadAssets();
 			ModHooks.AfterSavegameLoadHook += AfterSaveGameLoad;
 			ModHooks.GetPlayerVariableHook += GetVariableHook;
 			ModHooks.LanguageGetHook += LangGet;

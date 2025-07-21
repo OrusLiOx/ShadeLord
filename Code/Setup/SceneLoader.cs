@@ -64,13 +64,35 @@ namespace ShadeLord.Setup
 					{
 						obj.GetComponent<SpriteRenderer>().material.shader = Shader.Find("Sprites/Default");
 					}
+                }
+                GameObject scenery = Instantiate(ShadeLord.GameObjects["Abyss Scenery"]);
+				scenery.SetActive(true);
+                scenery.transform.SetPosition2D(new Vector2(-20, 63));
+				foreach (Transform t in scenery.transform)
+                {
+                    if (!(t.name.Contains("abyss_BG") || 
+						t.name.Contains("skull_corpses_layered_0003_1_set") || 
+						t.name.Contains("fog") ||
+                        t.name.Contains("_0154") ))
+					{
+						Destroy(t.gameObject);
+					}//*/
 				}
-
+                /*
+				GameObject corpses = new GameObject();
+				for (int i = 1; i <=17; i++)
+                {
+                    GameObject test = Instantiate(ShadeLord.GameObjects["Abyss Corpse " + i]);
+                    test.SetActive(true);
+					test.transform.SetParent(corpses.transform, false);
+                }
+                corpses.transform.SetPosition2D(new Vector2(-20, 63));//*/
+                GameObject.Find("Terrain/Background").SetActive(false);
                 // create abyss from radiance fight
                 GameObject abyssObj = new GameObject();
                 Instantiate(ShadeLord.GameObjects["Abyss Particles"], Vector3.zero, Quaternion.identity, abyssObj.transform).SetActive(true);
 				Instantiate(ShadeLord.GameObjects["Abyss Mist"], Vector3.zero, Quaternion.identity, abyssObj.transform).SetActive(true);
-                Instantiate(ShadeLord.GameObjects["Abyss Msk"], new Vector3(0,-8,0), Quaternion.identity, abyssObj.transform).SetActive(true);
+                Instantiate(ShadeLord.GameObjects["Abyss Msk"], new Vector3(0, -8, 0), Quaternion.identity, abyssObj.transform).SetActive(true);
                 abyssObj.name = "AbyssFloor";
                 abyssObj.AddComponent<BoxCollider2D>().size = new Vector2(55f, 1f);
                 abyssObj.GetComponent<BoxCollider2D>().offset = new Vector2(0f, -.5f);
