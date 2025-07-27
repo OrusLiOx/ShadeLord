@@ -1,15 +1,7 @@
-/*/
-
-Script to execute and stop Shade Lord's attacks
-
-/*/
-
 using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using static BossStatueCompletionStates;
-using System.Linq;
 
 public class Attacks : MonoBehaviour
 {
@@ -523,16 +515,17 @@ public class Attacks : MonoBehaviour
 			// spawn circle on self
 			GameObject obj = Instantiate(atts["VoidCircle"], parent.transform);
 			obj.GetComponent<VoidCircle>().size = 1f;
-			obj.transform.SetPosition3D(transform.GetPositionX(), transform.GetPositionY() - 2.37f, transform.GetPositionZ()+.001f);
+			obj.transform.SetPosition3D(transform.GetPositionX(), transform.GetPositionY() - 2.37f, transform.GetPositionZ()+.0001f);
 			obj.SetActive(true);
 			obj.GetComponent<VoidCircle>().Appear();
 
-			yield return new WaitForSeconds(1f);
+			yield return new WaitForSeconds(.8f);
 
 			anim.Play("Roar");
 			playSound("Scream");
 			playSound("BeamBlast");
-			obj.GetComponent<VoidCircle>().Fire();
+            yield return new WaitForSeconds(.2f);
+            obj.GetComponent<VoidCircle>().Fire();
 			//yield return new WaitForSeconds(.5f);
 
 			// pick random points to spawn

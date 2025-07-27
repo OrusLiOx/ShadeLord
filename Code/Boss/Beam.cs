@@ -1,12 +1,3 @@
-/*/
-
-Script to play a windup then beam loop animation and sound for beam upon enabling
-Intended for user to only have to worry about spawing and moving the beam
-
-Attach this script to all beam objects
-
-/*/
-
 using System;
 using System.Collections;
 using UnityEngine;

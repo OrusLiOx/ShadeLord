@@ -1,12 +1,3 @@
-/*/
-
-Script to play animation and sound for face spike and adjust hit box upon enabling
-Intended for user to only have to worry about spawing the face spike
-
-Attach this script to all face spike objects (not including outline)
-
-/*/
-
 using System.Collections;
 using UnityEngine;
 

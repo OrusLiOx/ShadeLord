@@ -1,10 +1,4 @@
-﻿/*/
- 
-Controls Shade Lord behavior (phases, attacks, spawning, dying)
-
-/*/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -524,20 +518,21 @@ class ShadeLordCtrl : MonoBehaviour
 			StopCoroutine(co);
 			attacks.Stop();
 		
-			// explode into void particles
+			// scream and spew particles
 			attacks.playSound("Scream");
 			Vanish();
 
-			// wait a bit
-			yield return new WaitForSeconds(.5f);
+            // wait a bit
+            yield return new WaitForSeconds(.5f);
 
 			// terrain breaks
-			helper.abyssArrive();
             yield return new WaitForSeconds(1f);
             breakTerrain(GameObject.Find("Terrain/Area1"));
 			// Wait a bit then start attacking again
-			yield return new WaitForSeconds(2.5f);
-			yield return new WaitForSeconds(4f);
+			yield return new WaitForSeconds(1f);
+
+            helper.abyssArrive();
+            yield return new WaitForSeconds(4f);
 			
 			//transform.SetPositionY(0f);
 			//GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
@@ -552,11 +547,6 @@ class ShadeLordCtrl : MonoBehaviour
 				attacks.CrossSlash
 			};
 
-			/*
-			atts = new List<Action>()
-			{
-				attacks.AimBeam
-			};//*/
 			co = StartCoroutine(AttackChoice());
 		}
 		StartCoroutine(ToPlatform());
@@ -566,6 +556,7 @@ class ShadeLordCtrl : MonoBehaviour
 		IEnumerator ToEnd()
 		{
             atts = new List<Action>() {};
+            GameObject.Find("Terrain/Area2/Respawn").SetActive(false);
             // wait till current attack done
             yield return new WaitWhile(attacks.isAttacking);
             GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
@@ -638,16 +629,13 @@ class ShadeLordCtrl : MonoBehaviour
 	}
 	private void Vanish()
 	{
-		//helper.fadeTo(gameObject.GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .1f);
-		//helper.fadeTo(GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>(), new Color(1, 1, 1, 0), .1f);
-		//gameObject.GetComponent<SpriteRenderer>().color = new Color(1,1,1,0);
 		GetComponent<BoxCollider2D>().enabled = false;
 
 		GameObject vanish = GameObject.Find("VanishParticles");
 		vanish.GetComponent<ParticleSystem>().Play();
 		vanish.transform.position = transform.position;
 		vanish.transform.SetPositionY(particles.transform.position.y + -5.080002f);
-		transform.SetPosition2D(0, 0);
+
 	}
 
 	private void breakTerrain(GameObject go)

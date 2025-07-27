@@ -1,12 +1,4 @@
-﻿/*/ 
-
-"Main" script for mod
-
-Handles meta information and loads a bunch of stuff
-
-/*/
-
-using Modding;
+﻿using Modding;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,18 +25,12 @@ namespace ShadeLord.Setup
 		{
 			["Boss Scene Controller"] = ("GG_Radiance", "Boss Scene Controller"),
 			["Godseeker"] = ("GG_Collector", "GG_Arena_Prefab/Godseeker Crowd"),
+			["Godseeker Throne"] = ("GG_Collector", "GG_Arena_Prefab/BG/throne"),
 			["Collector"] = ("GG_Collector", "Battle Scene/Jar Collector"),
             ["Abyss Mist"] = ("GG_Radiance", "Boss Control/Abyss Pit/Pt Mist"),
             ["Abyss Particles"] = ("GG_Radiance", "Boss Control/Abyss Pit/Pt Surface"),
             ["Abyss Msk"] = ("GG_Radiance", "Boss Control/Abyss Pit/msk_generic_soft"),
             ["Abyss Scenery"] = ("Abyss_06_Core", "_Scenery")
-        };
-
-        private Dictionary<string, ((string, string), (int, bool))> iterativePreload = new Dictionary<string, ((string, string), (int, bool))>()
-        {
-            ["Abyss Corpse"] = (("Abyss_06_Core", "_Scenery/skull_corpses_layered_0003_1_set"), (17, false)),
-            ["Egg"] = (("Abyss_06_Core", "_Scenery/abyss_white_egg"), (1, true)),
-            ["Egg 4"] = (("Abyss_06_Core", "_Scenery/abyss_white_egg4"), (3, true))
         };
 
         private Material _blurMat;
@@ -58,20 +44,7 @@ namespace ShadeLord.Setup
 
 		public override List<(string, string)> GetPreloadNames()
 		{
-			List<(string, string)> list = preload.Values.ToList();
-            foreach (var (name, ((scene, path), (quantity, hasOrig))) in iterativePreload)
-			{
-				if (hasOrig)
-				{
-                    list.Add((scene, path));
-                }
-                for (int i = 1; i <= quantity; i++)
-                {
-                    list.Add((scene, path + " (" + i + ")"));
-                }
-            }
-            
-            return list;
+            return preload.Values.ToList();
 		}
 
 		// statue information
@@ -98,17 +71,6 @@ namespace ShadeLord.Setup
 			{
 				GameObjects.Add(name, preloadedObjects[scene][path]);
 			}
-            foreach (var (name, ((scene, path), (quantity, hasOrig))) in iterativePreload)
-            {
-				if (hasOrig)
-				{
-                    GameObjects.Add(name, preloadedObjects[scene][path]);
-                }
-                for (int i = 1; i <= quantity; i++)
-                {
-                    GameObjects.Add(name + " " + i, preloadedObjects[scene][path + " (" + i + ")"]);
-                }
-            }
 
             LoadAssets();
 			ModHooks.AfterSavegameLoadHook += AfterSaveGameLoad;

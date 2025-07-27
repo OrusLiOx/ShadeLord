@@ -142,15 +142,17 @@ class SLHelper : MonoBehaviour
 
 	public void abyssToEnd()
 	{
-
         HeroController player = HeroController.instance;
         IEnumerator leftWallToEnd()
 		{
 			GameObject abyssWall = GameObject.Find("AbyssWallLeft");
-            
+            GameObject plat = GameObject.Find("Terrain/ToArea3/Plat (1)");
+            moveWallRoutine = moveX(abyssWall.transform, plat.transform.position.x - 5f, 20);
+            PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(plat.transform.position.x, plat.transform.position.y + 1f));
+
             for (int i = 1; i <= 14; i++)
 			{
-				GameObject plat = GameObject.Find("Terrain/ToArea3/Plat (" + i + ")");
+				plat = GameObject.Find("Terrain/ToArea3/Plat (" + i + ")");
                 Vector3 platPos = plat.transform.position;
 
 				yield return new WaitWhile(() => (

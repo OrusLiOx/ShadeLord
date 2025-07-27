@@ -1,14 +1,7 @@
-/*/
-
-Sets up ShadeLord scene
-
-/*/
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using USceneManager = UnityEngine.SceneManagement.SceneManager;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace ShadeLord.Setup
 {
@@ -73,21 +66,17 @@ namespace ShadeLord.Setup
                     if (!(t.name.Contains("abyss_BG") || 
 						t.name.Contains("skull_corpses_layered_0003_1_set") || 
 						t.name.Contains("fog") ||
-                        t.name.Contains("_0154") ))
+                        t.name.Contains("_0154")) ||
+						t.GetPositionY() > 150)
 					{
 						Destroy(t.gameObject);
-					}//*/
+					}
+					else
+					{
+						Modding.Logger.Log(t.name + ": " + t.GetPositionZ());
+					}
 				}
-                /*
-				GameObject corpses = new GameObject();
-				for (int i = 1; i <=17; i++)
-                {
-                    GameObject test = Instantiate(ShadeLord.GameObjects["Abyss Corpse " + i]);
-                    test.SetActive(true);
-					test.transform.SetParent(corpses.transform, false);
-                }
-                corpses.transform.SetPosition2D(new Vector2(-20, 63));//*/
-                GameObject.Find("Terrain/Background").SetActive(false);
+
                 // create abyss from radiance fight
                 GameObject abyssObj = new GameObject();
                 Instantiate(ShadeLord.GameObjects["Abyss Particles"], Vector3.zero, Quaternion.identity, abyssObj.transform).SetActive(true);
@@ -118,11 +107,12 @@ namespace ShadeLord.Setup
 				SceneController = bsc.GetComponent<BossSceneController>();
 				StatueCreator.BossLevel = SceneController.BossLevel;
 
-				var godseeker = Instantiate(ShadeLord.GameObjects["Godseeker"], new Vector3(x, 72.2f, 14.9f), Quaternion.identity);
+				GameObject godseeker = Instantiate(ShadeLord.GameObjects["Godseeker"]);
 				godseeker.SetActive(true);
-				foreach (SpriteRenderer sr in godseeker.GetComponentsInChildren<SpriteRenderer>())
-					sr.color = new Color(209 / 255f, 209 / 255f, 209 / 255f);
-				godseeker.transform.localScale = Vector3.one * .7f;
+                GameObject throne = Instantiate(ShadeLord.GameObjects["Godseeker Throne"], godseeker.transform, true);
+				throne.SetActive(true);
+				godseeker.transform.SetPosition3D(x, 73.2f, 16f);
+				godseeker.transform.localScale = Vector3.one * .8f;
 
 				// boss stuff
 				GameObject.Find("ShadeLord").AddComponent<ShadeLordCtrl>();
@@ -161,14 +151,6 @@ namespace ShadeLord.Setup
 			On.GameManager.EnterHero -= OnEnterHero;
 		}
 
-		// REMOVE WHEN DONE
-		// print position every 3 seconds 
-		private IEnumerator position()
-		{
-			yield return new WaitForSeconds(3f);
-			StartCoroutine(position());
-		}
-
 		// Turn given GameObject, obj, into a respawn point
 		// put an 'L' at the end of obj's name to make player spawn facing left
 		private void MakeRespawn(GameObject obj)
@@ -186,7 +168,7 @@ namespace ShadeLord.Setup
 
 			marker.transform.SetPositionZ(0);
 
-			obj.SetActive(true);//*/
+			obj.SetActive(true);
 		}
 		// Turn given GameObject, obj, into a camera lock area
 		// box collider of obj is the area the player must be in for the camera lock to apply
@@ -199,7 +181,7 @@ namespace ShadeLord.Setup
 			area.cameraXMax = bounds.max.x;
 			area.cameraXMin = bounds.min.x;
 			area.cameraYMax = bounds.max.y;
-			area.cameraYMin = bounds.min.y;//*/
+			area.cameraYMin = bounds.min.y;
 		}
 	}
 }

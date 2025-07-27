@@ -1,17 +1,5 @@
-﻿/*/
-
-Deal with this
-
-/*/
-
-using System;
-using System.Collections.Generic;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
-using System.Reflection;
-using System.Linq;
-
-
 class TendrilCtrl : MonoBehaviour
 {
 	private SpriteRenderer spriteRender;

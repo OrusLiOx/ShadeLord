@@ -1,9 +1,3 @@
-/*/
-
-Creates statue for Shade Lord
-
-/*/
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
