@@ -43,7 +43,6 @@ namespace ShadeLord.Setup
                 // add properties to certain elements
                 // respawns, camera locks, hazards, etc
                 GameObject[] allObjects = FindObjectsOfType<GameObject>();
-
 				foreach (GameObject obj in allObjects)
 				{
 					if (obj.name.Contains("Respawn"))
@@ -52,28 +51,42 @@ namespace ShadeLord.Setup
 						SetCameraLock(obj);
 					else if (obj.name.Contains("VoidHazard"))
 						obj.AddComponent<DamageHero>().hazardType = 2;
+					else if (obj.name.Contains("BlurPlane"))
+					{
+						obj.transform.SetScaleX(20);
+						obj.transform.SetScaleZ(60);
+						GameObject blur = Instantiate(obj);
+						blur.transform.SetPositionZ(20f);
+                    }
 
 					if (obj.GetComponent<SpriteRenderer>() != null)
 					{
 						obj.GetComponent<SpriteRenderer>().material.shader = Shader.Find("Sprites/Default");
 					}
                 }
+
                 GameObject scenery = Instantiate(ShadeLord.GameObjects["Abyss Scenery"]);
 				scenery.SetActive(true);
                 scenery.transform.SetPosition2D(new Vector2(-20, 63));
 				foreach (Transform t in scenery.transform)
                 {
-                    if (!(t.name.Contains("abyss_BG") || 
-						t.name.Contains("skull_corpses_layered_0003_1_set") || 
-						t.name.Contains("fog") ||
-                        t.name.Contains("_0154")) ||
+                    if (t.name.Contains("fog"))
+					{
+
+					}
+                    else if (t.name.Contains("_0154"))
+					{
+						foreach (Transform t2 in t)
+						{
+							if (t2.GetPositionX() > 50)
+                                Destroy(t2.gameObject);
+                        }
+					}
+                    else if (!(t.name.Contains("abyss_BG") || 
+						t.name.Contains("skull_corpses_layered_0003_1_set")) ||
 						t.GetPositionY() > 150)
 					{
 						Destroy(t.gameObject);
-					}
-					else
-					{
-						Modding.Logger.Log(t.name + ": " + t.GetPositionZ());
 					}
 				}
 
@@ -92,12 +105,12 @@ namespace ShadeLord.Setup
 				float hideOffset = 3f;
                 abyssObj.transform.position = new Vector3(abyssXPos, abyssYPos - hideOffset - 2f, 0f);
 
-                // right wall (45,60)
+                /*/ right wall (45,60)
                 GameObject abyss = Instantiate(abyssObj, new Vector3(45 + hideOffset, 60), Quaternion.Euler(0,0,90));
                 abyss.name = "AbyssWallRight";
                 // left wall (2,90)
                 abyss = Instantiate(abyssObj, new Vector3(2 - hideOffset, 90), Quaternion.Euler(0,0,-90));
-                abyss.name = "AbyssWallLeft";
+                abyss.name = "AbyssWallLeft";//*/
 
                 PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
 

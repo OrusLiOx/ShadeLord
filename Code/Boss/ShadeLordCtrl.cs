@@ -85,7 +85,7 @@ class ShadeLordCtrl : MonoBehaviour
 
 		// trackers
 		tendrils = new Queue<GameObject>();
-		transCamLock.SetActive(false);
+		//transCamLock.SetActive(false);
 
     } 
 	void Start()
