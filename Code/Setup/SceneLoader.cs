@@ -55,8 +55,7 @@ namespace ShadeLord.Setup
 					{
 						obj.transform.SetScaleX(20);
 						obj.transform.SetScaleZ(60);
-						GameObject blur = Instantiate(obj);
-						blur.transform.SetPositionZ(20f);
+						Instantiate(obj).transform.SetPositionZ(20f);
                     }
 
 					if (obj.GetComponent<SpriteRenderer>() != null)
@@ -72,7 +71,14 @@ namespace ShadeLord.Setup
                 {
                     if (t.name.Contains("fog"))
 					{
+						for (int i = 1; i <= 2; i++)
+						{
+							GameObject fog = Instantiate(t.gameObject);
+							fog.transform.SetPositionX(t.GetPositionX() + 100f*i);
+							fog.transform.SetPositionY(t.GetPositionY());
 
+                            Modding.Logger.Log(t.position + " " + fog.transform.position);
+                        }
 					}
                     else if (t.name.Contains("_0154"))
 					{
