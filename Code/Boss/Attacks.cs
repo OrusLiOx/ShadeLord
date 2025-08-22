@@ -155,7 +155,7 @@ public class Attacks : MonoBehaviour
 				// calc angles and stuff
 				if (x == 0)
 					x = .001f;
-				dir = (float)Math.Atan((y / x)) * 180.0f / (float)Mathf.PI;//*
+				dir = (float)Math.Atan((y / x)) * 180.0f / (float)Mathf.PI;
 				if (x > 0)
 				{
 					transform.SetScaleX(-1);
@@ -166,13 +166,9 @@ public class Attacks : MonoBehaviour
 
 
 				// telegraph
-				//emitters[i].transform.position = new Vector3(xCenter-xEdge, yDef+4.5f, 0);
-				//emitters[i].transform.position = (new Vector3(xCenter, yDef + 2, 0) + transform.position)/2;
-				//emitters[i].transform.position = transform.position;
-				
 				emitters[i].transform.position = new Vector2(
 					Mathf.Clamp(transform.GetPositionX(), xCenter-xEdge-5, xCenter + xEdge+5), 
-					Mathf.Clamp(transform.GetPositionY(), yDef-10f, yDef+4.5f));//*/
+					Mathf.Clamp(transform.GetPositionY(), yDef-10f, yDef+4.5f));
 				emitters[i].SetActive(true);
 				ParticleSystem.EmissionModule em = emitters[i].GetComponent<ParticleSystem>().emission;
 				ParticleSystem.ShapeModule shape = emitters[i].GetComponent<ParticleSystem>().shape;
@@ -412,7 +408,7 @@ public class Attacks : MonoBehaviour
 			yield return new WaitForSeconds(2f);
 			eyes(true);
 			yield return new WaitUntil(() => !wait);
-			leave();//*/
+			leave();
 			yield return new WaitUntil(() => !wait);
 			attacking = false;
 		}
@@ -491,7 +487,7 @@ public class Attacks : MonoBehaviour
 	{
 		attacking = true;
 		forward = true;
-		//*/
+		
 		if (lastPhase)
 		{
 			StartCoroutine(SpamCircles());
@@ -499,7 +495,7 @@ public class Attacks : MonoBehaviour
 			options.Add(1);
             StartCoroutine(SpamTeleport(options));
 		}
-		else//*/
+		else
 			StartCoroutine(VoidCircles());
 
 		IEnumerator VoidCircles()
@@ -568,20 +564,7 @@ public class Attacks : MonoBehaviour
 				if (i != rand)
 					randOptions.Add(i);
             }
-            /*/
-            switch (randOptions[UnityEngine.Random.Range(0, randOptions.Count)])
 
-			{
-                case 0:
-                    transform.SetPositionX(xCenter);
-                    break;
-                case 1:
-                    transform.SetPositionX(xCenter - xEdge + 4);
-                    break;
-                case 2:
-                    transform.SetPositionX(xCenter + xEdge - 4);
-                    break;
-            }//*/
             arrive();
             yield return new WaitWhile(() => wait);
             anim.Play("Roar");
@@ -1051,7 +1034,7 @@ public class Attacks : MonoBehaviour
         else
         {
             anim.Play("SideAppear");
-        }//*/
+        }
 
         int iters = 10;
         for (int i = 1; i <= iters; i++)

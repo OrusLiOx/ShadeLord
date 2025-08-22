@@ -38,7 +38,8 @@ class ShadeLordCtrl : MonoBehaviour
 	private Queue<GameObject> spawned;
 	private Queue<GameObject> tendrils;
 
-	private GameObject transCamLock = GameObject.Find("Terrain/ToArea3/CameraLock");
+    private GameObject area1CamLock = GameObject.Find("Terrain/Area2/CameraLock");
+    private GameObject transCamLock = GameObject.Find("Terrain/ToArea3/CameraLock");
 
 	private bool triggeredRocks;
 	public int phase;
@@ -48,12 +49,12 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		// generic unity stuff
 		anim = gameObject.GetComponent<Animator>();
-		boxCol = gameObject.GetComponent<BoxCollider2D>();//*/
+		boxCol = gameObject.GetComponent<BoxCollider2D>();
 		particles = GameObject.Find("HitParticles").GetComponent<ParticleSystem>();
 		particleEm = particles.shape;
 
 		// hollow knight stuff
-		player = HeroController.instance.gameObject;//*/
+		player = HeroController.instance.gameObject;
 		hc = HeroController.instance;
 
 		// properties
@@ -73,13 +74,7 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.CrossSlash,
 			attacks.Spikes,
 			attacks.VoidCircles
-		};//*/
-
-		/*
-		atts = new List<Action>()
-		{
-			attacks.Spikes
-        };//*/
+		};
 
 		helper = gameObject.AddComponent<SLHelper>();
 
@@ -99,8 +94,8 @@ class ShadeLordCtrl : MonoBehaviour
 		health.OnDeath += OnDeath;
 		attacks.Phase(phase);
 
-		//Spawn();
-		FastSpawn();
+		Spawn();
+		//FastSpawn();
 	}
 	private void AssignValues()
 	{
@@ -111,7 +106,7 @@ class ShadeLordCtrl : MonoBehaviour
 		hpMarkers[1] = hpMarkers[0] - hpMarkers[1];
 		hpMarkers[2] = hpMarkers[1] - hpMarkers[2];
 		hpMarkers[3] = hpMarkers[2] - hpMarkers[3];
-		hpMarkers[4] = 0;//*/
+		hpMarkers[4] = 0;
 
 		phase = 0;
 		triggeredRocks = false;
@@ -127,7 +122,7 @@ class ShadeLordCtrl : MonoBehaviour
 		foreach (FieldInfo fi in typeof(HealthManager).GetFields(BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.Name.Contains("Prefab")))
 		{
 			fi.SetValue(health, fi.GetValue(refHP));
-		}//*/
+		}
 
 		// extra damageable
 		ExtraDamageable extraDamageable = refObj.GetComponent<ExtraDamageable>();
@@ -203,7 +198,7 @@ class ShadeLordCtrl : MonoBehaviour
 		else if (Input.GetKeyDown(KeyCode.Keypad8))
 			actionState = 8;
 
-    }//*/
+    }
 	// damage stuff
 	private void OnDeath()
 	{
@@ -254,7 +249,7 @@ class ShadeLordCtrl : MonoBehaviour
 			}
 			gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 		}
-	}//*/
+	}
 
 	// Phase changes
 	public void nextPhase()
@@ -297,7 +292,7 @@ class ShadeLordCtrl : MonoBehaviour
 			Modding.Logger.Log("void circle next");
 			atts.Add(attacks.VoidCircles);
 
-			yield return new WaitWhile(() => attacks.isAttacking());//*/
+			yield return new WaitWhile(() => attacks.isAttacking());
 			yield return new WaitForSeconds(1f);
 			attacks.VoidCircles();
 			yield return new WaitWhile(() => attacks.isAttacking());
@@ -363,7 +358,12 @@ class ShadeLordCtrl : MonoBehaviour
 		GameObject hud = GameObject.Find("Hud Canvas");
 		IEnumerator Spawn()
 		{
-			ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
+			GameObject godseeker = GameObject.Find("GodseekerHolder/Godseeker");
+			godseeker.SetActive(false);
+			transCamLock.SetActive(false);
+			area1CamLock.SetActive(false);
+
+            ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
 			transform.SetPositionY(-2f);
 			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["Silence"]);
 			GameObject.Find("Start").transform.SetPosition3D(0, 3.5f, 38f);
@@ -378,23 +378,9 @@ class ShadeLordCtrl : MonoBehaviour
 
 			// START ANIMATION
 			yield return new WaitForSeconds(3f);
-			SpriteRenderer[] bg = {
-				GameObject.Find("Terrain/Area1/Floor/Sprite").GetComponent<SpriteRenderer>(),
-				GameObject.Find("Terrain/Area2/Mid/Sprite").GetComponent<SpriteRenderer>(),
-				GameObject.Find("Terrain/Area2/Right/Sprite").GetComponent<SpriteRenderer>(),
-				GameObject.Find("Terrain/Area2/Left/Sprite").GetComponent<SpriteRenderer>(),
-				GameObject.Find("Terrain/Background/Start/Bg_Start_3").GetComponent<SpriteRenderer>(),
-				GameObject.Find("Terrain/Background/Start/Bg_Start_2").GetComponent<SpriteRenderer>(),
-				GameObject.Find("Terrain/Background/Start/Bg_Start_1").GetComponent<SpriteRenderer>(),
-				GameObject.Find("Terrain/Background/Start/Bg_Start_0").GetComponent<SpriteRenderer>()
-			};
-			emission.rateOverTime = 100f;
-			for (int i = 0; i< 4; i++)
-				fadeToBlack(bg[i], 1 / 60f, 0);
-			for (int i = 4; i < 8; i++)
-				fadeToBlack(bg[i], 1 / (60f+i*5), (i-4)*25);
+            emission.rateOverTime = 100f;
 
-			yield return new WaitForSeconds(3.5f);
+            yield return new WaitForSeconds(3.5f);
 			emission.rateOverTime = 200f;
 			yield return new WaitForSeconds(3.5f);
 
@@ -408,11 +394,9 @@ class ShadeLordCtrl : MonoBehaviour
 
 			// black screen
 			wall.transform.localPosition = new Vector3(0,0f,0);
-			foreach (SpriteRenderer s in bg)
-				s.color = new Color(.5f,.5f,.5f);
 
 			// set stuff before reveal
-			transform.SetPosition2D(100f, 75.23f);
+			transform.SetPosition2D(23.5f, 75.23f);
 			anim.Play("NeutralSquint");
 			attacks.playSound("ScreamLong");
 			GameObject.Find("ShadeLord/Tendrils").GetComponent<PolygonCollider2D>().enabled = false;
@@ -439,14 +423,14 @@ class ShadeLordCtrl : MonoBehaviour
 			wall.transform.localPosition = new Vector3(0, 0f, 0);
 
 			// hide lord
-			foreach (SpriteRenderer s in bg)
-				s.color = new Color(1f, 1f, 1f);
 			GameObject.Find("ShadeLord/Tendrils").SetActive(false);
 			transform.SetPositionY(-2f);
 
 			// text appear, then leave
-			emission.rateOverTime = 10f;
-			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
+			emission.rateOverTime = 0f;
+			godseeker.SetActive(true);
+			GameObject.Find("GodseekerHolder/GodseekerSpawn").SetActive(false);
+            ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
 			while (titleSprite.color.a<1)
 			{
 				titleSprite.color += c;
@@ -486,6 +470,7 @@ class ShadeLordCtrl : MonoBehaviour
 
 			// GO
 			GameObject.Find("Terrain/CameraLock").SetActive(false);
+			area1CamLock.SetActive(true);
 			title.SetActive(false);
 
 			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR EXIT", false);
@@ -559,7 +544,7 @@ class ShadeLordCtrl : MonoBehaviour
             GameObject.Find("Terrain/Area2/Respawn").SetActive(false);
             // wait till current attack done
             yield return new WaitWhile(attacks.isAttacking);
-            GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
+			GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
             cameraLock.SetActive(false);
             StopCoroutine(co);
 
@@ -569,7 +554,7 @@ class ShadeLordCtrl : MonoBehaviour
             yield return new WaitForSeconds(1f);
 
             // terrain break 1
-            GameObject.Find("Terrain/Area2/CameraLock").SetActive(false);
+            area1CamLock.SetActive(false);
 			transCamLock.SetActive(true);
             helper.abyssToEnd();
 
@@ -585,7 +570,7 @@ class ShadeLordCtrl : MonoBehaviour
             cameraLock.SetActive(true);
             transCamLock.SetActive(false);
 
-            helper.moveX(GameObject.Find("AbyssWallLeft").transform, GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX() - 15f, 1);
+            helper.moveX(GameObject.Find("AbyssWallLeft").transform, cameraLock.transform.GetPositionX() - 15f, 1);
             GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
             GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
 
@@ -660,7 +645,7 @@ class ShadeLordCtrl : MonoBehaviour
 			{
 				triggeredRocks = true;
 				helper.launchRocks();
-			}//*/
+			}
 		}
 		IEnumerator fade(SpriteRenderer sprite)
 		{
@@ -719,13 +704,12 @@ class ShadeLordCtrl : MonoBehaviour
         curr = atts[i];
 		curr.Invoke();
 		// Wait till last attack is done
-		yield return new WaitWhile(() => attacks.isAttacking());//*/
+		yield return new WaitWhile(() => attacks.isAttacking());
 		// delay between attacks
 		if (phase != 4)
 			yield return new WaitForSeconds(.3f);
 		// Repeat
-
-		co = StartCoroutine(AttackChoice());//*/
+		co = StartCoroutine(AttackChoice());
 	}
 
 	// helper

@@ -25,6 +25,7 @@ namespace ShadeLord.Setup
 		{
 			["Boss Scene Controller"] = ("GG_Radiance", "Boss Scene Controller"),
 			["Godseeker"] = ("GG_Collector", "GG_Arena_Prefab/Godseeker Crowd"),
+			["Godseeker Spawn"] = ("GG_Radiance", "Boss Control/Godseeker Crowd"),
 			["Godseeker Throne"] = ("GG_Collector", "GG_Arena_Prefab/BG/throne"),
 			["Collector"] = ("GG_Collector", "Battle Scene/Jar Collector"),
             ["Abyss Mist"] = ("GG_Radiance", "Boss Control/Abyss Pit/Pt Mist"),
@@ -194,7 +195,7 @@ namespace ShadeLord.Setup
 			if (ctrl.health.hp < ctrl.hpMarkers[ctrl.phase])
 			{
 				ctrl.nextPhase();
-			}//*/
+			}
 
 			IEnumerator flicker()
 			{

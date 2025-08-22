@@ -32,7 +32,7 @@ namespace ShadeLord.Setup
 				sm.mapZone = GlobalEnums.MapZone.GODS_GLORY;
 				sm.isWindy = false;
 				sm.noParticles = true;
-				sm.environmentType = 5;//*/
+				sm.environmentType = 5;
 			}
 		}
 		// Set up scene and attach nessecary scripts
@@ -76,8 +76,6 @@ namespace ShadeLord.Setup
 							GameObject fog = Instantiate(t.gameObject);
 							fog.transform.SetPositionX(t.GetPositionX() + 100f*i);
 							fog.transform.SetPositionY(t.GetPositionY());
-
-                            Modding.Logger.Log(t.position + " " + fog.transform.position);
                         }
 					}
                     else if (t.name.Contains("_0154"))
@@ -111,12 +109,12 @@ namespace ShadeLord.Setup
 				float hideOffset = 3f;
                 abyssObj.transform.position = new Vector3(abyssXPos, abyssYPos - hideOffset - 2f, 0f);
 
-                /*/ right wall (45,60)
+                // right wall (45,60)
                 GameObject abyss = Instantiate(abyssObj, new Vector3(45 + hideOffset, 60), Quaternion.Euler(0,0,90));
                 abyss.name = "AbyssWallRight";
                 // left wall (2,90)
                 abyss = Instantiate(abyssObj, new Vector3(2 - hideOffset, 90), Quaternion.Euler(0,0,-90));
-                abyss.name = "AbyssWallLeft";//*/
+                abyss.name = "AbyssWallLeft";
 
                 PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
 
@@ -126,15 +124,24 @@ namespace ShadeLord.Setup
 				SceneController = bsc.GetComponent<BossSceneController>();
 				StatueCreator.BossLevel = SceneController.BossLevel;
 
-				GameObject godseeker = Instantiate(ShadeLord.GameObjects["Godseeker"]);
+				GameObject godseekerHolder = new GameObject();
+                GameObject throne = Instantiate(ShadeLord.GameObjects["Godseeker Throne"], godseekerHolder.transform, true);
+                throne.SetActive(true);
+                GameObject godseeker = Instantiate(ShadeLord.GameObjects["Godseeker"], godseekerHolder.transform, true);
 				godseeker.SetActive(true);
-                GameObject throne = Instantiate(ShadeLord.GameObjects["Godseeker Throne"], godseeker.transform, true);
-				throne.SetActive(true);
-				godseeker.transform.SetPosition3D(x, 73.2f, 16f);
-				godseeker.transform.localScale = Vector3.one * .8f;
+                godseeker.name = "Godseeker";
+                GameObject godseekerSpawn = Instantiate(ShadeLord.GameObjects["Godseeker Spawn"], godseekerHolder.transform,true);
+                godseekerSpawn.SetActive(true);
+				godseekerSpawn.name = "GodseekerSpawn";
+				godseekerSpawn.transform.position = godseeker.transform.position;
 
-				// boss stuff
-				GameObject.Find("ShadeLord").AddComponent<ShadeLordCtrl>();
+
+				godseekerHolder.transform.SetPosition3D(x-4.5f, 69.2f, 16f);
+                godseekerHolder.transform.localScale = Vector3.one * .5f;
+				godseekerHolder.name = "GodseekerHolder";
+
+                // boss stuff
+                GameObject.Find("ShadeLord").AddComponent<ShadeLordCtrl>();
 				//end boss stuff
 				var rootGOs = nextScene.GetRootGameObjects();
 				foreach (var go in rootGOs)

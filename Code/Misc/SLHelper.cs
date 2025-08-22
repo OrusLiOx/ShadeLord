@@ -85,7 +85,7 @@ class SLHelper : MonoBehaviour
 			if (a < 0)
 				subVals[3] = a * -1;
 			else
-				addVals[3] = a * 1;//*/
+				addVals[3] = a * 1;
 
 			Color add = new Color(addVals[0], addVals[1], addVals[2], addVals[3]),
 				sub = new Color(subVals[0], subVals[1], subVals[2], subVals[3]);
