@@ -67,8 +67,10 @@ public class VoidCircle : MonoBehaviour
 				float a = sprite.color.a - (3 / 60f);
 				sprite.color = new Color(1, 1, 1, a);
 				outline.color = new Color(1, 1, 1, a);
-			}
-			col.enabled = false;
+
+				if (col.enabled)
+	                col.enabled = false;
+            }
 			// burst fade
 			while(sprite.color.a > 0)
 			{

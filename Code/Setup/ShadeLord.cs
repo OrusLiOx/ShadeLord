@@ -189,6 +189,7 @@ namespace ShadeLord.Setup
 			ctrl.particles.transform.SetPositionY(ctrl.particles.transform.position.y + -2.5f);
 			ctrl.particles.Play();
 			ctrl.StartCoroutine(flicker());
+			ctrl.attacks.playSound("VoidHit");
 
 			orig(self, hitinstance);
 			//SpawnHitEffect(hitinstance.Direction);
@@ -237,7 +238,7 @@ namespace ShadeLord.Setup
 		}
 
 		// Change music script from Pale Court
-		public static void PlayMusic(AudioClip clip)
+		public static void PlayMusic(AudioClip clip, float transitionTime = 0f)
 		{
 			MusicCue musicCue = ScriptableObject.CreateInstance<MusicCue>();
 			MusicCue.MusicChannelInfo channelInfo = new MusicCue.MusicChannelInfo();
@@ -247,7 +248,7 @@ namespace ShadeLord.Setup
 				channelInfo, null, null, null, null, null
 			};
 			ReflectionHelper.SetField(musicCue, "channelInfos", channelInfos);
-			GameManager.instance.AudioManager.ApplyMusicCue(musicCue, 0, 0, false);
+			GameManager.instance.AudioManager.ApplyMusicCue(musicCue, transitionTime, transitionTime, false);
 		}
 
 		public static void DreamDelayed()

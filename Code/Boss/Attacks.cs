@@ -332,7 +332,7 @@ public class Attacks : MonoBehaviour
             if (infiniteSpike)
                 anim.Play("SpikeLoop");
 
-            // fire 3 sets of spikes with random offset
+            // fire spikes with random offset
             int i = 1;
 			float randOffset = xCenter - xEdge + UnityEngine.Random.Range(0, 1f);
             while (i > 0 || infiniteSpike)
@@ -346,7 +346,10 @@ public class Attacks : MonoBehaviour
 					GameObject s = Instantiate(atts["Spike"], parent.transform);
 					s.SetActive(true);
 					s.transform.SetPosition2D(offset, 66.42f);
-					offset += 2f;
+					if (infiniteSpike)
+						offset += 2.5f;
+					else
+						offset += 2f;
 				}
 				yield return new WaitForSeconds(Spike.spawnTime);
 				// spikes go up
@@ -543,16 +546,18 @@ public class Attacks : MonoBehaviour
 		IEnumerator SpamCircles(float wait = 0f)
 		{
 			yield return new WaitForSeconds(wait);
-            float curX = xCenter - xEdge - 2.5f + UnityEngine.Random.Range(5f, 9f);
+			float minVar = 7f;
+			float maxVar = 11f;
+            float curX = xCenter - xEdge - 2.5f + UnityEngine.Random.Range(minVar, maxVar);
             while (curX < xCenter + xEdge)
             {
                 StartCoroutine(MakeCircle(curX, UnityEngine.Random.Range(66f, 76f), .7f, false));
-                curX += UnityEngine.Random.Range(5f, 9f);
+                curX += UnityEngine.Random.Range(minVar, maxVar);
             }
 
             yield return new WaitForSeconds(.5f);
             playSound("BeamBlast");
-            yield return new WaitForSeconds(.7f);
+            yield return new WaitForSeconds(1f);
 			StartCoroutine(SpamCircles());
         }
 		IEnumerator SpamTeleport(List<int> randOptions)

@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Linq;
 using UObject = UnityEngine.Object;
 using ShadeLord.Setup;
+using static UnityEngine.GraphicsBuffer;
+using UnityEngine.Audio;
 
 class ShadeLordCtrl : MonoBehaviour
 {
@@ -31,7 +33,7 @@ class ShadeLordCtrl : MonoBehaviour
 	//public int[] hpMarkers = { 400, 450, 300, 750, 2200 };
 	private System.Random rand;
 	
-	private Attacks attacks;
+	public Attacks attacks;
 	private SLHelper helper;
 
 	// trackers
@@ -72,8 +74,7 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.Dash,
 			attacks.AimBeam,
 			attacks.CrossSlash,
-			attacks.Spikes,
-			attacks.VoidCircles
+			attacks.Spikes
 		};
 
 		helper = gameObject.AddComponent<SLHelper>();
@@ -330,7 +331,10 @@ class ShadeLordCtrl : MonoBehaviour
 
 			// text appear, then leave
 			emission.rateOverTime = 10f;
-			ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
+			GameObject music = GameObject.Find("ShadeLordMusic");
+            music.GetComponent<AudioSource>().Play();
+			//music.outputAudioMixerGroup = GameManager.instance.AudioManager.
+
             // hud appear
 
             // GO
@@ -342,6 +346,7 @@ class ShadeLordCtrl : MonoBehaviour
 
 		List<GameObject> startTendrils = new List<GameObject>();
 		List<GameObject> voidTendrils = new List<GameObject>();
+		bool foundAudioGroup = false;
 		foreach (GameObject obj in allObjects)
 		{
 			if (obj.name == "white_palace_particles" || obj.name == "default_particles")
@@ -350,7 +355,20 @@ class ShadeLordCtrl : MonoBehaviour
 				voidTendrils.Add(obj);
 			else if (obj.name.Contains("StartTendril"))
 				startTendrils.Add(obj);
-		}
+            else if (!foundAudioGroup && obj.GetComponent<AudioSource>() != null)
+            {
+                if (obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.name == "Music")
+                {
+					Modding.Logger.Log(obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.name);
+                    AudioMixerGroup group = obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.FindMatchingGroups(string.Empty)[1];
+					foreach(AudioMixerGroup g in obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.FindMatchingGroups(string.Empty))
+						Modding.Logger.Log("   "+g.name);
+                    GameObject.Find("ShadeLordMusic").GetComponent<AudioSource>().outputAudioMixerGroup = group;
+                    GameObject.Find("VoidAmbience").GetComponent<AudioSource>().outputAudioMixerGroup = group;
+					foundAudioGroup = true;
+                }
+            }//*/
+        }
 		helper.randomizeAnimStart(voidTendrils, "ShortAnim", 12);
 		helper.randomizeAnimStart(startTendrils, "TendrilWiggle", 8);
 		StartCoroutine(Spawn());
@@ -380,16 +398,26 @@ class ShadeLordCtrl : MonoBehaviour
 			GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().Play();
 
 			// START ANIMATION
+			SpriteRenderer blackout = GameObject.Find("Terrain/BlackSquare").GetComponent<SpriteRenderer>();
 			yield return new WaitForSeconds(3f);
             emission.rateOverTime = 100f;
 
-            yield return new WaitForSeconds(3.5f);
+            c = new Color(0, 0, 0, 1 / 360f);
+            while (blackout.color.a < .35)
+            {
+                blackout.color += c;
+                yield return new WaitForSeconds(1 / 30f);
+            }
 			emission.rateOverTime = 200f;
-			yield return new WaitForSeconds(3.5f);
+            while (blackout.color.a < .6)
+            {
+                blackout.color += c;
+                yield return new WaitForSeconds(1 / 30f);
+            }
 
-			// APPEAR CLOSER / SCREAM
-			// lock movemnet
-			if (player.transform.GetPositionX() > transform.GetPositionX())
+            // APPEAR CLOSER / SCREAM
+            // lock movemnet
+            if (player.transform.GetPositionX() > transform.GetPositionX())
 				HeroController.instance.FaceLeft();
 			else
 				HeroController.instance.FaceRight();
@@ -403,9 +431,10 @@ class ShadeLordCtrl : MonoBehaviour
 			anim.Play("Roar");
 			attacks.playSound("ScreamLong");
 			GameObject.Find("ShadeLord/Tendrils").GetComponent<PolygonCollider2D>().enabled = false;
+			blackout.color = new Color(0,0,0,0);
 
-			// reveal
-			yield return new WaitForSeconds(1/6f);
+            // reveal
+            yield return new WaitForSeconds(1/6f);
 			c = new Color(0, 0, 0, 1 / 7f);
 			while (wallSprite.color.a > 0)
 			{
@@ -535,10 +564,6 @@ class ShadeLordCtrl : MonoBehaviour
             helper.abyssArrive();
             yield return new WaitForSeconds(4f);
 			
-			//transform.SetPositionY(0f);
-			//GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-			//GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-			
 			atts = new List<Action>()
 			{
 				attacks.VoidCircles,
@@ -560,7 +585,9 @@ class ShadeLordCtrl : MonoBehaviour
             GameObject.Find("Terrain/Area2/Respawn").SetActive(false);
             // wait till current attack done
             yield return new WaitWhile(attacks.isAttacking);
-			GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
+            ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
+			emission.rateOverTime = 50f;
+            GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
             cameraLock.SetActive(false);
             StopCoroutine(co);
 
@@ -579,6 +606,7 @@ class ShadeLordCtrl : MonoBehaviour
             //attacks.VoidCircles();
 
             atts = new List<Action>() { attacks.AimBeam };
+            StartCoroutine(FadeMusic());
             co = StartCoroutine(AttackChoice());
             float xTrigger = GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f;
 			// Wait till reach end section
@@ -593,7 +621,21 @@ class ShadeLordCtrl : MonoBehaviour
             atts = new List<Action>() { attacks.VoidCircles };
             attacks.Stop();
 		}
-		StartCoroutine(ToEnd());
+		IEnumerator FadeMusic()
+		{
+			AudioSource music = GameObject.Find("ShadeLordMusic").GetComponent<AudioSource>();
+			AudioSource ambience = GameObject.Find("VoidAmbience").GetComponent<AudioSource>();
+			ambience.volume = 0;
+			ambience.Play();
+            while (music.volume >0)
+			{
+				music.volume -= 1f/100f;
+				ambience.volume += 1f / 100f;
+				yield return new WaitForSeconds(1/10f);
+			}
+		}
+
+        StartCoroutine(ToEnd());
 	}
 	private void Death()
 	{
@@ -655,9 +697,12 @@ class ShadeLordCtrl : MonoBehaviour
 
 			yield return new WaitForSeconds(3f);
 			go.SetActive(false);
+			AudioSource audio = GameObject.Find("Terrain/BreakAudio").GetComponent<AudioSource>();
+            audio.outputAudioMixerGroup = player.GetComponent<AudioSource>().outputAudioMixerGroup;
+            audio.Play();
 
-			// rock particles
-			if (!triggeredRocks)
+            // rock particles
+            if (!triggeredRocks)
 			{
 				triggeredRocks = true;
 				helper.launchRocks();
