@@ -150,7 +150,7 @@ class SLHelper : MonoBehaviour
             moveWallRoutine = moveX(abyssWall.transform, plat.transform.position.x - 5f, 20);
             PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(plat.transform.position.x, plat.transform.position.y + 1f));
 
-            for (int i = 1; i <= 14; i++)
+            for (int i = 1; i <= 19; i++)
 			{
 				plat = GameObject.Find("Terrain/ToArea3/Plat (" + i + ")");
                 Vector3 platPos = plat.transform.position;

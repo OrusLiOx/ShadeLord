@@ -333,7 +333,7 @@ public class Attacks : MonoBehaviour
                 anim.Play("SpikeLoop");
 
             // fire 3 sets of spikes with random offset
-            int i = 3;
+            int i = 1;
 			float randOffset = xCenter - xEdge + UnityEngine.Random.Range(0, 1f);
             while (i > 0 || infiniteSpike)
 			{
@@ -490,7 +490,7 @@ public class Attacks : MonoBehaviour
 		
 		if (lastPhase)
 		{
-			StartCoroutine(SpamCircles());
+			StartCoroutine(SpamCircles(2.5f));
             List<int> options = new List<int>();
 			options.Add(1);
             StartCoroutine(SpamTeleport(options));
@@ -516,10 +516,8 @@ public class Attacks : MonoBehaviour
 			obj.GetComponent<VoidCircle>().Appear();
 
 			yield return new WaitForSeconds(.8f);
-
-			anim.Play("Roar");
 			playSound("Scream");
-			playSound("BeamBlast");
+			anim.Play("Roar");
             yield return new WaitForSeconds(.2f);
             obj.GetComponent<VoidCircle>().Fire();
 			//yield return new WaitForSeconds(.5f);
@@ -542,8 +540,9 @@ public class Attacks : MonoBehaviour
 			haloSprite.enabled = true;
 			attacking = false;
 		}
-		IEnumerator SpamCircles()
+		IEnumerator SpamCircles(float wait = 0f)
 		{
+			yield return new WaitForSeconds(wait);
             float curX = xCenter - xEdge - 2.5f + UnityEngine.Random.Range(5f, 9f);
             while (curX < xCenter + xEdge)
             {
@@ -551,28 +550,33 @@ public class Attacks : MonoBehaviour
                 curX += UnityEngine.Random.Range(5f, 9f);
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(.5f);
+            playSound("BeamBlast");
+            yield return new WaitForSeconds(.7f);
 			StartCoroutine(SpamCircles());
-		}
+        }
 		IEnumerator SpamTeleport(List<int> randOptions)
         {
             int rand = randOptions[UnityEngine.Random.Range(0, randOptions.Count)];
-            transform.SetPositionX(xCenter + rand * (-xEdge + 4));
-            randOptions.Clear();
-            for (int i = -1; i <=1;i ++)
-			{
-				if (i != rand)
-					randOptions.Add(i);
-            }
+			
+            transform.SetPositionX(xCenter + rand * (xEdge - 4));
 
             arrive();
             yield return new WaitWhile(() => wait);
+			if (randOptions.Count == 1)
+				playSound("Scream");
             anim.Play("Roar");
             yield return new WaitForSeconds(2);
 
             leave();
             yield return new WaitWhile(() => wait);
 
+            randOptions.Clear();
+            for (int i = -1; i <= 1; i++)
+            {
+                if (i != rand)
+                    randOptions.Add(i);
+            }
             StartCoroutine(SpamTeleport(randOptions));
         }
         IEnumerator MakeCircle(float x, float y, float wait, bool hasSound = true)
@@ -586,12 +590,6 @@ public class Attacks : MonoBehaviour
 			yield return new WaitForSeconds(wait);
 
 			obj.GetComponent<VoidCircle>().Fire(hasSound);
-			if (!hasSound)
-			{
-				yield return new WaitForSeconds(2);
-                playSound("BeamBlast");
-            }
-			//playSound("BeamBlast");
 		}
 	}
 	// void beams
@@ -984,7 +982,7 @@ public class Attacks : MonoBehaviour
 			wait = false;
 		}
 	}
-	private void leave()
+	public void leave()
 	{
 		StartCoroutine(leave());
 		IEnumerator leave()
@@ -1053,10 +1051,10 @@ public class Attacks : MonoBehaviour
 	{
 		t.Rotate(new Vector3(0, 0, t.rotation.z + r));
 	}
-	public void playSound(string clip)
+	public void playSound(string clip, float volume = 1f)
 	{
 		//aud.clip = sounds[clip];
-		aud.GetComponent<AudioSource>().PlayOneShot(sounds[clip]);
+		aud.GetComponent<AudioSource>().PlayOneShot(sounds[clip], volume);
 	}
 	private void resetHitBox()
 	{

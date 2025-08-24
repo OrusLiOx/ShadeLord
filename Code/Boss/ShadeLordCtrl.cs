@@ -94,8 +94,8 @@ class ShadeLordCtrl : MonoBehaviour
 		health.OnDeath += OnDeath;
 		attacks.Phase(phase);
 
-		Spawn();
-		//FastSpawn();
+		//Spawn();
+		FastSpawn();
 	}
 	private void AssignValues()
 	{
@@ -293,9 +293,12 @@ class ShadeLordCtrl : MonoBehaviour
 			atts.Add(attacks.VoidCircles);
 
 			yield return new WaitWhile(() => attacks.isAttacking());
-			yield return new WaitForSeconds(1f);
-			attacks.VoidCircles();
-			yield return new WaitWhile(() => attacks.isAttacking());
+			if (phase == 1)
+			{
+				yield return new WaitForSeconds(1f);
+				attacks.VoidCircles();
+				yield return new WaitWhile(() => attacks.isAttacking());
+			}
 			co = StartCoroutine(AttackChoice());
 		}
 	}
@@ -397,7 +400,7 @@ class ShadeLordCtrl : MonoBehaviour
 
 			// set stuff before reveal
 			transform.SetPosition2D(23.5f, 75.23f);
-			anim.Play("NeutralSquint");
+			anim.Play("Roar");
 			attacks.playSound("ScreamLong");
 			GameObject.Find("ShadeLord/Tendrils").GetComponent<PolygonCollider2D>().enabled = false;
 
@@ -499,19 +502,32 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		IEnumerator ToPlatform()
 		{
-			// stop all and disapear into void particles
+			// stop all
 			StopCoroutine(co);
 			attacks.Stop();
 		
-			// scream and spew particles
-			attacks.playSound("Scream");
-			Vanish();
+			// lord animation
+			attacks.playSound("ScreamLong");
+			attacks.leave();
+            Vector3 pos = transform.position + new Vector3(0, -2, 0);
+            GameObject particles = GameObject.Find("VanishParticles");
+            GameObject.Find("Gradient").transform.position = pos;
+            particles.transform.position = pos;
+            particles.GetComponent<ParticleSystem>().Play();
+
+            yield return new WaitForSeconds(.5f);
+            Color c = new Color(0, 0, 0, 1 / 30f);
+			SpriteRenderer sprite = GameObject.Find("Gradient").GetComponent<SpriteRenderer>();
+            while (sprite.color.a > 0)
+            {
+                sprite.color -= c;
+                yield return new WaitForSeconds(1 / 30f);
+            }
 
             // wait a bit
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(1.5f);
 
 			// terrain breaks
-            yield return new WaitForSeconds(1f);
             breakTerrain(GameObject.Find("Terrain/Area1"));
 			// Wait a bit then start attacking again
 			yield return new WaitForSeconds(1f);
