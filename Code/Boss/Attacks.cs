@@ -353,7 +353,7 @@ public class Attacks : MonoBehaviour
 				}
 				yield return new WaitForSeconds(Spike.spawnTime);
 				// spikes go up
-				playSound("SpikeUpLower");
+				playSound("SpikeUp");
 				yield return new WaitForSeconds(Spike.upTime + Spike.activeTime + Spike.downTime + .1f);
 				i--;
 			}
@@ -1058,7 +1058,6 @@ public class Attacks : MonoBehaviour
 	}
 	public void playSound(string clip, float volume = 1f)
 	{
-		//aud.clip = sounds[clip];
 		aud.GetComponent<AudioSource>().PlayOneShot(sounds[clip], volume);
 	}
 	private void resetHitBox()

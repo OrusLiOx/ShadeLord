@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UObject = UnityEngine.Object;
 
 namespace ShadeLord.Setup
@@ -80,6 +82,7 @@ namespace ShadeLord.Setup
 			ModHooks.NewGameHook += AddComponent;
 			On.GameManager.StartNewGame += StartNewGame;
 			On.HealthManager.TakeDamage += OnTakeDamage;
+			On.HealthManager.Die += OnDeath;
 			ModHooks.SetPlayerVariableHook += SetVariableHook;
 
 			On.BlurPlane.Awake += OnBlurPlaneAwake;
@@ -211,9 +214,84 @@ namespace ShadeLord.Setup
 			}
 		}
 
+        public void OnDeath(On.HealthManager.orig_Die orig, HealthManager self, float? attackDirection, AttackTypes attackType, bool ignoreEvasion)
+        {
+            ShadeLordCtrl ctrl;
+            Modding.Logger.Log(self.gameObject.name);
+            if (!self.gameObject.TryGetComponent<ShadeLordCtrl>(out ctrl))
+            {
+                orig(self, attackDirection, attackType, ignoreEvasion);
+                return;
+            }
+            ctrl.gameObject.GetComponent<Attacks>().Stop();
+            ctrl.StopAllCoroutines();
+            ctrl.StartCoroutine(Death());
 
-		// scene stuff
-		private void OnBlurPlaneAwake(On.BlurPlane.orig_Awake orig, BlurPlane self)
+            IEnumerator Death()
+            {
+                ctrl.attacks.playSound("ScreamLong");
+				// remove spawned attacks
+				ctrl.attacks.Stop();
+
+                // die
+                //anim.Play("Death");
+                ctrl.boxCol.enabled = false;
+                GameObject particleObj = GameObject.Find("SpewParticles");
+                particleObj.transform.position = ctrl.transform.position + new Vector3(0, -5, 0);
+                ParticleSystem particles = particleObj.GetComponent<ParticleSystem>();
+                ParticleSystem.EmissionModule emission = particles.emission;
+                particles.Play();
+                ctrl.anim.Play("Roar");
+                ctrl.attacks.playSound("ScreamLong");
+                ctrl.attacks.playSound("Death");
+				ctrl.StartCoroutine(ctrl.darkBurst());
+                emission.rateOverTime = 100f;
+				yield return new WaitForSeconds(2);
+                emission.rateOverTime = 200f;
+
+                SpriteRenderer haloSprite = GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>();
+                SpriteRenderer haloGlowSprite = GameObject.Find("ShadeLord/Halo/Glow").GetComponent<SpriteRenderer>();
+                haloSprite.color = Color.black;
+                SpriteRenderer lordSprite = GameObject.Find("ShadeLord").GetComponent<SpriteRenderer>();
+                lordSprite.color = Color.black;
+                SpriteRenderer gradientSprite = GameObject.Find("Gradient").GetComponent<SpriteRenderer>();
+                gradientSprite.color = new Color(0, 0, 0, 0);
+                GameObject.Find("Gradient").transform.position = ctrl.transform.position + new Vector3(0, -7, 0);
+                Color c = new Color(0, 0, 0, 1 / 90f);
+                SpriteRenderer blackout = GameObject.Find("Terrain/BlackSquare").GetComponent<SpriteRenderer>();
+				blackout.color = new Color(0, 0, 0, 0);
+
+                while (haloSprite.color.a > 0)
+                {
+					gradientSprite.color += c;
+                    haloSprite.color -= c;
+					lordSprite.color -= c/2;
+					haloGlowSprite.color -= c;
+					blackout.color += c/2;
+                    yield return new WaitForSeconds(1 / 30f);
+                }
+
+                emission.rateOverTime = 0f;
+                yield return new WaitForSeconds(2f);
+                c = new Color(0, 0, 0, 1 / 90f);
+				ctrl.anim.Play("Nothing");
+                while (gradientSprite.color.a > 0)
+                {
+                    gradientSprite.color -= c;
+                    blackout.color -= c;
+                    lordSprite.color -= c*2;
+                    yield return new WaitForSeconds(1 / 30f);
+                }
+                yield return new WaitForSeconds(3f);
+                
+
+                DreamDelayed();
+                GameObject.Destroy(ctrl.gameObject);
+            }
+        }
+
+        // scene stuff
+        private void OnBlurPlaneAwake(On.BlurPlane.orig_Awake orig, BlurPlane self)
 		{
 			orig(self);
 

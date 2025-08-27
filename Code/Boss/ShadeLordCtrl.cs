@@ -13,8 +13,8 @@ class ShadeLordCtrl : MonoBehaviour
 {
 	private int actionState = -1;
 	// generic unity stuff
-	private Animator anim;
-	private BoxCollider2D boxCol;
+	public Animator anim;
+	public BoxCollider2D boxCol;
 	public ParticleSystem particles;
 	public ParticleSystem.ShapeModule particleEm;
 	private Coroutine co;
@@ -35,10 +35,6 @@ class ShadeLordCtrl : MonoBehaviour
 	
 	public Attacks attacks;
 	private SLHelper helper;
-
-	// trackers
-	private Queue<GameObject> spawned;
-	private Queue<GameObject> tendrils;
 
     private GameObject area1CamLock = GameObject.Find("Terrain/Area2/CameraLock");
     private GameObject transCamLock = GameObject.Find("Terrain/ToArea3/CameraLock");
@@ -78,11 +74,6 @@ class ShadeLordCtrl : MonoBehaviour
 		};
 
 		helper = gameObject.AddComponent<SLHelper>();
-
-		// trackers
-		tendrils = new Queue<GameObject>();
-		//transCamLock.SetActive(false);
-
     } 
 	void Start()
 	{
@@ -92,7 +83,6 @@ class ShadeLordCtrl : MonoBehaviour
 		extDmg = gameObject.AddComponent<ExtraDamageable>();
 		GameObject.Find("Halo").AddComponent<Spin>();
 		AssignValues();
-		health.OnDeath += OnDeath;
 		attacks.Phase(phase);
 
 		//Spawn();
@@ -101,7 +91,7 @@ class ShadeLordCtrl : MonoBehaviour
 	private void AssignValues()
 	{
 		// health
-		health.hp = hpMarkers[4];
+		health.hp = 1;//hpMarkers[4];
 
 		hpMarkers[0] = hpMarkers[4] - hpMarkers[0];
 		hpMarkers[1] = hpMarkers[0] - hpMarkers[1];
@@ -205,8 +195,48 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		gameObject.GetComponent<Attacks>().Stop();
 		StopAllCoroutines();
-		Death();
-	}
+        StartCoroutine(Death());
+
+        IEnumerator Death()
+        {
+            attacks.playSound("ScreamLong");
+
+            // die
+            //anim.Play("Death");
+            boxCol.enabled = false;
+            GameObject particleObj = GameObject.Find("SpewParticles");
+            particleObj.transform.position = transform.position + new Vector3(0, -2, 0);
+            ParticleSystem particles = particleObj.GetComponent<ParticleSystem>();
+            ParticleSystem.EmissionModule emission = particles.emission;
+            particles.Play();
+            anim.Play("Roar");
+            attacks.playSound("ScreamLong");
+            yield return new WaitForSeconds(3f);
+
+            GameObject.Find("Gradient").transform.position = transform.position + new Vector3(0, -2, 0);
+            emission.rateOverTime = 0f;
+            yield return new WaitForSeconds(.5f);
+            Color c = new Color(0, 0, 0, 1 / 30f);
+            SpriteRenderer sprite = GameObject.Find("Gradient").GetComponent<SpriteRenderer>();
+            sprite.color = Color.black;
+            while (sprite.color.a > 0)
+            {
+                sprite.color -= c;
+                yield return new WaitForSeconds(1 / 30f);
+            }
+            yield return new WaitForSeconds(3f);
+            /*
+			StatueCreator.WonFight = true;
+			var bsc = SceneLoader.SceneController.GetComponent<BossSceneController>();
+			GameObject transition = UObject.Instantiate(bsc.transitionPrefab);
+			PlayMakerFSM transitionsFSM = transition.LocateMyFSM("Transitions");
+			transitionsFSM.SetState("Out Statue");
+			bsc.DoDreamReturn();//*/
+
+            ShadeLord.Setup.ShadeLord.DreamDelayed();
+            Destroy(gameObject);
+        }
+    }
 	// on take damage moved to ShadeLord.cs
 	private void SpawnHitEffect(float dir)
 	{
@@ -255,6 +285,7 @@ class ShadeLordCtrl : MonoBehaviour
 	// Phase changes
 	public void nextPhase()
 	{
+		return;
 		phase++;
 		Modding.Logger.Log(phase);
 		switch (phase)
@@ -331,9 +362,7 @@ class ShadeLordCtrl : MonoBehaviour
 
 			// text appear, then leave
 			emission.rateOverTime = 10f;
-			GameObject music = GameObject.Find("ShadeLordMusic");
-            music.GetComponent<AudioSource>().Play();
-			//music.outputAudioMixerGroup = GameManager.instance.AudioManager.
+			GameObject.Find("ShadeLordMusic").GetComponent<AudioSource>().Play();
 
             // hud appear
 
@@ -361,8 +390,6 @@ class ShadeLordCtrl : MonoBehaviour
                 {
 					Modding.Logger.Log(obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.name);
                     AudioMixerGroup group = obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.FindMatchingGroups(string.Empty)[1];
-					foreach(AudioMixerGroup g in obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.FindMatchingGroups(string.Empty))
-						Modding.Logger.Log("   "+g.name);
                     GameObject.Find("ShadeLordMusic").GetComponent<AudioSource>().outputAudioMixerGroup = group;
                     GameObject.Find("VoidAmbience").GetComponent<AudioSource>().outputAudioMixerGroup = group;
 					foundAudioGroup = true;
@@ -462,8 +489,8 @@ class ShadeLordCtrl : MonoBehaviour
 			emission.rateOverTime = 0f;
 			godseeker.SetActive(true);
 			GameObject.Find("GodseekerHolder/GodseekerSpawn").SetActive(false);
-            ShadeLord.Setup.ShadeLord.PlayMusic(attacks.sounds["ShadeLord_Theme"]);
-			while (titleSprite.color.a<1)
+            GameObject.Find("ShadeLordMusic").GetComponent<AudioSource>().Play();
+            while (titleSprite.color.a<1)
 			{
 				titleSprite.color += c;
 				yield return new WaitForSeconds(1/30f);
@@ -512,6 +539,7 @@ class ShadeLordCtrl : MonoBehaviour
 		
 		List<GameObject> startTendrils = new List<GameObject>();
 		List<GameObject> voidTendrils = new List<GameObject>();
+		bool foundAudioGroup = false;
 		foreach (GameObject obj in allObjects)
 		{
 			if (obj.name == "white_palace_particles" || obj.name == "default_particles")
@@ -522,7 +550,18 @@ class ShadeLordCtrl : MonoBehaviour
 				voidTendrils.Add(obj);
 			else if (obj.name.Contains("StartTendril"))
 				startTendrils.Add(obj);
-		}
+            else if (!foundAudioGroup && obj.GetComponent<AudioSource>() != null)
+            {
+                if (obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.name == "Music")
+                {
+                    Modding.Logger.Log(obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.name);
+                    AudioMixerGroup group = obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.FindMatchingGroups(string.Empty)[1];
+                    GameObject.Find("ShadeLordMusic").GetComponent<AudioSource>().outputAudioMixerGroup = group;
+                    GameObject.Find("VoidAmbience").GetComponent<AudioSource>().outputAudioMixerGroup = group;
+                    foundAudioGroup = true;
+                }
+            }
+        }
 		helper.randomizeAnimStart(voidTendrils, "ShortAnim", 12);
 		helper.randomizeAnimStart(startTendrils, "TendrilWiggle", 8);
 		StartCoroutine(Spawn());
@@ -540,21 +579,12 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.leave();
             Vector3 pos = transform.position + new Vector3(0, -2, 0);
             GameObject particles = GameObject.Find("VanishParticles");
-            GameObject.Find("Gradient").transform.position = pos;
             particles.transform.position = pos;
             particles.GetComponent<ParticleSystem>().Play();
 
-            yield return new WaitForSeconds(.5f);
-            Color c = new Color(0, 0, 0, 1 / 30f);
-			SpriteRenderer sprite = GameObject.Find("Gradient").GetComponent<SpriteRenderer>();
-            while (sprite.color.a > 0)
-            {
-                sprite.color -= c;
-                yield return new WaitForSeconds(1 / 30f);
-            }
-
+			StartCoroutine(darkBurst());
             // wait a bit
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(2f);
 
 			// terrain breaks
             breakTerrain(GameObject.Find("Terrain/Area1"));
@@ -636,39 +666,6 @@ class ShadeLordCtrl : MonoBehaviour
 		}
 
         StartCoroutine(ToEnd());
-	}
-	private void Death()
-	{
-		IEnumerator Death()
-		{
-			attacks.playSound("ScreamLong");
-			// remove spawned attacks
-			foreach (GameObject obj in spawned)
-			{
-				Destroy(obj);
-			}
-			foreach (GameObject obj in tendrils)
-			{
-				Destroy(obj);
-			}
-			// die
-			//anim.Play("Death");
-			boxCol.enabled = false;
-			yield return null;
-			yield return new WaitForSeconds(3f);
-
-			StatueCreator.WonFight = true;
-			var bsc = SceneLoader.SceneController.GetComponent<BossSceneController>();
-			GameObject transition = UObject.Instantiate(bsc.transitionPrefab);
-			PlayMakerFSM transitionsFSM = transition.LocateMyFSM("Transitions");
-			transitionsFSM.SetState("Out Statue");
-			bsc.DoDreamReturn();
-
-			Destroy(gameObject);
-		}
-		ShadeLord.Setup.ShadeLord.DreamDelayed();
-		Destroy(gameObject);
-		StartCoroutine(Death());
 	}
 	private void Vanish()
 	{
@@ -782,4 +779,17 @@ class ShadeLordCtrl : MonoBehaviour
 		Destroy(particle);
 	}
 
+	public IEnumerator darkBurst()
+	{
+        GameObject.Find("Gradient").transform.position = transform.position + new Vector3(0,-5,0);
+        Color c = new Color(0, 0, 0, 1 / 30f);
+        SpriteRenderer sprite = GameObject.Find("Gradient").GetComponent<SpriteRenderer>();
+        sprite.color = Color.black;
+		yield return new WaitForSeconds(.5f);
+        while (sprite.color.a > 0)
+        {
+            sprite.color -= c;
+            yield return new WaitForSeconds(1 / 30f);
+        }
+    }
 }
