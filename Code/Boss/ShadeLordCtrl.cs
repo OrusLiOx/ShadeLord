@@ -30,7 +30,7 @@ class ShadeLordCtrl : MonoBehaviour
 	private GameObject head, title;
 	private List<Action> atts;
 	public int[] hpMarkers = { 50,50,50,50,300};
-	//public int[] hpMarkers = { 400, 450, 300, 750, 2200 };
+	//public int[] hpMarkers = { 400, 450, 300, 750, 281 };
 	private System.Random rand;
 	
 	public Attacks attacks;
@@ -39,7 +39,6 @@ class ShadeLordCtrl : MonoBehaviour
     private GameObject area1CamLock = GameObject.Find("Terrain/Area2/CameraLock");
     private GameObject transCamLock = GameObject.Find("Terrain/ToArea3/CameraLock");
 
-	private bool triggeredRocks;
 	public int phase;
 
 	// setting up stuff
@@ -85,22 +84,26 @@ class ShadeLordCtrl : MonoBehaviour
 		AssignValues();
 		attacks.Phase(phase);
 
-		//Spawn();
-		FastSpawn();
+		Spawn();
+		//FastSpawn();
 	}
 	private void AssignValues()
 	{
 		// health
-		health.hp = 1;//hpMarkers[4];
+		int maxHp = 0;
+		foreach (int phaseHp in hpMarkers)
+		{
+			maxHp += phaseHp;
+		}
+		health.hp = maxHp;
 
-		hpMarkers[0] = hpMarkers[4] - hpMarkers[0];
+		hpMarkers[0] = maxHp - hpMarkers[0];
 		hpMarkers[1] = hpMarkers[0] - hpMarkers[1];
 		hpMarkers[2] = hpMarkers[1] - hpMarkers[2];
 		hpMarkers[3] = hpMarkers[2] - hpMarkers[3];
 		hpMarkers[4] = 0;
 
 		phase = 0;
-		triggeredRocks = false;
 
 		gameObject.layer = 11;
 
@@ -285,7 +288,6 @@ class ShadeLordCtrl : MonoBehaviour
 	// Phase changes
 	public void nextPhase()
 	{
-		return;
 		phase++;
 		Modding.Logger.Log(phase);
 		switch (phase)
@@ -428,6 +430,12 @@ class ShadeLordCtrl : MonoBehaviour
 			SpriteRenderer blackout = GameObject.Find("Terrain/BlackSquare").GetComponent<SpriteRenderer>();
 			yield return new WaitForSeconds(3f);
             emission.rateOverTime = 100f;
+			transform.SetPosition3D(23.3f, 80f, 60f);
+			transform.SetScaleMatching(1f);
+			GetComponent<SpriteRenderer>().color = Color.black;
+			attacks.arrive(80f);
+            GameObject tendrils = GameObject.Find("ShadeLord/Tendrils");
+			tendrils.SetActive(false);
 
             c = new Color(0, 0, 0, 1 / 360f);
             while (blackout.color.a < .35)
@@ -454,10 +462,13 @@ class ShadeLordCtrl : MonoBehaviour
 			wall.transform.localPosition = new Vector3(0,0f,0);
 
 			// set stuff before reveal
-			transform.SetPosition2D(23.5f, 75.23f);
-			anim.Play("Roar");
+			transform.SetPosition3D(23.5f, 75.23f, .1f);
+			transform.SetScaleMatching(1f);
+            GetComponent<SpriteRenderer>().color = Color.white;
+            anim.Play("Roar");
 			attacks.playSound("ScreamLong");
-			GameObject.Find("ShadeLord/Tendrils").GetComponent<PolygonCollider2D>().enabled = false;
+			tendrils.SetActive(true);
+            tendrils.GetComponent<PolygonCollider2D>().enabled = false;
 			blackout.color = new Color(0,0,0,0);
 
             // reveal
@@ -481,8 +492,8 @@ class ShadeLordCtrl : MonoBehaviour
 			}
 			wall.transform.localPosition = new Vector3(0, 0f, 0);
 
-			// hide lord
-			GameObject.Find("ShadeLord/Tendrils").SetActive(false);
+            // hide lord
+            tendrils.SetActive(false);
 			transform.SetPositionY(-2f);
 
 			// text appear, then leave
@@ -587,7 +598,7 @@ class ShadeLordCtrl : MonoBehaviour
             yield return new WaitForSeconds(2f);
 
 			// terrain breaks
-            breakTerrain(GameObject.Find("Terrain/Area1"));
+            breakTerrain(GameObject.Find("Terrain/Area1"), GameObject.Find("Terrain/RocksFloor"));
 			// Wait a bit then start attacking again
 			yield return new WaitForSeconds(1f);
 
@@ -613,12 +624,17 @@ class ShadeLordCtrl : MonoBehaviour
 		{
             atts = new List<Action>() {};
             GameObject.Find("Terrain/Area2/Respawn").SetActive(false);
+
             // wait till current attack done
             yield return new WaitWhile(attacks.isAttacking);
             ParticleSystem.EmissionModule emission = GameObject.Find("BackgroundParticles").GetComponent<ParticleSystem>().emission;
 			emission.rateOverTime = 50f;
             GameObject cameraLock = GameObject.Find("Terrain/Area3/CameraLock");
             cameraLock.SetActive(false);
+			GameObject breakSound = GameObject.Find("Terrain/BreakAudio");
+			breakSound.transform.SetPosition2D(18.18f, 73.48f);
+			breakSound.GetComponent<AudioSource>().minDistance = 8f;
+			breakTerrain(GameObject.Find("Terrain/Area2/RightWall"), GameObject.Find("Terrain/RocksRight"));
             StopCoroutine(co);
 
             GetComponent<BoxCollider2D>().enabled = false;
@@ -678,7 +694,7 @@ class ShadeLordCtrl : MonoBehaviour
 
 	}
 
-	private void breakTerrain(GameObject go)
+	private void breakTerrain(GameObject go, GameObject rocks)
 	{
 		float c = 1/120f;
 		Color scale = new Color(c, c, c, 0);
@@ -699,11 +715,7 @@ class ShadeLordCtrl : MonoBehaviour
             audio.Play();
 
             // rock particles
-            if (!triggeredRocks)
-			{
-				triggeredRocks = true;
-				helper.launchRocks();
-			}
+			helper.launchRocks(rocks);
 		}
 		IEnumerator fade(SpriteRenderer sprite)
 		{

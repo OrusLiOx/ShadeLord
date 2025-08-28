@@ -102,7 +102,7 @@ namespace ShadeLord.Setup
                 Instantiate(ShadeLord.GameObjects["Abyss Msk"], new Vector3(0, -8, 0), Quaternion.identity, abyssObj.transform).SetActive(true);
                 abyssObj.name = "AbyssFloor";
                 abyssObj.AddComponent<BoxCollider2D>().size = new Vector2(55f, 1f);
-                abyssObj.GetComponent<BoxCollider2D>().offset = new Vector2(0f, -.5f);
+                abyssObj.GetComponent<BoxCollider2D>().offset = new Vector2(0f, -1f);
                 abyssObj.AddComponent<DamageHero>().hazardType = 2;
                 abyssObj.layer = 17;
                 float abyssYPos = 64f;
@@ -137,7 +137,7 @@ namespace ShadeLord.Setup
 				godseekerSpawn.transform.position = godseeker.transform.position;
 
 
-				godseekerHolder.transform.SetPosition3D(x-4.5f, 69.2f, 16f);
+				godseekerHolder.transform.SetPosition3D(x-4.5f, 67.2f, 16f);
                 godseekerHolder.transform.localScale = Vector3.one * .5f;
 				godseekerHolder.name = "GodseekerHolder";
 

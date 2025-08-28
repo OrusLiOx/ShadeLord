@@ -33,6 +33,7 @@ public class Attacks : MonoBehaviour
 		sweepPos = 0;
 		attacking = false;
 		wait = false;
+		forward = true;
 		infiniteSpike = false;
 		lastPhase = false;
 		platPhase = false;
@@ -49,8 +50,10 @@ public class Attacks : MonoBehaviour
 		target = HeroController.instance.gameObject;
 		aud.outputAudioMixerGroup = target.GetComponent<AudioSource>().outputAudioMixerGroup;
 
-		// Load dicts
-		atts = new Dictionary<string, GameObject>();
+        GameObject.Find("ShadeLord/Dash/White_Gradients_0 (1)").GetComponent<SpriteRenderer>().color = new Color(1,1,1, 0f/255f);
+
+        // Load dicts
+        atts = new Dictionary<string, GameObject>();
 		sounds = new Dictionary<string, AudioClip>();
 
 		// put scripts on attacks
@@ -505,7 +508,19 @@ public class Attacks : MonoBehaviour
 		{
 			// setup
 			haloSprite.enabled = false;
-			transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
+			float randPos = UnityEngine.Random.Range(-5, xEdge - 5);
+			if (target.transform.position.x < xCenter - 7)
+			{
+				transform.SetPositionX(xCenter + randPos);
+			}
+			else if (target.transform.position.x > xCenter + 7)
+			{
+				transform.SetPositionX(xCenter - randPos);
+			}
+			else
+			{
+				transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 5, xCenter + xEdge - 5));
+			}
 
 			arrive();
 			yield return new WaitWhile(() => wait);
@@ -535,7 +550,7 @@ public class Attacks : MonoBehaviour
 			}
 			yield return new WaitForSeconds(.5f);
 			anim.Play("NeutralIdle");
-			yield return new WaitForSeconds(.5f);
+			yield return new WaitForSeconds(1.5f);
 
 			// end
 			leave();
@@ -595,17 +610,6 @@ public class Attacks : MonoBehaviour
 			yield return new WaitForSeconds(wait);
 
 			obj.GetComponent<VoidCircle>().Fire(hasSound);
-		}
-	}
-	// void beams
-	public void VoidBeams()
-	{
-		attacking = true;
-		forward = true;
-		StartCoroutine(VoidBeams());
-		IEnumerator VoidBeams()
-		{
-			yield return new WaitForSeconds(1f);
 		}
 	}
 	// fire beam at player that remains in place while several vertical beams sequentially fire at the player 
@@ -732,170 +736,9 @@ public class Attacks : MonoBehaviour
 		beam.transform.SetPositionX(x);
 
 		beam.SetActive(true);
-        beam.gameObject.GetComponent<Beam>().go(1.5f, false);
+        beam.gameObject.GetComponent<Beam>().go(.7f, false);
 	}
 
-	// UNUSED
-	// spawn several orbs that explode into crosses
-	public void VoidBurst()
-	{
-		attacking = true;
-		forward = true;
-		StartCoroutine(VoidBurst());
-
-		IEnumerator VoidBurst()
-		{
-			// pick rand location
-			transform.SetPositionX(UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4));
-			arrive();
-			yield return new WaitUntil(() => !wait);
-
-			// spawn orbs
-			//float rotation = UnityEngine.Random.Range(0f,359f);
-			for (int k = (int)(xEdge / 6); k > 0; k--)
-			{
-				// pick random location
-				float x = UnityEngine.Random.Range(xCenter - xEdge + 4, xCenter + xEdge - 4),
-					  y = UnityEngine.Random.Range(yDef - 7, yDef + 3),
-					  rotation = UnityEngine.Random.Range(0f, 359f);
-				StartCoroutine(SpawnVoidBurst(x, y, 0, rotation, 1.5f));
-				StartCoroutine(SpawnVoidBurst(x, y, .005f, rotation + 45, 1.5f));
-			}
-
-
-			yield return new WaitForSeconds(4f);
-			leave();
-			yield return new WaitUntil(() => !wait);
-			attacking = false;
-
-		}
-		IEnumerator SpawnVoidBurst(float x, float y, float z, float r, float wait)
-		{
-			List<GameObject> burst = new List<GameObject>();
-			for (int i = 0; i < 4; i++)
-				burst.Add(Instantiate(atts["VoidBurst"], parent.transform));
-
-			for (int i = 0; i < 4; i++)
-			{
-				burst[i].transform.SetPosition3D(x, y, z);
-				burst[i].transform.SetRotationZ(r + 90 * i);
-				burst[i].SetActive(true);
-			}
-			yield return new WaitForSeconds(wait);
-
-			for (int i = 0; i < 4; i++)
-			{
-				burst[i].GetComponent<VoidBurst>().Fire();
-			}
-			playSound("BeamBlast");
-		}
-	}
-	// fire beam that sweeps across the screen
-	public void SweepBeam()
-	{
-		attacking = true;
-		forward = false;
-		StartCoroutine(SweepBeam());
-
-		IEnumerator SweepBeam()
-		{
-			// pick location
-			bool goright = true;
-			if (lastPhase)
-			{
-				int i = UnityEngine.Random.Range(0, 2);
-				if (i >= sweepPos)
-					i++;
-				sweepPos = i;
-				switch (i)
-				{
-					case 0: // center
-						transform.SetPositionX(xCenter);
-						goright = UnityEngine.Random.Range(0, 2) == 0;
-						break;
-					case 1: // on left
-						transform.SetPositionX(xCenter - xEdge + 9);
-						goright = true;
-						break;
-					case 2: // on right
-						transform.SetPositionX(xCenter + xEdge - 9);
-						goright = false;
-						break;
-				}
-			}
-			else if (platPhase)
-			{
-				transform.SetPositionX(xCenter);
-				goright = target.transform.position.x > xCenter;
-			}
-			else
-			{
-				goright = UnityEngine.Random.Range(0, 1f) > .5f;
-				if (Math.Abs(target.transform.position.x - xCenter) > xEdge + 15)
-				{
-					goright = target.transform.position.x > xCenter;
-				}
-
-
-				if (goright)
-				{
-					transform.SetPositionX(xCenter - xEdge + 5);
-				}
-				else
-				{
-					transform.SetPositionX(xCenter + xEdge - 5);
-				}
-			}
-
-			if (!goright)
-				transform.localScale = new Vector3(-1, 1, 1);
-			else
-				transform.localScale = new Vector3(1, 1, 1);
-
-			Transform beam = atts["BeamOrigin"].transform;
-			SpriteRenderer head = transform.Find("BeamOrigin/Head").GetComponent<SpriteRenderer>();
-			head.enabled = false;
-
-			arrive();
-			yield return new WaitUntil(() => !wait);
-			yield return new WaitForSeconds(.3f);
-
-			// charge
-			beam.SetRotationZ(0f);
-			anim.Play("SweepBeamCharge");
-			playSound("BeamCharge");
-			atts["BeamOrigin"].SetActive(true);
-			yield return new WaitForSeconds(1f);
-
-			// fire
-			playSound("BeamBlast");
-			aud.clip = sounds["BeamLoop"];
-			aud.loop = true;
-			anim.Play("Body");
-			head.enabled = true;
-
-			// rotation
-			float speed = -120f / 90f;
-
-			for (float f = 0f; f >= -60f; f += speed)
-			{
-				beam.SetRotationZ(f);
-				yield return new WaitForSeconds(1 / 60f);
-			}
-
-			// end
-			atts["BeamOrigin"].SetActive(false);
-			aud.Stop();
-			aud.loop = false;
-			eyes(true);
-			yield return new WaitUntil(() => !wait);
-
-			yield return new WaitForSeconds(3 / 12f);
-			leave();
-			yield return new WaitUntil(() => !wait);
-			attacking = false;
-		}
-	}
 	// Misc Public functions 
 	public void Stop()
 	{
@@ -1018,7 +861,7 @@ public class Attacks : MonoBehaviour
 	{
 		StartCoroutine(arriveRoutine(yDef));
 	}
-	private void arrive(float height)
+	public void arrive(float height)
 	{
 		StartCoroutine(arriveRoutine(height));
 	}

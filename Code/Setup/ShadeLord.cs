@@ -191,7 +191,7 @@ namespace ShadeLord.Setup
 			ctrl.particles.transform.position = ctrl.transform.position;
 			ctrl.particles.transform.SetPositionY(ctrl.particles.transform.position.y + -2.5f);
 			ctrl.particles.Play();
-			ctrl.StartCoroutine(flicker());
+			//ctrl.StartCoroutine(flicker());
 			ctrl.attacks.playSound("VoidHit");
 
 			orig(self, hitinstance);
@@ -286,6 +286,7 @@ namespace ShadeLord.Setup
                 
 
                 DreamDelayed();
+                orig(self, attackDirection, attackType, ignoreEvasion);
                 GameObject.Destroy(ctrl.gameObject);
             }
         }

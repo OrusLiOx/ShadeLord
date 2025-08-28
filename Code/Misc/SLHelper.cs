@@ -29,17 +29,9 @@ class SLHelper : MonoBehaviour
 	}
 
 	// rock particles
-	public void launchRocks()
+	public void launchRocks(GameObject rockContainer)
 	{
-		foreach (Rigidbody2D rb in GameObject.Find("Terrain/RocksLeft").GetComponentsInChildren<Rigidbody2D>())
-		{
-			StartCoroutine(launchRock(rb));
-		}
-		foreach (Rigidbody2D rb in GameObject.Find("Terrain/RocksRight").GetComponentsInChildren<Rigidbody2D>())
-		{
-			StartCoroutine(launchRock(rb));
-		}
-		foreach (Rigidbody2D rb in GameObject.Find("Terrain/RocksFloor").GetComponentsInChildren<Rigidbody2D>())
+		foreach (Rigidbody2D rb in rockContainer.GetComponentsInChildren<Rigidbody2D>())
 		{
 			StartCoroutine(launchRock(rb));
 		}
