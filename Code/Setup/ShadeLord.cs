@@ -1,4 +1,5 @@
-﻿using Modding;
+﻿using GlobalEnums;
+using Modding;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -193,8 +194,15 @@ namespace ShadeLord.Setup
 			ctrl.particles.Play();
 			//ctrl.StartCoroutine(flicker());
 			ctrl.attacks.playSound("VoidHit");
+			Modding.Logger.Log(ctrl.attacks.readyToDie);
+			if (ctrl.attacks.readyToDie)
+			{
+				ctrl.attacks.Stop();
+				ctrl.StartCoroutine(Death(ctrl));
+			}
 
-			orig(self, hitinstance);
+
+            orig(self, hitinstance);
 			//SpawnHitEffect(hitinstance.Direction);
 			if (ctrl.health.hp < ctrl.hpMarkers[ctrl.phase])
 			{
@@ -223,72 +231,81 @@ namespace ShadeLord.Setup
                 orig(self, attackDirection, attackType, ignoreEvasion);
                 return;
             }
-            ctrl.gameObject.GetComponent<Attacks>().Stop();
-            ctrl.StopAllCoroutines();
-            ctrl.StartCoroutine(Death());
 
-            IEnumerator Death()
-            {
-                ctrl.attacks.playSound("ScreamLong");
-				// remove spawned attacks
-				ctrl.attacks.Stop();
+            ctrl.attacks.waitForKillingBlow = true;
 
-                // die
-                //anim.Play("Death");
-                ctrl.boxCol.enabled = false;
-                GameObject particleObj = GameObject.Find("SpewParticles");
-                particleObj.transform.position = ctrl.transform.position + new Vector3(0, -5, 0);
-                ParticleSystem particles = particleObj.GetComponent<ParticleSystem>();
-                ParticleSystem.EmissionModule emission = particles.emission;
-                particles.Play();
-                ctrl.anim.Play("Roar");
-                ctrl.attacks.playSound("ScreamLong");
-                ctrl.attacks.playSound("Death");
-				ctrl.StartCoroutine(ctrl.darkBurst());
-                emission.rateOverTime = 100f;
-				yield return new WaitForSeconds(2);
-                emission.rateOverTime = 200f;
-
-                SpriteRenderer haloSprite = GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>();
-                SpriteRenderer haloGlowSprite = GameObject.Find("ShadeLord/Halo/Glow").GetComponent<SpriteRenderer>();
-                haloSprite.color = Color.black;
-                SpriteRenderer lordSprite = GameObject.Find("ShadeLord").GetComponent<SpriteRenderer>();
-                lordSprite.color = Color.black;
-                SpriteRenderer gradientSprite = GameObject.Find("Gradient").GetComponent<SpriteRenderer>();
-                gradientSprite.color = new Color(0, 0, 0, 0);
-                GameObject.Find("Gradient").transform.position = ctrl.transform.position + new Vector3(0, -7, 0);
-                Color c = new Color(0, 0, 0, 1 / 90f);
-                SpriteRenderer blackout = GameObject.Find("Terrain/BlackSquare").GetComponent<SpriteRenderer>();
-				blackout.color = new Color(0, 0, 0, 0);
-
-                while (haloSprite.color.a > 0)
-                {
-					gradientSprite.color += c;
-                    haloSprite.color -= c;
-					lordSprite.color -= c/2;
-					haloGlowSprite.color -= c;
-					blackout.color += c/2;
-                    yield return new WaitForSeconds(1 / 30f);
-                }
-
-                emission.rateOverTime = 0f;
-                yield return new WaitForSeconds(2f);
-                c = new Color(0, 0, 0, 1 / 90f);
-				ctrl.anim.Play("Nothing");
-                while (gradientSprite.color.a > 0)
-                {
-                    gradientSprite.color -= c;
-                    blackout.color -= c;
-                    lordSprite.color -= c*2;
-                    yield return new WaitForSeconds(1 / 30f);
-                }
-                yield return new WaitForSeconds(3f);
-                
-
-                DreamDelayed();
-                orig(self, attackDirection, attackType, ignoreEvasion);
-                GameObject.Destroy(ctrl.gameObject);
+            //ctrl.StartCoroutine(Wait());
+			IEnumerator Wait()
+			{
+				ctrl.attacks.waitForKillingBlow = true;
+                yield return new WaitWhile(() => ctrl.attacks.waitForKillingBlow);
+                ctrl.gameObject.GetComponent<Attacks>().Stop();
+                ctrl.StartCoroutine(Death(ctrl));
             }
+            
+        }
+        IEnumerator Death(ShadeLordCtrl ctrl)
+        {
+
+            ctrl.attacks.playSound("ScreamLong");
+            // remove spawned attacks
+            ctrl.attacks.Stop();
+
+            // die
+            //anim.Play("Death");
+            ctrl.boxCol.enabled = false;
+            GameObject particleObj = GameObject.Find("SpewParticles");
+            particleObj.transform.position = ctrl.transform.position + new Vector3(0, -5, 0);
+            ParticleSystem particles = particleObj.GetComponent<ParticleSystem>();
+            ParticleSystem.EmissionModule emission = particles.emission;
+            particles.Play();
+            ctrl.anim.Play("Roar");
+            ctrl.attacks.playSound("ScreamLong");
+            ctrl.attacks.playSound("Death");
+            ctrl.StartCoroutine(ctrl.darkBurst());
+            SpriteRenderer lordSprite = GameObject.Find("ShadeLord").GetComponent<SpriteRenderer>();
+            lordSprite.color = Color.black;
+            emission.rateOverTime = 100f;
+            yield return new WaitForSeconds(2);
+            emission.rateOverTime = 200f;
+
+            SpriteRenderer haloSprite = GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>();
+            SpriteRenderer haloGlowSprite = GameObject.Find("ShadeLord/Halo/Glow").GetComponent<SpriteRenderer>();
+            haloSprite.color = Color.black;
+            SpriteRenderer gradientSprite = GameObject.Find("Gradient").GetComponent<SpriteRenderer>();
+            gradientSprite.color = new Color(0, 0, 0, 0);
+            GameObject.Find("Gradient").transform.position = ctrl.transform.position + new Vector3(0, -7, 0);
+            Color c = new Color(0, 0, 0, 1 / 90f);
+            SpriteRenderer blackout = GameObject.Find("Terrain/BlackSquare").GetComponent<SpriteRenderer>();
+            blackout.color = new Color(0, 0, 0, 0);
+
+            while (haloSprite.color.a > 0)
+            {
+                gradientSprite.color += c;
+                haloSprite.color -= c;
+                lordSprite.color -= c / 2;
+                haloGlowSprite.color -= c;
+                blackout.color += c / 2;
+                yield return new WaitForSeconds(1 / 30f);
+            }
+
+            emission.rateOverTime = 0f;
+            yield return new WaitForSeconds(2f);
+            c = new Color(0, 0, 0, 1 / 90f);
+            ctrl.anim.Play("Nothing");
+            while (gradientSprite.color.a > 0)
+            {
+                gradientSprite.color -= c;
+                blackout.color -= c;
+                lordSprite.color -= c * 2;
+                yield return new WaitForSeconds(1 / 30f);
+            }
+            yield return new WaitForSeconds(3f);
+
+
+            DreamDelayed();
+            //orig(self, attackDirection, attackType, ignoreEvasion);
+            GameObject.Destroy(ctrl.gameObject);
         }
 
         // scene stuff

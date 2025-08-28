@@ -14,8 +14,10 @@ public class Attacks : MonoBehaviour
 	private bool attacking, wait, forward, infiniteSpike, lastPhase, platPhase;
 	private GameObject parent;
 
-	// Unity Components
-	private BoxCollider2D col;
+    public bool waitForKillingBlow = false, readyToDie = false;
+
+    // Unity Components
+    private BoxCollider2D col;
 	private Animator anim;
 	private Rigidbody2D rig;
 	private AudioSource aud;
@@ -576,28 +578,41 @@ public class Attacks : MonoBehaviour
 			StartCoroutine(SpamCircles());
         }
 		IEnumerator SpamTeleport(List<int> randOptions)
-        {
-            int rand = randOptions[UnityEngine.Random.Range(0, randOptions.Count)];
-			
-            transform.SetPositionX(xCenter + rand * (xEdge - 4));
+		{
+			int rand = randOptions[UnityEngine.Random.Range(0, randOptions.Count)];
 
-            arrive();
-            yield return new WaitWhile(() => wait);
+			transform.SetPositionX(xCenter + rand * (xEdge - 4));
+
+			arrive();
+			yield return new WaitWhile(() => wait);
 			if (randOptions.Count == 1)
 				playSound("Scream");
-            anim.Play("Roar");
-            yield return new WaitForSeconds(2);
+			anim.Play("Roar");
+			yield return new WaitForSeconds(2);
 
-            leave();
-            yield return new WaitWhile(() => wait);
+			leave();
+			yield return new WaitWhile(() => wait);
 
-            randOptions.Clear();
-            for (int i = -1; i <= 1; i++)
-            {
-                if (i != rand)
-                    randOptions.Add(i);
-            }
-            StartCoroutine(SpamTeleport(randOptions));
+			randOptions.Clear();
+
+			if (waitForKillingBlow)
+			{
+				transform.SetPositionX(xCenter);
+
+				arrive();
+				yield return new WaitWhile(() => wait);
+				anim.Play("Roar");
+				readyToDie = true;
+			}
+			else
+			{
+				for (int i = -1; i <= 1; i++)
+				{
+					if (i != rand)
+						randOptions.Add(i);
+				}
+				StartCoroutine(SpamTeleport(randOptions));
+			}
         }
         IEnumerator MakeCircle(float x, float y, float wait, bool hasSound = true)
 		{
@@ -703,27 +718,27 @@ public class Attacks : MonoBehaviour
 			else
 			{
 				FireTargetedBeam(goright);
-			}
 
 
-			yield return new WaitForSeconds(1f);
-
-			// fire vertical beams
-			for (int i = 0; i < 3; i++)
-			{
-				// fire
-				spawnVerticalBeam(target.transform.GetPositionX());
 				yield return new WaitForSeconds(1f);
-            }
-            yield return new WaitForSeconds(5/12f);
-            atts["BeamOrigin"].SetActive(false);
-			// end
-			eyes(true);
-            yield return new WaitForSeconds(7/12f);
-            //yield return new WaitUntil(() => !wait);
-            leave();
-			yield return new WaitUntil(() => !wait);
-			attacking = false;
+
+				// fire vertical beams
+				for (int i = 0; i < 3; i++)
+				{
+					// fire
+					spawnVerticalBeam(target.transform.GetPositionX());
+					yield return new WaitForSeconds(1f);
+				}
+				yield return new WaitForSeconds(5/12f);
+				atts["BeamOrigin"].SetActive(false);
+				// end
+				eyes(true);
+				yield return new WaitForSeconds(7/12f);
+				//yield return new WaitUntil(() => !wait);
+				leave();
+				yield return new WaitUntil(() => !wait);
+				attacking = false;
+			}
 		}
 	}
 	private void spawnVerticalBeam(float x)
@@ -743,6 +758,7 @@ public class Attacks : MonoBehaviour
 	public void Stop()
 	{
 		StopAllCoroutines();
+		Modding.Logger.Log("STOP");
         rig.velocity = new Vector2(0f, 0f);
         foreach (Transform c in parent.GetComponentsInChildren<Transform>())
 		{

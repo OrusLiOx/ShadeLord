@@ -34,7 +34,9 @@ namespace ShadeLord.Setup
 				sm.isWindy = false;
 				sm.noParticles = true;
 				sm.environmentType = 5;
-			}
+				sm.darknessLevel = 0;
+
+            }
 		}
 		// Set up scene and attach nessecary scripts
 		private void OnSceneChange(Scene prevScene, Scene nextScene)
@@ -137,7 +139,7 @@ namespace ShadeLord.Setup
 				godseekerSpawn.transform.position = godseeker.transform.position;
 
 
-				godseekerHolder.transform.SetPosition3D(x-4.5f, 67.2f, 16f);
+				godseekerHolder.transform.SetPosition3D(x-4.5f, 68.2f, 16f);
                 godseekerHolder.transform.localScale = Vector3.one * .5f;
 				godseekerHolder.name = "GodseekerHolder";
 

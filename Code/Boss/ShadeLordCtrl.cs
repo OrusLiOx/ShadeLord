@@ -29,7 +29,7 @@ class ShadeLordCtrl : MonoBehaviour
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	public int[] hpMarkers = { 50,50,50,50,300};
+	public int[] hpMarkers = { 50,50,50,50,50};
 	//public int[] hpMarkers = { 400, 450, 300, 750, 281 };
 	private System.Random rand;
 	
@@ -306,7 +306,7 @@ class ShadeLordCtrl : MonoBehaviour
 				ToEnd();
 				break;
 		}
-		if (health.hp < hpMarkers[phase])
+		if (health.hp < hpMarkers[phase] && phase < 3)
 		{
 			nextPhase();
 		}
@@ -428,22 +428,24 @@ class ShadeLordCtrl : MonoBehaviour
 
 			// START ANIMATION
 			SpriteRenderer blackout = GameObject.Find("Terrain/BlackSquare").GetComponent<SpriteRenderer>();
-			yield return new WaitForSeconds(3f);
-            emission.rateOverTime = 100f;
-			transform.SetPosition3D(23.3f, 80f, 60f);
-			transform.SetScaleMatching(1f);
-			GetComponent<SpriteRenderer>().color = Color.black;
-			attacks.arrive(80f);
+            transform.SetPosition3D(23.3f, 80f, 40f);
+            transform.SetScaleMatching(1f);
+            GetComponent<SpriteRenderer>().color = Color.black;
+			anim.Play("Nothing");
             GameObject tendrils = GameObject.Find("ShadeLord/Tendrils");
-			tendrils.SetActive(false);
+            tendrils.SetActive(false);
+
+            yield return new WaitForSeconds(3f);
+            emission.rateOverTime = 100f;
 
             c = new Color(0, 0, 0, 1 / 360f);
-            while (blackout.color.a < .35)
+            while (blackout.color.a < .2)
             {
                 blackout.color += c;
                 yield return new WaitForSeconds(1 / 30f);
             }
 			emission.rateOverTime = 200f;
+            anim.Play("NeutralAppear");
             while (blackout.color.a < .6)
             {
                 blackout.color += c;
@@ -465,7 +467,7 @@ class ShadeLordCtrl : MonoBehaviour
 			transform.SetPosition3D(23.5f, 75.23f, .1f);
 			transform.SetScaleMatching(1f);
             GetComponent<SpriteRenderer>().color = Color.white;
-            anim.Play("Roar");
+            anim.Play("NeutralIdle");
 			attacks.playSound("ScreamLong");
 			tendrils.SetActive(true);
             tendrils.GetComponent<PolygonCollider2D>().enabled = false;
@@ -638,25 +640,23 @@ class ShadeLordCtrl : MonoBehaviour
             StopCoroutine(co);
 
             GetComponent<BoxCollider2D>().enabled = false;
-            GameObject.Find("Terrain/ToArea3").transform.SetPositionY(56.04f);
+			GameObject.Find("Terrain/ToArea3").transform.SetPositionY(56.04f);
 
-            yield return new WaitForSeconds(1f);
-
-            // terrain break 1
+            // terrain break
             area1CamLock.SetActive(false);
 			transCamLock.SetActive(true);
             helper.abyssToEnd();
 
-            // terrain break 2
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(5f);
             //attacks.VoidCircles();
 
-            atts = new List<Action>() { attacks.AimBeam };
+            attacks.AimBeam();
             StartCoroutine(FadeMusic());
-            co = StartCoroutine(AttackChoice());
             float xTrigger = GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f;
+
 			// Wait till reach end section
 			yield return new WaitWhile(() => player.transform.GetPositionX()<xTrigger);
+			StopCoroutine(helper.wallToEndRoutine);
             cameraLock.SetActive(true);
             transCamLock.SetActive(false);
 
@@ -664,8 +664,8 @@ class ShadeLordCtrl : MonoBehaviour
             GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
             GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
 
-            atts = new List<Action>() { attacks.VoidCircles };
             attacks.Stop();
+			attacks.VoidCircles();
 		}
 		IEnumerator FadeMusic()
 		{

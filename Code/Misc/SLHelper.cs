@@ -14,6 +14,7 @@ using GlobalEnums;
 class SLHelper : MonoBehaviour
 {
 	Coroutine moveWallRoutine;
+	public Coroutine wallToEndRoutine;
 	// randomize animation times
 	public void randomizeAnimStart(List<GameObject> objs, string anim, int frames)
 	{
@@ -178,7 +179,7 @@ class SLHelper : MonoBehaviour
         GameObject particles = GameObject.Find("BackgroundParticles");
         particles.transform.SetParent(GameObject.Find("AbyssFloor").transform, true);
 
-        StartCoroutine(leftWallToEnd());
+        wallToEndRoutine = StartCoroutine(leftWallToEnd());
 		StartCoroutine(AbyssFloorLoad());
 		moveX(GameObject.Find("AbyssWallRight").transform, GameObject.Find("Terrain/Area3/CameraLock").transform.GetPositionX()+15f, 3f);
     }
