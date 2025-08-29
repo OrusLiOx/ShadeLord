@@ -24,11 +24,12 @@ namespace ShadeLord.Setup
 		private void CreateStatue()
 		{
 			// clone a statue
-			GameObject statue = Instantiate(GameObject.Find("GG_Statue_Mage_Knight"));
-			statue.transform.position += Vector3.left * 9;
+			GameObject statue = Instantiate(GameObject.Find("GG_Statue_Gruz"));
+			statue.transform.position = GameObject.Find("GG_Statue_Knight").transform.position;
+            Destroy(GameObject.Find("GG_Statue_Knight"));
 
-			// set scene
-			var scene = ScriptableObject.CreateInstance<BossScene>();
+            // set scene
+            var scene = ScriptableObject.CreateInstance<BossScene>();
 			scene.sceneName = "GG_Shade_Lord";
 
 			var bs = statue.GetComponent<BossStatue>();
@@ -48,7 +49,7 @@ namespace ShadeLord.Setup
 			var statueTex = ShadeLord.statueTex;
 			SpriteRenderer sr = appearance.transform.Find("GG_statues_0006_5").GetComponent<SpriteRenderer>();
 			sr.enabled = true;
-			sr.sprite = Sprite.Create(statueTex, new Rect(0, 0, statueTex.width, statueTex.height), new Vector2(0.5f, 0.5f));
+			sr.sprite = Sprite.Create(statueTex, new Rect(0, 0, statueTex.width, statueTex.height), new Vector2(0.48f, 0.5f));
 			sr.transform.position += Vector3.up * 1.7f;
 			sr.transform.position += Vector3.left * .4f;
 			sr.transform.localScale *= 1.25f;

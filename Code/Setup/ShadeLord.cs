@@ -60,7 +60,7 @@ namespace ShadeLord.Setup
 				case "LORD_SUB": return "";
 				case "LORD_SUPER": return "";
 				case "LORD_NAME": return "Shade Lord";
-				case "LORD_DESC": return "God of unified void";
+				case "LORD_DESC": return "Void given focus";
 				default: return orig;
 			}
 		}
@@ -180,11 +180,9 @@ namespace ShadeLord.Setup
 			ShadeLordCtrl ctrl;
 			if (!self.gameObject.TryGetComponent<ShadeLordCtrl>(out ctrl))
 			{
-				Modding.Logger.Log("normal hit: " + self.hp + " " + hitinstance.DamageDealt + " " + hitinstance.Direction);
 				orig(self, hitinstance);
 				return;
 			}
-			Modding.Logger.Log("ShadeLord hit: " +self.hp + " " + hitinstance.DamageDealt + " " + hitinstance.Direction);
 			// deal hit then check phase
 			ctrl.particleEm.rotation = new Vector3(0, -hitinstance.Direction + 90, 0);
 			ctrl.particles.transform.position = ctrl.transform.position;
@@ -241,9 +239,9 @@ namespace ShadeLord.Setup
             ctrl.attacks.playSound("Death");
             ctrl.StartCoroutine(ctrl.darkBurst());
             SpriteRenderer lordSprite = GameObject.Find("ShadeLord").GetComponent<SpriteRenderer>();
-            emission.rateOverTime = 100f;
-            yield return new WaitForSeconds(2);
+			lordSprite.color = Color.black;
             emission.rateOverTime = 200f;
+            yield return new WaitForSeconds(1);
 
             SpriteRenderer haloSprite = GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>();
             SpriteRenderer haloGlowSprite = GameObject.Find("ShadeLord/Halo/Glow").GetComponent<SpriteRenderer>();
@@ -264,7 +262,7 @@ namespace ShadeLord.Setup
                 blackout.color += c / 2;
                 yield return new WaitForSeconds(1 / 30f);
             }
-
+            yield return new WaitForSeconds(1f);
             emission.rateOverTime = 0f;
             yield return new WaitForSeconds(2f);
             c = new Color(0, 0, 0, 1 / 90f);
@@ -276,9 +274,17 @@ namespace ShadeLord.Setup
                 lordSprite.color -= c * 2;
                 yield return new WaitForSeconds(1 / 30f);
             }
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(1f);
 
 
+            SpriteRenderer wallSprite = GameObject.Find("Start/Wall/Black").GetComponent<SpriteRenderer>();
+            wallSprite.color = new Color(1, 1, 1, 0);
+            c = new Color(0, 0, 0, 1 / 7f);
+            while (wallSprite.color.a < 1)
+            {
+                wallSprite.color += c;
+                yield return new WaitForSeconds(1 / 30f);
+            }
             DreamDelayed();
             //orig(self, attackDirection, attackType, ignoreEvasion);
             GameObject.Destroy(ctrl.gameObject);

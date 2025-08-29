@@ -758,7 +758,6 @@ public class Attacks : MonoBehaviour
 	public void Stop()
 	{
 		StopAllCoroutines();
-		Modding.Logger.Log("STOP");
         rig.velocity = new Vector2(0f, 0f);
         foreach (Transform c in parent.GetComponentsInChildren<Transform>())
 		{

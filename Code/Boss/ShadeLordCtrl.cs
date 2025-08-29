@@ -166,6 +166,7 @@ class ShadeLordCtrl : MonoBehaviour
 	 
 	void Update()
 	{
+
 		if (Input.GetKeyDown(KeyCode.KeypadEnter))
 		{
 			Modding.Logger.Log("Shade Lord Position: " + transform.position);
@@ -191,7 +192,7 @@ class ShadeLordCtrl : MonoBehaviour
 		else if (Input.GetKeyDown(KeyCode.Keypad8))
 			actionState = 7;
 		else if (Input.GetKeyDown(KeyCode.Keypad8))
-			actionState = 8;
+			actionState = 8;//*/
 
     }
 	// damage stuff
@@ -290,7 +291,6 @@ class ShadeLordCtrl : MonoBehaviour
 	public void nextPhase()
 	{
 		phase++;
-		Modding.Logger.Log(phase);
 		switch (phase)
 		{
 			case 1:
@@ -319,15 +319,12 @@ class ShadeLordCtrl : MonoBehaviour
 		{
 			attacks.Phase(phase);
 		}
-        Modding.Logger.Log("Shade Lord Phase: " + phase);
         IEnumerator phase2()
 		{
 			if (health.hp < hpMarkers[2])
 			{
-				Modding.Logger.Log("cancel void circle transition");
 				yield break;
 			}
-			Modding.Logger.Log("void circle next");
 			atts.Add(attacks.VoidCircles);
 
 			yield return new WaitWhile(() => attacks.isAttacking());
@@ -394,7 +391,6 @@ class ShadeLordCtrl : MonoBehaviour
             {
                 if (obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.name == "Music")
                 {
-					Modding.Logger.Log(obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.name);
                     AudioMixerGroup group = obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.FindMatchingGroups(string.Empty)[1];
                     GameObject.Find("ShadeLordMusic").GetComponent<AudioSource>().outputAudioMixerGroup = group;
                     GameObject.Find("VoidAmbience").GetComponent<AudioSource>().outputAudioMixerGroup = group;
@@ -548,7 +544,6 @@ class ShadeLordCtrl : MonoBehaviour
 			// GO
 			GameObject.Find("Terrain/CameraLock").SetActive(false);
 			area1CamLock.SetActive(true);
-			title.SetActive(false);
 
 			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR EXIT", false);
 			yield return new WaitForSeconds(1f);
@@ -572,7 +567,6 @@ class ShadeLordCtrl : MonoBehaviour
             {
                 if (obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.name == "Music")
                 {
-                    Modding.Logger.Log(obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.name);
                     AudioMixerGroup group = obj.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer.FindMatchingGroups(string.Empty)[1];
                     GameObject.Find("ShadeLordMusic").GetComponent<AudioSource>().outputAudioMixerGroup = group;
                     GameObject.Find("VoidAmbience").GetComponent<AudioSource>().outputAudioMixerGroup = group;
@@ -801,10 +795,10 @@ class ShadeLordCtrl : MonoBehaviour
 		Destroy(particle);
 	}
 
-	public IEnumerator darkBurst()
+	public IEnumerator darkBurst(float duration = 1f)
 	{
         GameObject.Find("Gradient").transform.position = transform.position + new Vector3(0,-5,0);
-        Color c = new Color(0, 0, 0, 1 / 30f);
+        Color c = new Color(0, 0, 0, 1f / (30f/duration));
         SpriteRenderer sprite = GameObject.Find("Gradient").GetComponent<SpriteRenderer>();
         sprite.color = Color.black;
 		yield return new WaitForSeconds(.5f);

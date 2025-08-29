@@ -47,13 +47,13 @@ public class VoidCircle : MonoBehaviour
 		IEnumerator Fire()
 		{
 			SpriteRenderer burstSprite = burst.GetComponent<SpriteRenderer>();
-			float incr = 60f*.1f;
+			float incr = 30f*.1f;
 			// burst appear
 			for (float i = 0; i < incr; i +=1)
 			{
 				float c = .5f / incr * i;
 				burstSprite.color = new Color(c, c, c, i/incr);
-				yield return new WaitForSeconds(1/60f);
+				yield return new WaitForSeconds(1/30f);
 			}
 			if (playSound)
 				GetComponent<AudioSource>().Play();
@@ -61,10 +61,10 @@ public class VoidCircle : MonoBehaviour
 			col.enabled = true;
 			while (burstSprite.color.a > 0)
 			{
-				yield return new WaitForSeconds(1 / 60f);
-				burstSprite.color = new Color(0, 0, 0, burstSprite.color.a - (2 / 60f));
+				yield return new WaitForSeconds(1 / 30f);
+				burstSprite.color = new Color(0, 0, 0, burstSprite.color.a - (2 / 30f));
 
-				float a = sprite.color.a - (3 / 60f);
+				float a = sprite.color.a - (3 / 30f);
 				sprite.color = new Color(1, 1, 1, a);
 				outline.color = new Color(1, 1, 1, a);
 
@@ -74,10 +74,10 @@ public class VoidCircle : MonoBehaviour
 			// burst fade
 			while(sprite.color.a > 0)
 			{
-				float a = sprite.color.a - (3 / 60f);
+				float a = sprite.color.a - (3 / 30f);
 				sprite.color = new Color(1, 1, 1, a);
 				outline.color = new Color(1, 1, 1, a);
-				yield return new WaitForSeconds(1 / 60f);
+				yield return new WaitForSeconds(1 / 30f);
 			}
 
 			yield return new WaitForSeconds(5f);
