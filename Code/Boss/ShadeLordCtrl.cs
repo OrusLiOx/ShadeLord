@@ -29,8 +29,8 @@ class ShadeLordCtrl : MonoBehaviour
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	public int[] hpMarkers = { 50,50,50,50,50};
-	//public int[] hpMarkers = { 400, 450, 300, 750, 281 };
+	public int[] hpMarkers = { 50,50,50,50,50, 1000};
+	//public int[] hpMarkers = { 400, 450, 300, 750, 281, 1000 };
 	private System.Random rand;
 	
 	public Attacks attacks;
@@ -40,6 +40,7 @@ class ShadeLordCtrl : MonoBehaviour
     private GameObject transCamLock = GameObject.Find("Terrain/ToArea3/CameraLock");
 
 	public int phase;
+	public bool phaseTransitioning = false;
 
 	// setting up stuff
 	void Awake()
@@ -97,11 +98,11 @@ class ShadeLordCtrl : MonoBehaviour
 		}
 		health.hp = maxHp;
 
-		hpMarkers[0] = maxHp - hpMarkers[0];
-		hpMarkers[1] = hpMarkers[0] - hpMarkers[1];
-		hpMarkers[2] = hpMarkers[1] - hpMarkers[2];
-		hpMarkers[3] = hpMarkers[2] - hpMarkers[3];
-		hpMarkers[4] = 0;
+		for (int i = 0; i < hpMarkers.Length; i++)
+		{
+			hpMarkers[i] = maxHp - hpMarkers[i];
+			maxHp = hpMarkers[i];
+		}
 
 		phase = 0;
 
@@ -305,18 +306,21 @@ class ShadeLordCtrl : MonoBehaviour
 			case 4: // descend phase
 				ToEnd();
 				break;
-		}
-		if (health.hp < hpMarkers[phase] && phase < 3)
+			case 5:
+				phaseTransitioning = true;
+                attacks.waitForKillingBlow = true;
+				break;
+        }
+		if (health.hp < hpMarkers[phase])
 		{
 			nextPhase();
 		}
 		else
 		{
 			attacks.Phase(phase);
-			Modding.Logger.Log("Shade Lord Phase: " + phase);
 		}
-
-		IEnumerator phase2()
+        Modding.Logger.Log("Shade Lord Phase: " + phase);
+        IEnumerator phase2()
 		{
 			if (health.hp < hpMarkers[2])
 			{
@@ -469,7 +473,8 @@ class ShadeLordCtrl : MonoBehaviour
             GetComponent<SpriteRenderer>().color = Color.white;
             anim.Play("NeutralIdle");
 			attacks.playSound("ScreamLong");
-			tendrils.SetActive(true);
+            GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+            tendrils.SetActive(true);
             tendrils.GetComponent<PolygonCollider2D>().enabled = false;
 			blackout.color = new Color(0,0,0,0);
 
@@ -583,8 +588,9 @@ class ShadeLordCtrl : MonoBehaviour
 	{
 		IEnumerator ToPlatform()
 		{
-			// stop all
-			StopCoroutine(co);
+			phaseTransitioning = true;
+            // stop all
+            StopCoroutine(co);
 			attacks.Stop();
 		
 			// lord animation
@@ -617,13 +623,16 @@ class ShadeLordCtrl : MonoBehaviour
 			};
 
 			co = StartCoroutine(AttackChoice());
-		}
+			phaseTransitioning = false;
+
+        }
 		StartCoroutine(ToPlatform());
 	}
 	private void ToEnd()
 	{
 		IEnumerator ToEnd()
 		{
+			phaseTransitioning = true;
             atts = new List<Action>() {};
             GameObject.Find("Terrain/Area2/Respawn").SetActive(false);
 
@@ -666,7 +675,8 @@ class ShadeLordCtrl : MonoBehaviour
 
             attacks.Stop();
 			attacks.VoidCircles();
-		}
+			phaseTransitioning = false;
+        }
 		IEnumerator FadeMusic()
 		{
 			AudioSource music = GameObject.Find("ShadeLordMusic").GetComponent<AudioSource>();

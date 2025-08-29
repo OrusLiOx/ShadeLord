@@ -83,7 +83,6 @@ namespace ShadeLord.Setup
 			ModHooks.NewGameHook += AddComponent;
 			On.GameManager.StartNewGame += StartNewGame;
 			On.HealthManager.TakeDamage += OnTakeDamage;
-			On.HealthManager.Die += OnDeath;
 			ModHooks.SetPlayerVariableHook += SetVariableHook;
 
 			On.BlurPlane.Awake += OnBlurPlaneAwake;
@@ -179,7 +178,6 @@ namespace ShadeLord.Setup
 		public void OnTakeDamage(On.HealthManager.orig_TakeDamage orig, HealthManager self, HitInstance hitinstance)
 		{
 			ShadeLordCtrl ctrl;
-			Modding.Logger.Log(self.gameObject.name);
 			if (!self.gameObject.TryGetComponent<ShadeLordCtrl>(out ctrl))
 			{
 				Modding.Logger.Log("normal hit: " + self.hp + " " + hitinstance.DamageDealt + " " + hitinstance.Direction);
@@ -194,16 +192,18 @@ namespace ShadeLord.Setup
 			ctrl.particles.Play();
 			//ctrl.StartCoroutine(flicker());
 			ctrl.attacks.playSound("VoidHit");
-			Modding.Logger.Log(ctrl.attacks.readyToDie);
-			if (ctrl.attacks.readyToDie)
+
+			if (ctrl.attacks.readyToDie && hitinstance.AttackType == AttackTypes.Nail)
 			{
 				ctrl.attacks.Stop();
 				ctrl.StartCoroutine(Death(ctrl));
 			}
 
+			if (ctrl.phaseTransitioning)
+				hitinstance.DamageDealt = 0;
 
             orig(self, hitinstance);
-			//SpawnHitEffect(hitinstance.Direction);
+
 			if (ctrl.health.hp < ctrl.hpMarkers[ctrl.phase])
 			{
 				ctrl.nextPhase();
@@ -221,29 +221,6 @@ namespace ShadeLord.Setup
 				ctrl.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 			}
 		}
-
-        public void OnDeath(On.HealthManager.orig_Die orig, HealthManager self, float? attackDirection, AttackTypes attackType, bool ignoreEvasion)
-        {
-            ShadeLordCtrl ctrl;
-            Modding.Logger.Log(self.gameObject.name);
-            if (!self.gameObject.TryGetComponent<ShadeLordCtrl>(out ctrl))
-            {
-                orig(self, attackDirection, attackType, ignoreEvasion);
-                return;
-            }
-
-            ctrl.attacks.waitForKillingBlow = true;
-
-            //ctrl.StartCoroutine(Wait());
-			IEnumerator Wait()
-			{
-				ctrl.attacks.waitForKillingBlow = true;
-                yield return new WaitWhile(() => ctrl.attacks.waitForKillingBlow);
-                ctrl.gameObject.GetComponent<Attacks>().Stop();
-                ctrl.StartCoroutine(Death(ctrl));
-            }
-            
-        }
         IEnumerator Death(ShadeLordCtrl ctrl)
         {
 
@@ -264,7 +241,6 @@ namespace ShadeLord.Setup
             ctrl.attacks.playSound("Death");
             ctrl.StartCoroutine(ctrl.darkBurst());
             SpriteRenderer lordSprite = GameObject.Find("ShadeLord").GetComponent<SpriteRenderer>();
-            lordSprite.color = Color.black;
             emission.rateOverTime = 100f;
             yield return new WaitForSeconds(2);
             emission.rateOverTime = 200f;
@@ -283,7 +259,7 @@ namespace ShadeLord.Setup
             {
                 gradientSprite.color += c;
                 haloSprite.color -= c;
-                lordSprite.color -= c / 2;
+                lordSprite.color -= c;
                 haloGlowSprite.color -= c;
                 blackout.color += c / 2;
                 yield return new WaitForSeconds(1 / 30f);
