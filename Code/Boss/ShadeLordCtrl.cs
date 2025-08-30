@@ -169,11 +169,7 @@ class ShadeLordCtrl : MonoBehaviour
 	 
 	void Update()
     {
-        HeroController hc = HeroController.instance;
-
-        //Modding.Logger.Log(hc.playerData.GetVector3("hazardRespawnLocation"));
-        //Modding.Logger.Log(hc.FindGroundPoint(hc.playerData.GetVector3("hazardRespawnLocation")));
-        //*
+        /*
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
 		{
 			Modding.Logger.Log("Shade Lord Position: " + transform.position);

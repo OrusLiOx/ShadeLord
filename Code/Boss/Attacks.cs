@@ -272,7 +272,7 @@ public class Attacks : MonoBehaviour
 			anim.Play("CrossSlashAttack1");
 			atts["CrossSlash"].SetActive(true);
 
-			yield return new WaitForSeconds(2 / 12f);
+            yield return new WaitForSeconds(2 / 12f);
 
 			atts["CrossSlash"].SetActive(false);
 
