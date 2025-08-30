@@ -157,7 +157,6 @@ class SLHelper : MonoBehaviour
 					StopCoroutine(moveWallRoutine);
                 moveWallRoutine = moveX(abyssWall.transform, platPos.x - 5f, 1);
                 PlayerData.instance.SetHazardRespawn(new Vector3(platPos.x, platPos.y+5, 0), true);
-				Modding.Logger.Log(platPos);
 
 				if (player.gameObject.transform.position.x >= GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f)
 					break;
