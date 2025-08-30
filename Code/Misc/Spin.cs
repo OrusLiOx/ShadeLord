@@ -8,6 +8,7 @@ speed = degrees/second
 /*/
 
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class Spin : MonoBehaviour
@@ -19,9 +20,8 @@ public class Spin : MonoBehaviour
 		speed = 15f;
 		dir = -1;
 	}
-
-	void Update()
+	public void FixedUpdate()
 	{
-		transform.Rotate(0, 0, dir*speed * Time.deltaTime, Space.World); //rotates 50 degrees per second around z axis
-	}
+        transform.Rotate(0, 0, dir * speed * Time.fixedDeltaTime, Space.World); 
+    }
 }

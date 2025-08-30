@@ -235,6 +235,7 @@ public class Attacks : MonoBehaviour
 
 			transform.SetScaleX(1);
 			Hide();
+			yield return new WaitForSeconds(.5f);
 			attacking = false;
 		}
 	}
@@ -319,8 +320,6 @@ public class Attacks : MonoBehaviour
 		IEnumerator Spikes()
 		{
             transform.SetPositionX(xCenter);
-
-            // go to random location
             if (infiniteSpike)
 			{
 				arrive();
@@ -329,8 +328,10 @@ public class Attacks : MonoBehaviour
 
             // first set
             playSound("BeamCharge");
-            if (infiniteSpike)
-                anim.Play("SpikeWindup");
+			if (infiniteSpike)
+				anim.Play("SpikeWindup");
+			else
+				anim.Play("Nothing");
 			// generate spikes
 			yield return new WaitForSeconds(.7f);
             //playSound("Scream");
@@ -362,7 +363,7 @@ public class Attacks : MonoBehaviour
 				if (!infiniteSpike)
 					yield return new WaitForSeconds(Spike.upTime + Spike.activeTime + Spike.downTime + .1f);
 				else
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(.7f);
                 i--;
 			}
 

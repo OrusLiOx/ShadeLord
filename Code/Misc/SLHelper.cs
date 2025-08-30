@@ -141,7 +141,7 @@ class SLHelper : MonoBehaviour
 			GameObject abyssWall = GameObject.Find("AbyssWallLeft");
             GameObject plat = GameObject.Find("Terrain/ToArea3/Plat (1)");
             moveWallRoutine = moveX(abyssWall.transform, plat.transform.position.x - 5f, 20);
-            PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(plat.transform.position.x, plat.transform.position.y + 1f));
+            PlayerData.instance.SetHazardRespawn(new Vector3(plat.transform.position.x, plat.transform.position.y + 5f, 0),true);
 
             for (int i = 1; i <= 19; i++)
 			{
@@ -156,7 +156,8 @@ class SLHelper : MonoBehaviour
                 if (moveWallRoutine != null)
 					StopCoroutine(moveWallRoutine);
                 moveWallRoutine = moveX(abyssWall.transform, platPos.x - 5f, 1);
-                PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(platPos.x, platPos.y+1f));
+                PlayerData.instance.SetHazardRespawn(new Vector3(platPos.x, platPos.y+5, 0), true);
+				Modding.Logger.Log(platPos);
 
 				if (player.gameObject.transform.position.x >= GameObject.Find("Terrain/Area3").transform.GetPositionX() - 5f)
 					break;

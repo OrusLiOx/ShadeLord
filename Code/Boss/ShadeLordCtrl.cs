@@ -29,8 +29,8 @@ class ShadeLordCtrl : MonoBehaviour
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	//public int[] hpMarkers = { 50,50,50,50,50, 1000};
-	public int[] hpMarkers = { 400, 450, 300, 750, 281, 1000 };
+	public int[] hpMarkers = { 50,50,50,50,50, 1};
+	//public int[] hpMarkers = { 400, 450, 300, 750, 281, 1000 };
 	private System.Random rand;
 	
 	public Attacks attacks;
@@ -38,6 +38,8 @@ class ShadeLordCtrl : MonoBehaviour
 
     private GameObject area1CamLock = GameObject.Find("Terrain/Area2/CameraLock");
     private GameObject transCamLock = GameObject.Find("Terrain/ToArea3/CameraLock");
+
+	private List<int> lastActions;
 
 	public int phase;
 	public bool phaseTransitioning = false;
@@ -72,8 +74,9 @@ class ShadeLordCtrl : MonoBehaviour
 			attacks.CrossSlash,
 			attacks.Spikes
 		};
+		lastActions = new List<int>() {-1, -1};
 
-		helper = gameObject.AddComponent<SLHelper>();
+        helper = gameObject.AddComponent<SLHelper>();
     } 
 	void Start()
 	{
@@ -165,9 +168,13 @@ class ShadeLordCtrl : MonoBehaviour
 	}
 	 
 	void Update()
-	{
-		/*
-		if (Input.GetKeyDown(KeyCode.KeypadEnter))
+    {
+        HeroController hc = HeroController.instance;
+
+        //Modding.Logger.Log(hc.playerData.GetVector3("hazardRespawnLocation"));
+        //Modding.Logger.Log(hc.FindGroundPoint(hc.playerData.GetVector3("hazardRespawnLocation")));
+        //*
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))
 		{
 			Modding.Logger.Log("Shade Lord Position: " + transform.position);
 			Modding.Logger.Log("Hero Position: " + player.transform.position);
@@ -456,8 +463,8 @@ class ShadeLordCtrl : MonoBehaviour
             // lock movemnet
             if (player.transform.GetPositionX() > transform.GetPositionX())
 				HeroController.instance.FaceLeft();
-			else
-				HeroController.instance.FaceRight();
+			else if (player.transform.GetPositionX() < transform.GetPositionX())
+                HeroController.instance.FaceRight();
 			FSMUtility.SendEventToGameObject(HeroController.instance.gameObject, "ROAR ENTER", false);
 
 			// black screen
@@ -495,7 +502,9 @@ class ShadeLordCtrl : MonoBehaviour
 			}
 			wall.transform.localPosition = new Vector3(0, 0f, 0);
 
-            // hide lord
+			// hide lord
+			Destroy(tendrils.transform.GetChild(8));
+			Destroy(tendrils.transform.GetChild(3));
             tendrils.SetActive(false);
 			transform.SetPositionY(-2f);
 
@@ -597,15 +606,13 @@ class ShadeLordCtrl : MonoBehaviour
 
 			StartCoroutine(darkBurst());
             // wait a bit
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(4f);
 
 			// terrain breaks
             breakTerrain(GameObject.Find("Terrain/Area1"), GameObject.Find("Terrain/RocksFloor"));
 			// Wait a bit then start attacking again
-			yield return new WaitForSeconds(1f);
-
             helper.abyssArrive();
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(6f);
 			
 			atts = new List<Action>()
 			{
@@ -771,7 +778,16 @@ class ShadeLordCtrl : MonoBehaviour
         Action curr;
 		int i;
 		if (actionState == -1)
+		{
 			i = rand.Next(0, atts.Count);
+			if (phase == 0 || phase == 1 || phase == 3)
+			{
+				while (lastActions.Contains(i))
+					i = rand.Next(0, atts.Count);
+				lastActions.RemoveAt(0);
+				lastActions.Add(i);
+			}
+		}
 		else
 			i = actionState % atts.Count;
 

@@ -12,9 +12,9 @@ namespace ShadeLord.Setup
 		float x = 23.5f; // center of stage
 
 		// Connect OnEnterHero and OnSceneChanage to proper events
-		private void Awake()
+		private void Start()
 		{
-			On.GameManager.EnterHero += OnEnterHero;
+            On.GameManager.EnterHero += OnEnterHero;
 			USceneManager.activeSceneChanged += OnSceneChange;
 		}
 
@@ -24,9 +24,7 @@ namespace ShadeLord.Setup
 			orig(gm, additiveGateSearch);
 			if (gm.sceneName == "GG_Shade_Lord")
 			{
-				HeroController.instance.transform.SetPosition2D
-				(HeroController.instance.gameObject.GetComponent<HeroController>().FindGroundPoint
-				(PlayerData.instance.GetVector3("hazardRespawnLocation")));
+				HeroController.instance.transform.SetPosition2D(23.5f, 67.87813f);
 
 				// scene manager
 				SceneManager sm = gm.sm;
@@ -41,13 +39,14 @@ namespace ShadeLord.Setup
 		// Set up scene and attach nessecary scripts
 		private void OnSceneChange(Scene prevScene, Scene nextScene)
 		{
-            if (nextScene.name == "GG_Shade_Lord")
+			if (nextScene.name == "GG_Shade_Lord")
 			{
-                // add properties to certain elements
-                // respawns, camera locks, hazards, etc
+				// add properties to certain elements
+				// respawns, camera locks, hazards, etc
                 GameObject[] allObjects = FindObjectsOfType<GameObject>();
 				foreach (GameObject obj in allObjects)
 				{
+					
 					if (obj.name.Contains("Respawn"))
 						MakeRespawn(obj);
 					else if (obj.name.Equals("CameraLock"))
@@ -118,8 +117,8 @@ namespace ShadeLord.Setup
                 // left wall (2,90)
                 abyss = Instantiate(abyssObj, new Vector3(2 - hideOffset, 90), Quaternion.Euler(0,0,-90));
                 abyss.name = "AbyssWallLeft";
-
-                PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
+				//PlayerData.instance.SetHazardRespawn(new Vector3(x, 69, 0), true);
+                //PlayerData.instance.SetVector3("hazardRespawnLocation", new Vector3(x, 69f));
 
 				// scene stuff
 				var bsc = Instantiate(ShadeLord.GameObjects["Boss Scene Controller"]);
@@ -128,6 +127,7 @@ namespace ShadeLord.Setup
 				StatueCreator.BossLevel = SceneController.BossLevel;
 
 				GameObject godseekerHolder = new GameObject();
+                godseekerHolder.name = "GodseekerHolder";
                 GameObject throne = Instantiate(ShadeLord.GameObjects["Godseeker Throne"], godseekerHolder.transform, true);
                 throne.SetActive(true);
                 GameObject godseeker = Instantiate(ShadeLord.GameObjects["Godseeker"], godseekerHolder.transform, true);
@@ -140,8 +140,7 @@ namespace ShadeLord.Setup
 
 
 				godseekerHolder.transform.SetPosition3D(x-4.5f, 68.2f, 16f);
-                godseekerHolder.transform.localScale = Vector3.one * .5f;
-				godseekerHolder.name = "GodseekerHolder";
+				godseekerHolder.transform.localScale = Vector3.one * .5f;
 
                 // boss stuff
                 GameObject.Find("ShadeLord").AddComponent<ShadeLordCtrl>();
@@ -178,7 +177,8 @@ namespace ShadeLord.Setup
 		private void OnDestroy()
 		{
 			On.GameManager.EnterHero -= OnEnterHero;
-		}
+            USceneManager.activeSceneChanged -= OnSceneChange;
+        }
 
 		// Turn given GameObject, obj, into a respawn point
 		// put an 'L' at the end of obj's name to make player spawn facing left

@@ -125,8 +125,7 @@ namespace ShadeLord.Setup
 		{
 			GameManager.instance.gameObject.AddComponent<StatueCreator>();
 			GameManager.instance.gameObject.AddComponent<SceneLoader>();
-
-		}
+        }
 
 		private void LoadAssets()
 		{
@@ -184,10 +183,13 @@ namespace ShadeLord.Setup
 				return;
 			}
 			// deal hit then check phase
-			ctrl.particleEm.rotation = new Vector3(0, -hitinstance.Direction + 90, 0);
-			ctrl.particles.transform.position = ctrl.transform.position;
-			ctrl.particles.transform.SetPositionY(ctrl.particles.transform.position.y + -2.5f);
-			ctrl.particles.Play();
+			if (hitinstance.AttackType == AttackTypes.Nail)
+			{
+				ctrl.particleEm.rotation = new Vector3(0, -hitinstance.Direction + 90, 0);
+				ctrl.particles.transform.position = ctrl.transform.position;
+				ctrl.particles.transform.SetPositionY(ctrl.particles.transform.position.y + -2.5f);
+				ctrl.particles.Play();
+			}
 			//ctrl.StartCoroutine(flicker());
 			ctrl.attacks.playSound("VoidHit");
 
@@ -221,7 +223,7 @@ namespace ShadeLord.Setup
 		}
         IEnumerator Death(ShadeLordCtrl ctrl)
         {
-
+			HeroController.instance.damageMode = DamageMode.NO_DAMAGE;
             ctrl.attacks.playSound("ScreamLong");
             // remove spawned attacks
             ctrl.attacks.Stop();
@@ -286,7 +288,6 @@ namespace ShadeLord.Setup
                 yield return new WaitForSeconds(1 / 30f);
             }
             DreamDelayed();
-            //orig(self, attackDirection, attackType, ignoreEvasion);
             GameObject.Destroy(ctrl.gameObject);
         }
 
