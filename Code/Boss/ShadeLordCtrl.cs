@@ -29,8 +29,8 @@ class ShadeLordCtrl : MonoBehaviour
 	// properties
 	private GameObject head, title;
 	private List<Action> atts;
-	public int[] hpMarkers = { 50,50,50,50,50, 1};
-	//public int[] hpMarkers = { 400, 450, 300, 750, 281, 1000 };
+	//public int[] hpMarkers = { 50, 50, 50, 50, 50, 100};
+	public int[] hpMarkers = { 400, 450, 300, 750, 281, 100 };
 	private System.Random rand;
 	
 	public Attacks attacks;
