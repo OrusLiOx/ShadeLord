@@ -27,6 +27,7 @@ namespace ShadeLord.Setup
 			GameObject statue = Instantiate(GameObject.Find("GG_Statue_Gruz"));
 			statue.transform.position = GameObject.Find("GG_Statue_Knight").transform.position;
             Destroy(GameObject.Find("GG_Statue_Knight"));
+			Destroy(GameObject.Find("Knight Statue Cage/Cage"));
 
             // set scene
             var scene = ScriptableObject.CreateInstance<BossScene>();

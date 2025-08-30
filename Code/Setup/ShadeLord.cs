@@ -241,7 +241,7 @@ namespace ShadeLord.Setup
             SpriteRenderer lordSprite = GameObject.Find("ShadeLord").GetComponent<SpriteRenderer>();
 			lordSprite.color = Color.black;
             emission.rateOverTime = 200f;
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1.5f);
 
             SpriteRenderer haloSprite = GameObject.Find("ShadeLord/Halo").GetComponent<SpriteRenderer>();
             SpriteRenderer haloGlowSprite = GameObject.Find("ShadeLord/Halo/Glow").GetComponent<SpriteRenderer>();
@@ -262,7 +262,7 @@ namespace ShadeLord.Setup
                 blackout.color += c / 2;
                 yield return new WaitForSeconds(1 / 30f);
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.5f);
             emission.rateOverTime = 0f;
             yield return new WaitForSeconds(2f);
             c = new Color(0, 0, 0, 1 / 90f);

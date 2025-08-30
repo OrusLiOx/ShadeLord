@@ -359,8 +359,11 @@ public class Attacks : MonoBehaviour
 				yield return new WaitForSeconds(Spike.spawnTime);
 				// spikes go up
 				playSound("SpikeUp");
-				yield return new WaitForSeconds(Spike.upTime + Spike.activeTime + Spike.downTime + .1f);
-				i--;
+				if (!infiniteSpike)
+					yield return new WaitForSeconds(Spike.upTime + Spike.activeTime + Spike.downTime + .1f);
+				else
+                    yield return new WaitForSeconds(1f);
+                i--;
 			}
 
 			if (infiniteSpike)
@@ -540,10 +543,11 @@ public class Attacks : MonoBehaviour
 			anim.Play("Roar");
             yield return new WaitForSeconds(.2f);
             obj.GetComponent<VoidCircle>().Fire();
-			//yield return new WaitForSeconds(.5f);
+            //yield return new WaitForSeconds(.5f);
+            anim.Play("RoarLoop");
 
-			// pick random points to spawn
-			float curX = xCenter - xEdge-2.5f + UnityEngine.Random.Range(5f,9f);
+            // pick random points to spawn
+            float curX = xCenter - xEdge-2.5f + UnityEngine.Random.Range(5f,9f);
 			while (curX< xCenter + xEdge)
 			{
 				StartCoroutine(MakeCircle(curX, UnityEngine.Random.Range(66f, 76f), .7f));
@@ -588,7 +592,9 @@ public class Attacks : MonoBehaviour
 			if (randOptions.Count == 1)
 				playSound("Scream");
 			anim.Play("Roar");
-			yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(.25f);
+            anim.Play("RoarLoop");
+            yield return new WaitForSeconds(1.75f);
 
 			leave();
 			yield return new WaitWhile(() => wait);
@@ -601,8 +607,10 @@ public class Attacks : MonoBehaviour
 
 				arrive();
 				yield return new WaitWhile(() => wait);
-				anim.Play("Roar");
-				readyToDie = true;
+                readyToDie = true;
+                anim.Play("Roar");
+                yield return new WaitForSeconds(.25f);
+                anim.Play("RoarLoop");
 			}
 			else
 			{
@@ -759,6 +767,7 @@ public class Attacks : MonoBehaviour
 	{
 		StopAllCoroutines();
         rig.velocity = new Vector2(0f, 0f);
+        transform.SetRotationZ(0);
         foreach (Transform c in parent.GetComponentsInChildren<Transform>())
 		{
 			if (!c.gameObject.name.Equals(parent.name))
