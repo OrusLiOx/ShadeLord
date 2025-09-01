@@ -7,8 +7,8 @@
     <AssemblyTitle>ShadeLord</AssemblyTitle>
     <Product>ShadeLord</Product>
     <Description>Shade Lord Boss Fight.</Description>
-    <Copyright>Copyright © OrusLiOx 2022</Copyright>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Copyright>Copyright © OrusLiOx 2025</Copyright>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>

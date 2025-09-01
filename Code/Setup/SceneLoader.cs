@@ -110,6 +110,15 @@ namespace ShadeLord.Setup
                 float abyssYPos = 64f;
                 float abyssXPos = 25f;
                 float hideOffset = 3f;
+
+
+                GameObject abyssTerrain = new GameObject();
+                abyssTerrain.transform.SetPosition2D(0, 0);
+                abyssTerrain.transform.SetParent(abyssObj.transform, false);
+                abyssTerrain.AddComponent<BoxCollider2D>().size = new Vector2(55f, 1f);
+                abyssTerrain.GetComponent<BoxCollider2D>().offset = new Vector2(0f, -2f);
+                abyssTerrain.layer = 8;
+
                 abyssObj.transform.position = new Vector3(abyssXPos, abyssYPos - hideOffset - 2f, 0f);
 
                 // right wall (45,60)
