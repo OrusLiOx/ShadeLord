@@ -24,7 +24,7 @@ Based on orchestration by RoomTempOJ - https://musescore.com/user/34039276/score
 ## Code
 Code by OrusLiOx
 
-Hall of Gods statue code based on Aspid Queen code (no longer available)
+Hall of Gods statue code based on Aspid Queen code (https://github.com/jngo102/AspidQueen)
 
 ## Hollow Knight Asset Dumps
 Sprite dump - https://drive.google.com/drive/folders/1lx02_w9TFTYdR3aggI1gbXcLr69roaNV
